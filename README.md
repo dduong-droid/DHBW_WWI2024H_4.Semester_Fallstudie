@@ -1,0 +1,2 @@
+# DHBW_WWI2024H_4.Semester_Fallstudie
+Fallstudie Food4Recovery
