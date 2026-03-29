@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "recovery-orange": "#ff9500",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .circular-progress {
+            background: radial-gradient(closest-side, white 85%, transparent 86% 100%),
+                        conic-gradient(#33c758 67%, #e2e8f0 0);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 lg:px-40">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-xl bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">nutrition</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-serif text-xl font-bold leading-tight tracking-tight">Food 4 Recovery</h2>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold">Premium Healthcare</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 bg-slate-100 text-slate-600 hover:bg-primary/20 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">calendar_today</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary/20 p-0.5">
+<img alt="User Profile" class="h-full w-full rounded-full object-cover" data-alt="User profile picture of a healthy smiling person" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdCpoc88fQIkBNHyqQvziCNjeR7Kygg0VBO-g0mJdXdRNeBBlT1_R5CdWJl3lfk-_75SbOd4AsSPC-2MpmLJZVFLOubf0xvLmqZqDkSmFlav3DTDLNkTh9IUbqlZgR3LnnHQWYI2Xd2798RNDiJ57pwHUREe5hMjeSwcJ07G3J0R_Kldw-8NG7GpWrlHbY65W7E2bHEuz3yCFuErc-z-JvLR__TsVczZX7WXvpVxDhb_wGa5wrqpXJG9PsGdAPI-MvB2tB-LUxhTs"/>
+</div>
+</div>
+</header>
+<main class="flex-1 px-6 py-8 lg:px-40 max-w-[1200px] mx-auto w-full">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Summary & Macros -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100 flex flex-col items-center">
+<h3 class="font-serif text-2xl mb-8 self-start">Tagesübersicht</h3>
+<!-- Circular Progress Ring -->
+<div class="relative size-64 flex items-center justify-center mb-6">
+<div class="circular-progress absolute inset-0 rounded-full"></div>
+<div class="z-10 text-center">
+<span class="text-4xl font-extrabold text-slate-900 leading-none">1.240</span>
+<p class="text-slate-500 font-medium text-sm mt-1">kcal verbleibend</p>
+<div class="mt-2 h-px w-12 bg-slate-200 mx-auto"></div>
+<p class="text-xs text-slate-400 mt-2">Ziel: 1.850 kcal</p>
+</div>
+</div>
+<!-- Macro Progress Bars -->
+<div class="w-full space-y-5 mt-4">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span class="text-slate-700">Protein (Recovery)</span>
+<span class="text-primary">120g / 150g</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span class="text-slate-700">Kohlenhydrate</span>
+<span class="text-recovery-orange">165g / 220g</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-recovery-orange rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span class="text-slate-700">Fette</span>
+<span class="text-slate-400">45g / 65g</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-slate-400 rounded-full" style="width: 69%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Water Tracker -->
+<div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-serif text-2xl">Hydratation</h3>
+<span class="text-primary font-bold">1.8L / 2.5L</span>
+</div>
+<div class="flex justify-between gap-3 overflow-x-auto pb-2">
+<!-- Interactive Cups -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="size-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<span class="text-[10px] font-bold text-primary">250ml</span>
+</button>
+<button class="flex flex-col items-center gap-2 group">
+<div class="size-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<span class="text-[10px] font-bold text-primary">250ml</span>
+</button>
+<button class="flex flex-col items-center gap-2 group">
+<div class="size-12 rounded-xl bg-slate-100 text-slate-300 flex items-center justify-center border-2 border-dashed border-slate-200">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400">Hinzufügen</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Timeline & Micronutrients -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Meal Timeline -->
+<div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+<h3 class="font-serif text-2xl mb-8">Mahlzeiten Timeline</h3>
+<div class="space-y-8 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
+<!-- Frühstück -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 size-10 rounded-full bg-white border-2 border-primary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-primary text-xl">wb_twilight</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-lg">Frühstück</h4>
+<p class="text-sm text-slate-500">Haferflocken mit Beeren &amp; Leinsamen</p>
+<p class="text-xs font-bold text-primary mt-1">420 kcal</p>
+</div>
+<button class="size-8 rounded-lg bg-slate-50 text-slate-400 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">edit_square</span>
+</button>
+</div>
+</div>
+<!-- Mittagessen -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 size-10 rounded-full bg-white border-2 border-primary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-primary text-xl">wb_sunny</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-lg">Mittagessen</h4>
+<p class="text-sm text-slate-500">Gegrilltes Hähnchen mit Quinoa &amp; Brokkoli</p>
+<p class="text-xs font-bold text-primary mt-1">580 kcal</p>
+</div>
+<button class="size-8 rounded-lg bg-slate-50 text-slate-400 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">edit_square</span>
+</button>
+</div>
+</div>
+<!-- Abendessen (Upcoming) -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 size-10 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-slate-300 text-xl">dark_mode</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+<div>
+<h4 class="font-bold text-slate-400">Abendessen</h4>
+<p class="text-xs text-slate-400">Noch nichts eingetragen</p>
+</div>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm">add</span> Hinzufügen
+                                    </button>
+</div>
+</div>
+<!-- Snacks -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 size-10 rounded-full bg-white border-2 border-primary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-primary text-xl">bakery_dining</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-lg">Snacks</h4>
+<p class="text-sm text-slate-500">Eine Handvoll Mandeln, Proteinshake</p>
+<p class="text-xs font-bold text-primary mt-1">240 kcal</p>
+</div>
+<button class="size-8 rounded-lg bg-slate-50 text-slate-400 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Micronutrient Highlights -->
+<div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+<div class="flex items-center gap-2 mb-6">
+<h3 class="font-serif text-2xl">Recovery Mikronährstoffe</h3>
+<span class="material-symbols-outlined text-recovery-orange">offline_bolt</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+<div class="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined">pill</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tight">Zink</span>
+<span class="font-bold text-lg">12mg</span>
+<div class="mt-2 w-full h-1 bg-slate-200 rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+<div class="size-10 rounded-full bg-recovery-orange/10 text-recovery-orange flex items-center justify-center mb-3">
+<span class="material-symbols-outlined">vital_signs</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tight">Vitamin C</span>
+<span class="font-bold text-lg">95mg</span>
+<div class="mt-2 w-full h-1 bg-slate-200 rounded-full">
+<div class="h-full bg-recovery-orange rounded-full" style="width: 95%"></div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+<div class="size-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined">set_meal</span>
+</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-tight">Omega-3</span>
+<span class="font-bold text-lg">1.2g</span>
+<div class="mt-2 w-full h-1 bg-slate-200 rounded-full">
+<div class="h-full bg-blue-500 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Tab Bar (Mobile Aesthetic) -->
+<nav class="sticky bottom-0 bg-white/90 backdrop-blur-lg border-t border-slate-100 px-6 py-3 flex justify-around items-center lg:hidden">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined font-fill">dashboard</span>
+<span class="text-[10px] font-bold">Tracker</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold">Rezepte</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold">Progress</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profil</span>
+</button>
+</nav>
+</div>
+</div>
+</body></html>

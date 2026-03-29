@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                        "slate-900": "#0f172a",
+                        "slate-100": "#f1f5f9",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Instrument Serif", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .text-serif { font-family: 'Instrument Serif', serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 glass-card border-b border-primary/10 px-4 md:px-10 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">clinical_notes</span>
+</div>
+<div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Food 4 Recovery</h2>
+<p class="text-xs text-primary font-medium uppercase tracking-widest">Premium Health Navigation</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary/20 bg-cover bg-center" data-alt="Profilbild einer lächelnden Frau mittleren Alters" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3oRWQxmDO7rS80ysjjcOE4c4rrzyZbeCbuxT5gw0pg5sQTAvdLxm5hQGB6Y0T2_dSqCsvBX1HN5OyJpdIjMV6VS3wc7rvmgJhKgndToqHEjHP6EWELJ5d4kEAZZn3vCYCYSpVnSG3x0Nz6roSJwmdofIpPh4LhjT9SDH0ofKtSuNMWt7ifYmcmtWuXOqs3DjzfjUbq9OT2E1eAco8DN8xiHUtaE0H2dZp0cFPm2gDC4vjB6SGaGEy6kZApCqQgK2-j8KD7sxQxdU')">
+</div>
+</div>
+</header>
+<main class="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-10">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<h1 class="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100">
+                    Ihre KI-Gesundheitsanalyse
+                </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">
+                    Aktualisiert am 24. Mai 2024 basierend auf Ihrem Arztbrief.
+                </p>
+</div>
+<div class="w-full md:w-72 space-y-2">
+<div class="flex justify-between text-sm font-semibold text-primary">
+<span>Analyse abgeschlossen</span>
+<span>100%</span>
+</div>
+<div class="h-2 w-full bg-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- Main Summary Card -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 relative overflow-hidden rounded-3xl bg-slate-900 text-white p-8 md:p-12 shadow-2xl">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-20 pointer-events-none bg-gradient-to-l from-primary to-transparent"></div>
+<div class="relative z-10 space-y-6">
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-xs font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">auto_awesome</span> KI-EMPFEHLUNG
+                    </span>
+<h2 class="text-3xl md:text-4xl font-serif italic font-medium leading-tight">
+                        Optimale Erholungs-Strategie: <br/>
+<span class="text-primary not-italic font-display font-bold">Wundheilung &amp; Regeneration</span>
+</h2>
+<p class="text-slate-300 text-lg max-w-xl leading-relaxed">
+                        Ihre Analyse zeigt einen erhöhten Bedarf an spezifischen Aminosäuren und Zink zur Unterstützung der Geweberegeneration nach dem Eingriff. Wir haben Ihren Plan auf Entzündungshemmung optimiert.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<div class="flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+<span class="material-symbols-outlined text-primary text-3xl">healing</span>
+<div>
+<p class="text-xs uppercase text-slate-400 font-bold">Fokus</p>
+<p class="font-semibold text-sm">Gewebeschutz</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+<span class="material-symbols-outlined text-primary text-3xl">nutrition</span>
+<div>
+<p class="text-xs uppercase text-slate-400 font-bold">Nährstoff</p>
+<p class="font-semibold text-sm">Hoch-Protein</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Recovery Gauge Card -->
+<div class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+<div>
+<h3 class="font-bold text-lg mb-4">Erholungswert</h3>
+<div class="relative flex items-center justify-center py-4">
+<svg class="w-40 h-40 transform -rotate-90">
+<circle class="text-slate-100 dark:text-slate-700" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-black">75%</span>
+<span class="text-xs font-bold text-slate-400 uppercase">Status</span>
+</div>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 text-center italic">
+                    "Ihre Vitalwerte zeigen eine stabile Tendenz zur Besserung."
+                </p>
+</div>
+</section>
+<!-- Biomarker Visualization -->
+<section class="space-y-6">
+<h3 class="text-2xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span> Biomarker Analyse
+            </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-4">
+<span class="text-sm font-bold text-slate-500 uppercase tracking-tight">Entzündungswerte</span>
+<span class="px-2 py-1 bg-orange-100 text-orange-600 rounded text-xs font-bold uppercase">Leicht erhöht</span>
+</div>
+<div class="text-3xl font-bold mb-2">12.4 <span class="text-sm font-normal text-slate-400">mg/L</span></div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400 w-3/4"></div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-4">
+<span class="text-sm font-bold text-slate-500 uppercase tracking-tight">Proteinsynthese</span>
+<span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase">Optimal</span>
+</div>
+<div class="text-3xl font-bold mb-2">88.1 <span class="text-sm font-normal text-slate-400">%</span></div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[88%]"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-start mb-4">
+<span class="text-sm font-bold text-slate-500 uppercase tracking-tight">Mikronährstoffe</span>
+<span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase">Gut</span>
+</div>
+<div class="text-3xl font-bold mb-2">B12 / Zn <span class="text-sm font-normal text-slate-400">Status</span></div>
+<div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Document Insights -->
+<section class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden relative">
+<div class="absolute -right-10 -top-10 text-primary/5">
+<span class="material-symbols-outlined text-[160px]">description</span>
+</div>
+<div class="relative z-10 space-y-6">
+<h3 class="text-2xl font-bold">Extrahierte Daten aus Ihrem Arztbrief</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div class="flex gap-4 items-start border-l-4 border-primary pl-4">
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-100 italic">"Postoperative Ödembildung"</p>
+<p class="text-sm text-slate-500">Ihre Mahlzeiten enthalten nun vermehrt Bromelain und Kalium zur Entwässerung.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start border-l-4 border-primary pl-4">
+<div>
+<p class="font-bold text-slate-900 dark:text-slate-100 italic">"Gesteigerte Fibroblastenaktivität"</p>
+<p class="text-sm text-slate-500">Notwendigkeit für hohe Zufuhr von Vitamin C und Kollagen-Peptiden erkannt.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 rounded-2xl p-6 border border-primary/10">
+<h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">lightbulb</span> Empfohlene Anpassung
+                        </h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Vermeiden Sie in den nächsten 7 Tagen entzündungsfördernde Nachtschattengewächse (Tomaten, Paprika). Ihr Ernährungsplan wurde automatisch angepasst.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Personalized Recommendation CTA -->
+<section class="bg-primary/10 border border-primary/20 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8">
+<div class="w-full md:w-48 h-48 rounded-2xl bg-cover bg-center shadow-lg shrink-0" data-alt="Gesunde Mahlzeit mit grünem Blattgemüse und Lachs" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCM20a0IM2tkAigcX8ILyUVQ2kep8yCNGS0ceomHZy__xUQzMJ6LDwXo_wSbYnaII5-jMTywH7TdkrmGJHrAO1H3GNtdO06d8MsohDNhBuI9WPP-PANEk6aPUFH2a0wZwAB1HONLZwM8ssejhTWKvcQ85zDDzyvA9PpRqUEV2lfnluQKnXomsG0oRZiCWZQDaWBS893WFBorc53zrHa-cb0Lr7EH9q2UFP7Qsurf5uCFi1eLAFg3cWcZ7f-hsihzBTFj4KMelXft24')">
+</div>
+<div class="flex-grow space-y-4">
+<h3 class="text-2xl font-bold">Ihre personalisierte Wundheilungs-Box</h3>
+<p class="text-slate-600 dark:text-slate-400">
+                    Basierend auf Ihrer Analyse ist die <strong>Wundheilungs-Box (Intensiv)</strong> die beste Wahl. Sie enthält 21 Mahlzeiten, reich an L-Arginin, Zink und entzündungshemmenden Omega-3-Fettsäuren.
+                </p>
+<div class="flex flex-wrap gap-4 pt-2">
+<button class="bg-primary hover:bg-primary/90 text-slate-900 px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg flex items-center gap-2">
+                        Zur Wundheilungs-Box <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
+                        Inhaltsstoffe prüfen
+                    </button>
+</div>
+</div>
+</section>
+<!-- Next Steps Timeline -->
+<section class="space-y-8 pb-12">
+<h3 class="text-2xl font-bold">Nächste Schritte: Die 7-Tage-Erholungsphase</h3>
+<div class="relative">
+<div class="absolute top-8 left-4 bottom-8 w-0.5 bg-primary/20 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="relative pl-0 md:pl-12 space-y-2">
+<div class="hidden md:flex absolute left-2 top-0 w-4 h-4 rounded-full bg-primary border-4 border-background-light z-10"></div>
+<span class="text-xs font-bold text-primary uppercase">Tag 1-2</span>
+<h4 class="font-bold">Anti-Inflammation</h4>
+<p class="text-sm text-slate-500">Fokus auf Reduktion von Schwellungen durch Kurkuma &amp; Gingerole.</p>
+</div>
+<div class="relative pl-0 md:pl-12 space-y-2">
+<div class="hidden md:flex absolute left-2 top-0 w-4 h-4 rounded-full bg-primary/30 border-4 border-background-light z-10"></div>
+<span class="text-xs font-bold text-slate-400 uppercase">Tag 3-5</span>
+<h4 class="font-bold">Zell-Regeneration</h4>
+<p class="text-sm text-slate-500">Maximale Proteinaufnahme zur Unterstützung der Neubildung von Gewebe.</p>
+</div>
+<div class="relative pl-0 md:pl-12 space-y-2">
+<div class="hidden md:flex absolute left-2 top-0 w-4 h-4 rounded-full bg-primary/30 border-4 border-background-light z-10"></div>
+<span class="text-xs font-bold text-slate-400 uppercase">Tag 6-7</span>
+<h4 class="font-bold">Energie-Boost</h4>
+<p class="text-sm text-slate-500">Wiederaufbau der Glykogenspeicher für erste leichte Mobilisation.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Mobile Nav Hint (Accessibility) -->
+<footer class="md:hidden sticky bottom-0 glass-card p-4 flex justify-around border-t border-primary/10">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-bold">Menü</span>
+</button>
+<button class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profil</span>
+</button>
+</footer>
+</body></html>

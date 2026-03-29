@@ -1,0 +1,143 @@
+<!DOCTYPE html><html class="light" lang="de"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .mesh-gradient {
+            background-color: #f6f8f6;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(51, 199, 88, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(51, 199, 88, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(51, 199, 88, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(51, 199, 88, 0.08) 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark min-h-screen antialiased">
+<div class="flex min-h-screen w-full flex-col lg:flex-row">
+<!-- Left Side: Visual Content -->
+<div class="relative hidden lg:flex lg:w-1/2 items-center justify-center overflow-hidden bg-background-light dark:bg-background-dark">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center opacity-90 transition-transform duration-700 hover:scale-105" data-alt="Close up of fresh organic salad bowl with vibrant greens" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBNrukdQUt5XRi_ebV4w7kKtdi3nLC6h66FBhaqjkiYXiG370iWSgUiKH6e6n4WDaO-2cNacDImn70k6Qfw2Echiscv_qo2K07wHficxoMF_NTvyScmxHEhXupAJF_r8ioTukk0Cc4xJMwLiKyC4-lXcvSmYzPSeH2d9Af3NKpNNEzTLIuJMAhmnlSb6xMzkHQrndf4vjnLBpwdUBM9TuS7JU0X2o5RxlRgln3XXW-_9pL7QdZg4nlMEvNWUbQQdUkhSbrIKxzrk44&quot;);">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/60 via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 p-12 max-w-xl">
+<div class="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+<span class="material-symbols-outlined text-white text-4xl" style="">eco</span>
+</div>
+<h2 class="text-white text-5xl font-serif font-bold mb-6 leading-tight" style="">Bringen Sie Balance in Ihr Leben.</h2>
+<p class="text-white/80 text-xl font-light leading-relaxed" style="">Entdecken Sie personalisierte Ernährungspläne, die Ihre Erholung unterstützen und Ihren Körper stärken.</p>
+</div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="flex flex-1 flex-col justify-center px-6 py-12 lg:px-24 mesh-gradient dark:bg-background-dark">
+<div class="mx-auto w-full max-w-md">
+<!-- Mobile Header Image -->
+<div class="lg:hidden mb-8 overflow-hidden rounded-2xl h-48 w-full bg-cover bg-center" data-alt="Fresh vegetable assortment on a kitchen counter" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDMTADKLcOuXVwX20wZ3HOLz-YJwDsZTdx1Osw0l0XlJCGPKy2ezC7Wyy4Assd7YVuFJOpzpTZBVO8ibWAVcODWdyJEIRn3Dkueg5V2BUypjTU0os8txJF8xuWkf6nlewB4HGul7LO5XvXDtcMFCa_pqsHvvJWEgekXNbFIQVeZdzhSVT59Wa3WXXVyXC_TgDFJ8rRiSHa05BzTR_Fg-JI5_axOtUeRQqmcmn_4T8uu0BXWpYQYFr_xBXkg55R7FUxLkCypF6rYshM');">
+</div>
+<div class="mb-10">
+<h1 class="text-4xl lg:text-5xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-3" style="">Willkommen bei Food4Recovery</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg" style="">Melden Sie sich an, um fortzufahren.</p>
+</div>
+<!-- Social Login Section -->
+<div class="flex flex-col gap-4 mb-8">
+<button class="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-slate-700 dark:text-slate-200 font-semibold shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800" style="">
+<svg class="h-5 w-5" viewBox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="" style="">Mit Google anmelden</span>
+</button>
+<button class="flex w-full items-center justify-center gap-3 rounded-xl bg-black px-4 py-3.5 text-white font-semibold shadow-sm transition-all hover:bg-zinc-900" style="">
+<svg class="h-5 w-5 fill-current" viewBox="0 0 24 24">
+<path d="M17.05 20.28c-.96 0-2.04-.6-3.23-.6-1.2 0-2.09.55-3.14.55-1.56 0-4.01-2.48-4.01-6.2 0-3.66 2.31-5.61 4.54-5.61 1.16 0 2.1.72 3.07.72.93 0 2.05-.72 3.21-.72 1.02 0 2.37.52 3.19 1.7-2.65 1.58-2.22 5.31.42 6.57-.63 1.6-1.5 3.19-3.05 3.19zM15 4.72c0-1.24 1.02-2.26 2.26-2.26.14 0 .27.02.4.04-.06 1.41-1.12 2.53-2.31 2.53-.13 0-.25-.02-.35-.04v-.27z"></path>
+</svg>
+<span class="" style="">Mit Apple anmelden</span>
+</button>
+</div>
+<div class="relative mb-8">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-slate-200 dark:border-slate-800"></div>
+</div>
+<div class="relative flex justify-center text-sm font-medium leading-6">
+<span class="bg-background-light dark:bg-background-dark px-4 text-slate-500" style="">oder mit E-Mail</span>
+</div>
+</div>
+<!-- Email Login Form -->
+<form action="#" class="space-y-6" method="POST">
+<div>
+<label class="block text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100 mb-2" for="email" style="">E-Mail-Adresse</label>
+<div class="relative">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+<span class="material-symbols-outlined text-xl" style="">mail</span>
+</div>
+<input class="block w-full rounded-xl border-0 py-4 pl-12 pr-4 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-200 dark:ring-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-slate-900 text-base" id="email" name="email" placeholder="name@beispiel.de" required="" type="email">
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100" for="password" style="">Passwort</label>
+<a class="text-sm font-semibold text-primary hover:text-primary/80" href="#" style="">Passwort vergessen?</a>
+</div>
+<div class="relative">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+<span class="material-symbols-outlined text-xl" style="">lock</span>
+</div>
+<input class="block w-full rounded-xl border-0 py-4 pl-12 pr-12 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-200 dark:ring-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-slate-900 text-base" id="password" name="password" placeholder="Ihr Passwort" required="" type="password">
+<button class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600" type="button" style="">
+<span class="material-symbols-outlined text-xl" style="">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<input class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary" id="remember-me" name="remember-me" type="checkbox">
+<label class="text-sm text-slate-600 dark:text-slate-400" for="remember-me" style="">Angemeldet bleiben</label>
+</div>
+<button class="flex w-full items-center justify-center rounded-xl bg-primary px-4 py-4 text-base font-bold text-slate-900 shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98]" type="submit" style="">
+                        Anmelden
+                    </button>
+</form>
+<p class="mt-10 text-center text-sm text-slate-500" style="">
+                    Noch kein Mitglied?
+                    <a class="font-bold leading-6 text-primary hover:text-primary/80 transition-colors" href="#" style="">Kostenlos registrieren</a>
+</p>
+<!-- Footer Links -->
+<div class="mt-12 flex justify-center gap-6 text-xs text-slate-400">
+<a class="hover:text-slate-600 transition-colors" href="#" style="">Datenschutz</a>
+<a class="hover:text-slate-600 transition-colors" href="#" style="">Impressum</a>
+<a class="hover:text-slate-600 transition-colors" href="#" style="">Hilfe</a>
+</div>
+</div>
+</div>
+</div>
+</body></html>

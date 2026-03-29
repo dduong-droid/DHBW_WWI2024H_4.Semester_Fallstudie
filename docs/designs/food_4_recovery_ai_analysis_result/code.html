@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KI Gesundheitsanalyse - Ihr personalisierter Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 199, 88, 0.1);
+        }
+        .pulse-soft {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-10 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">insights</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">KI Gesundheitsanalyse</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
+<!-- Progress Section -->
+<div class="flex flex-col gap-4 p-6 rounded-xl bg-white dark:bg-slate-900/50 shadow-sm mb-8">
+<div class="flex gap-6 justify-between items-center">
+<div class="flex flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-normal">Analyse abgeschlossen</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Basierend auf Ihren biometrischen Markern und Erholungszielen</p>
+</div>
+<p class="text-primary text-xl font-bold leading-normal">100%</p>
+</div>
+<div class="rounded-full bg-primary/10 h-3 overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 100%;"></div>
+</div>
+</div>
+<!-- AI Insight Banner -->
+<div class="text-center mb-10">
+<span class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">Personalisiertes Ergebnis</span>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-slate-100 mb-4 tracking-tight">Ihre optimale Erholungs-Box</h1>
+<p class="text-slate-600 dark:text-slate-400 max-w-lg mx-auto">Unsere KI hat 42 Nährstoffanforderungen mit Ihren neuesten Gesundheitsdaten abgeglichen, um diese Lösung zu finden.</p>
+</div>
+<!-- Main Recommendation Card -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-12">
+<!-- Product Image/Visual -->
+<div class="relative rounded-xl overflow-hidden shadow-2xl group min-h-[350px]">
+<img alt="Wundheilungs-Box" class="absolute inset-0 w-full h-full object-cover" data-alt="Premium healthy meal kit box with fresh vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzJy8-wndPuc_uAFdeMJuc2HQ2HIhibbveSiuC966INn04naWX1FullHHHnvz7-bqbmF2djqPKXKfTMFU2V9zec6wxrBcNFPVTFsA0e3sT2y-Lj2uG9wjQe4JjVnZD7DIhK-1Pfj3u0_0TRS0Z4VsrFubOkyHUgf2MbwNCvx252yxniKrFu7_JTWKJA-ABTMOrZ-M_XMxjpVnjO61ReeKqNM32EnwwDUy8A7UkvaExwNVj6pr31Xf_KDMQ31q6CP7w7wcqkKsg6jQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Beste für Erholung</span>
+<span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Entzündungshemmend</span>
+</div>
+<h3 class="text-2xl font-bold text-white uppercase tracking-tighter">Wundheilungs-Box</h3>
+</div>
+</div>
+<!-- Recommendation Logic / Data Viz -->
+<div class="flex flex-col justify-center space-y-6 bg-white dark:bg-slate-900/50 p-8 rounded-xl shadow-sm border border-primary/5">
+<h4 class="font-bold text-lg border-b border-primary/10 pb-2">Warum das für Sie funktioniert:</h4>
+<!-- Metric 1 -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400 font-medium">Unterstützung der Proteinsynthese</span>
+<span class="text-primary font-bold">98% Übereinstimmung</span>
+</div>
+<div class="h-1.5 w-full bg-primary/10 rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 98%;"></div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400 font-medium">Mikronährstoffdichte</span>
+<span class="text-primary font-bold">94% Übereinstimmung</span>
+</div>
+<div class="h-1.5 w-full bg-primary/10 rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 94%;"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400 font-medium">Verdauungseffizienz</span>
+<span class="text-primary font-bold">89% Übereinstimmung</span>
+</div>
+<div class="h-1.5 w-full bg-primary/10 rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 89%;"></div>
+</div>
+</div>
+<div class="pt-4">
+<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-6 italic">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+                            "Enthält hochkonzentriertes Zink und Vitamin C, perfekt abgestimmt auf Ihre aktuellen Entzündungswerte."
+                        </div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95">
+<span class="material-symbols-outlined">shopping_basket</span>
+                            In den Warenkorb — 89,00 €
+                        </button>
+</div>
+</div>
+</div>
+<!-- Secondary Analysis Section -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+<div class="bg-primary/5 p-5 rounded-lg border border-primary/10">
+<span class="material-symbols-outlined text-primary mb-2">medical_services</span>
+<h5 class="font-bold text-sm mb-1">Medizinische Qualität</h5>
+<p class="text-xs text-slate-500">Formuliert nach postoperativen Ernährungsrichtlinien.</p>
+</div>
+<div class="bg-primary/5 p-5 rounded-lg border border-primary/10">
+<span class="material-symbols-outlined text-primary mb-2">eco</span>
+<h5 class="font-bold text-sm mb-1">Bioverfügbar</h5>
+<p class="text-xs text-slate-500">Zutaten ausgewählt für maximale Absorptionsrate.</p>
+</div>
+<div class="bg-primary/5 p-5 rounded-lg border border-primary/10">
+<span class="material-symbols-outlined text-primary mb-2">schedule</span>
+<h5 class="font-bold text-sm mb-1">7-Tage-Zyklus</h5>
+<p class="text-xs text-slate-500">Perfekt abgestimmt auf die natürliche Heilungsphase Ihres Körpers.</p>
+</div>
+</div>
+<!-- Comparison / Ghost State for Alternatives -->
+<div class="border-t border-primary/10 pt-10">
+<h4 class="text-xl font-bold mb-6">Alternative Empfehlungen</h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 opacity-60 hover:opacity-100 transition-opacity cursor-pointer grayscale hover:grayscale-0">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Vitality-Box" class="w-full h-full object-cover" data-alt="Healthy salad bowl background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkoPzU7oZrK6RUvvlHElK1_HzMxPm-m14TQUEbS8fy06On9guYVAkG0CG5TNnlfu0TcjEgOTPnnrpKS9I3NdPFGKd7-fHT6_-IUm--S3cMvoR0tT0KZZYR0snbene7jxtDdL7uFOPgZUSm8-ySjRedcHxqyh1Rgr0FVieEpe0c_Dmc_Yx5JPGo6_PIBUdHGBbuDLwMqV3AZtjTOoqV2e2z8dopi8OqVQoShsOJb5bWQbmWp3EjAXDDN-iGLf66s8SQuXDQSVki6Yg"/>
+</div>
+<div>
+<h5 class="font-bold text-sm">Vitality-Box</h5>
+<p class="text-xs text-slate-500">Fokus auf Energiespitzen. (74% Übereinstimmung)</p>
+<button class="text-primary text-xs font-bold mt-2">Analyse ansehen</button>
+</div>
+</div>
+<div class="flex gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 opacity-60 hover:opacity-100 transition-opacity cursor-pointer grayscale hover:grayscale-0">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Immune-Boost" class="w-full h-full object-cover" data-alt="Clean keto diet meal preparation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR3tqhv1MQDO0zbHTtpq_lj7vpb_GqhHGdt6WmEG-Zarv337HT3rl1k2lcDMHzffR2SenGOoX5pDg3ezGBzzmMMZtFMzNWgeFRXRL2Mnxt4b0BbLsLIXWc19e7JkWjfoexm2gnSWKxe_xA5syal4OOVjQM0yADuovhS8BUYpOXg7ya060T1teQkRZe5nuEz_zM3P5FOYZ4VVhgLl6OOKorGNEMfA9ZJBP2ooh3yY2lCb0bwN7M7oV7B_k9ObcmV4TEcX23JhRyw5M"/>
+</div>
+<div>
+<h5 class="font-bold text-sm">Immune-Boost</h5>
+<p class="text-xs text-slate-500">Hoher Antioxidantien-Fokus. (81% Übereinstimmung)</p>
+<button class="text-primary text-xs font-bold mt-2">Analyse ansehen</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Action (Mobile) -->
+<div class="md:hidden sticky bottom-0 p-4 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-primary/10">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg">
+                Wundheilungs-Box in den Warenkorb
+            </button>
+</div>
+<footer class="mt-20 py-10 border-t border-primary/10 text-center text-slate-500 dark:text-slate-400 text-sm">
+<div class="flex justify-center gap-6 mb-4">
+<a class="hover:text-primary transition-colors" href="#">Datenschutz</a>
+<a class="hover:text-primary transition-colors" href="#">Methodik</a>
+<a class="hover:text-primary transition-colors" href="#">Experten kontaktieren</a>
+</div>
+<p>© 2024 KI-Analyse-Tool. Präzisionsernährung für die Genesung.</p>
+</footer>
+</div>
+</div>
+</body></html>
