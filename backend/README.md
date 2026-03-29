@@ -11,7 +11,20 @@ Dieser Bereich enthaelt spaeter:
 - Datenbankanbindung
 - Integrationen und Tests
 
-## Hinweis
+## Aktueller Stand
 
-Es wurde bewusst nur ein strukturelles Grundgeruest angelegt.
-Es ist noch keine fachliche Implementierung enthalten.
+Aktuell ist nur das minimale API-Grundgeruest vorhanden:
+
+- FastAPI-Einstiegspunkt
+- zentraler API-Router
+- einfacher Health-Check unter `/health`
+
+Die fachlichen Module sind strukturell vorbereitet, aber noch nicht implementiert.
+
+## Lokaler Start
+
+Beispiel:
+
+```bash
+uvicorn app.main:app --reload
+```
