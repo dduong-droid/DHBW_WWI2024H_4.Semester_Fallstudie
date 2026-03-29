@@ -1,0 +1,1 @@
+"""Patient profile router placeholder."""
