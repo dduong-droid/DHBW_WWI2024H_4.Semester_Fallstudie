@@ -10,6 +10,12 @@ Fallstudie Food4Recovery mit Frontend-, Backend-, Infra-, Shared- und Docs-Struk
 - `shared/` fuer gemeinsame Contracts und Absprachen
 - `docs/` fuer Architektur, Setup und Projektdokumentation
 
+## Projektkontext
+
+Die inhaltliche Kurzreferenz zur Geschaeftsidee und zum aktuellen Zielbild liegt hier:
+
+- [project_context.md](/C:/Code/Fallstudie/DHBW_WWI2024H_4.Semester_Fallstudie/docs/project_context.md)
+
 ---
 
 ## Frontend Architektur (MVP)
