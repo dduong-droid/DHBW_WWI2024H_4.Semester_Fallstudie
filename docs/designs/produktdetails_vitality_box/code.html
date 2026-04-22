@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Detail - Vitality-Box</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#97d598",
+                        "surface-container-highest": "#dde5d8",
+                        "primary-fixed-dim": "#52e16e",
+                        "primary": "#006e27",
+                        "inverse-surface": "#2b322a",
+                        "on-primary-fixed": "#002107",
+                        "on-surface-variant": "#3d4a3c",
+                        "secondary": "#306a38",
+                        "secondary-fixed": "#b2f2b2",
+                        "surface-bright": "#f3fcee",
+                        "on-tertiary-fixed-variant": "#7e2a27",
+                        "on-primary": "#ffffff",
+                        "background": "#f3fcee",
+                        "surface-variant": "#dde5d8",
+                        "error": "#ba1a1a",
+                        "on-surface": "#161d15",
+                        "on-background": "#161d15",
+                        "surface-container": "#e8f0e3",
+                        "inverse-on-surface": "#ebf3e6",
+                        "primary-fixed": "#71fe87",
+                        "surface-container-high": "#e2ebdd",
+                        "on-primary-container": "#004d19",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eef6e9",
+                        "outline": "#6d7b6b",
+                        "outline-variant": "#bccbb8",
+                        "on-secondary-container": "#37703d",
+                        "tertiary-container": "#ff8e86",
+                        "inverse-primary": "#52e16e",
+                        "on-tertiary-container": "#772523",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-primary-fixed-variant": "#00531c",
+                        "on-tertiary-fixed": "#410004",
+                        "on-secondary-fixed": "#002107",
+                        "on-secondary-fixed-variant": "#165122",
+                        "surface-tint": "#006e27",
+                        "surface-dim": "#d4ddd0",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#9c413d",
+                        "primary-container": "#33c758",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#b2f2b2",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f3fcee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 sticky z-50 shadow-[0_4px_30px_rgba(0,0,0,0.03)] bg-[#f3fcee]/80 dark:bg-stone-950/80 backdrop-blur-xl">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-7xl mx-auto">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#33c758] dark:text-[#33c758]">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] text-lg font-semibold tracking-tight text-[#33c758] dark:text-[#33c758]">Product Detail</h1>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<main class="max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+<!-- Hero Section -->
+<section class="relative rounded-[1.5rem] overflow-hidden bg-surface-container-low shadow-[0_10px_40px_rgba(0,110,39,0.04)]">
+<div class="aspect-w-16 aspect-h-9 w-full md:aspect-none md:h-[400px]">
+<img alt="Wellness meal hero" class="w-full h-full object-cover" data-alt="Healthy organic bowl with quinoa, roasted vegetables, avocado, and leafy greens on a bright marble surface with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh2q5Tn1ldn8TzmRQWrM97cYvx7FSdauCS9xAWGalN1ya8EKGlOLqdWMNcHHVw7RQ862k3cin8hppqknCza1svddwngIcnITWozcfbbUzp1qkXP8SDp5evNMQj3uaTGY8g6T4SPmhNXA1JjMIV2rTu1BGGEbEAvOFP3rrENFVnRMMOaAVOoFwVJEzK21_DEn8DPEew5oqDzu_beR772SbjDQarjXgR41SuzQ4IMlplmfxThdQLkeS1jODX2NOwDOlGhoOk-VclcRs"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/40 to-transparent p-8 flex flex-col justify-end">
+<h2 class="font-headline text-[3.5rem] font-bold text-on-surface leading-tight tracking-tight mb-2">Vitality-Box</h2>
+<p class="font-body text-[1rem] text-on-surface-variant max-w-2xl">A scientifically balanced nutritional protocol designed to optimize general wellness, restore energy levels, and support metabolic equilibrium.</p>
+</div>
+</section>
+<!-- Daily Plan Bento Grid -->
+<section class="space-y-6">
+<h3 class="font-headline text-[1.75rem] font-semibold text-on-surface tracking-tight px-2">Daily Protocol</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Breakfast Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 shadow-[0_4px_24px_rgba(0,110,39,0.03)] border border-outline-variant/20 hover:shadow-[0_8px_32px_rgba(0,110,39,0.06)] transition-shadow">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+</div>
+<h4 class="font-headline text-[1.375rem] font-medium text-on-surface">Breakfast</h4>
+</div>
+<p class="font-body text-[1rem] text-on-surface mb-6 h-12">Avocado-Vollkornbrot</p>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Protein</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">12g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Carbs</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">35g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Fat</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">18g</span>
+</div>
+</div>
+</div>
+<!-- Lunch Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 shadow-[0_4px_24px_rgba(0,110,39,0.03)] border border-outline-variant/20 hover:shadow-[0_8px_32px_rgba(0,110,39,0.06)] transition-shadow">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<h4 class="font-headline text-[1.375rem] font-medium text-on-surface">Lunch</h4>
+</div>
+<p class="font-body text-[1rem] text-on-surface mb-6 h-12">Putenstreifen mit Gemüse</p>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Protein</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">45g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Carbs</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">20g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Fat</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">12g</span>
+</div>
+</div>
+</div>
+<!-- Dinner Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 shadow-[0_4px_24px_rgba(0,110,39,0.03)] border border-outline-variant/20 hover:shadow-[0_8px_32px_rgba(0,110,39,0.06)] transition-shadow">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">nights_stay</span>
+</div>
+<h4 class="font-headline text-[1.375rem] font-medium text-on-surface">Dinner</h4>
+</div>
+<p class="font-body text-[1rem] text-on-surface mb-6 h-12">Gebackener Feta</p>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Protein</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">25g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Carbs</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">15g</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant font-medium">Fat</span>
+<span class="text-on-surface font-semibold bg-surface-container-low px-3 py-1 rounded-full">22g</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Section -->
+<section class="pt-8 pb-12 flex justify-center">
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline text-[1.375rem] font-medium py-4 px-10 rounded-[1.5rem] shadow-[0_12px_24px_rgba(0,110,39,0.15)] hover:shadow-[0_16px_32px_rgba(0,110,39,0.2)] hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3">
+<span>In den Therapieplan aufnehmen</span>
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</section>
+</main>
+</body></html>

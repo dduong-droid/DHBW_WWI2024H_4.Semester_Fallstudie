@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="antialiased" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Erzähl uns von dir - FOOD 4 RECOVERY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#b2f2b2",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "on-tertiary-fixed-variant": "#7e2a27",
+                    "background": "#f3fcee",
+                    "surface-dim": "#d4ddd0",
+                    "tertiary-container": "#ff8e86",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#52e16e",
+                    "on-surface": "#161d15",
+                    "secondary-fixed": "#b2f2b2",
+                    "inverse-surface": "#2b322a",
+                    "on-secondary-fixed-variant": "#165122",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#3d4a3c",
+                    "secondary-fixed-dim": "#97d598",
+                    "on-tertiary-container": "#772523",
+                    "on-tertiary-fixed": "#410004",
+                    "on-primary-container": "#004d19",
+                    "surface-container-highest": "#dde5d8",
+                    "on-secondary-container": "#37703d",
+                    "primary-fixed-dim": "#52e16e",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#eef6e9",
+                    "tertiary": "#9c413d",
+                    "on-primary-fixed": "#002107",
+                    "primary-container": "#33c758",
+                    "primary": "#006e27",
+                    "secondary": "#306a38",
+                    "primary-fixed": "#71fe87",
+                    "tertiary-fixed": "#ffdad7",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#006e27",
+                    "on-primary-fixed-variant": "#00531c",
+                    "outline": "#6d7b6b",
+                    "on-secondary-fixed": "#002107",
+                    "surface-bright": "#f3fcee",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#e2ebdd",
+                    "inverse-on-surface": "#ebf3e6",
+                    "surface-container": "#e8f0e3",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#bccbb8",
+                    "surface": "#f3fcee",
+                    "on-background": "#161d15",
+                    "surface-variant": "#dde5d8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": [
+                            "Inter"
+                    ],
+                    "body": [
+                            "Inter"
+                    ],
+                    "label": [
+                            "Inter"
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3fcee; /* Default surface */
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col items-center justify-center pt-12 pb-32 px-4 sm:px-6 lg:px-8">
+<!-- Top App Bar (Modified for transactional screen - simplified, no actions) -->
+<header class="w-full fixed top-0 z-50 flex justify-center items-center px-6 py-4 bg-surface/90 backdrop-blur-md">
+<span class="font-headline font-bold text-primary tracking-widest text-base">FOOD 4 RECOVERY</span>
+</header>
+<main class="w-full max-w-md w-full space-y-8 mt-12 relative z-10">
+<!-- Header Section -->
+<div class="text-left mb-10 pl-2">
+<!-- Progress indicator conceptually -->
+<div class="flex items-center gap-2 mb-4">
+<div class="h-1.5 w-12 rounded-full bg-primary"></div>
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+</div>
+<h1 class="font-headline text-display-lg font-bold text-on-surface tracking-tight leading-tight">Erzähl uns von dir</h1>
+<p class="font-body text-body-lg text-on-surface-variant mt-3">Diese Angaben helfen uns, einen auf dich abgestimmten Plan zu erstellen.</p>
+</div>
+<!-- Form Section - Tonal Layering -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 shadow-[0_8px_30px_rgba(0,110,39,0.04)] space-y-6"><!-- Name Input -->
+<div class="space-y-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider" for="name">Name</label>
+<div class="relative">
+<input class="block w-full rounded-lg border-none bg-surface-container-high py-4 px-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:outline-none transition-all" id="name" name="name" placeholder="z.B. Maria" type="text"/>
+</div>
+</div>
+<!-- Age Input -->
+<div class="space-y-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider" for="age">Alter</label>
+<div class="relative">
+<input class="block w-full rounded-lg border-none bg-surface-container-high py-4 pl-4 pr-12 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:outline-none transition-all" id="age" name="age" placeholder="z.B. 28" type="number"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="text-on-surface-variant font-body text-sm">Jahre</span>
+</div>
+</div>
+</div>
+<!-- Weight Input -->
+<div class="space-y-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider" for="weight">Gewicht</label>
+<div class="relative">
+<input class="block w-full rounded-lg border-none bg-surface-container-high py-4 pl-4 pr-12 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:outline-none transition-all" id="weight" name="weight" placeholder="z.B. 65" step="0.1" type="number"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="text-on-surface-variant font-body text-sm">kg</span>
+</div>
+</div>
+</div>
+<!-- Height Input -->
+<div class="space-y-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider" for="height">Größe</label>
+<div class="relative">
+<input class="block w-full rounded-lg border-none bg-surface-container-high py-4 pl-4 pr-12 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:outline-none transition-all" id="height" name="height" placeholder="z.B. 170" type="number"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+<span class="text-on-surface-variant font-body text-sm">cm</span>
+</div>
+</div>
+</div>
+<!-- Appetite Select (Custom styled) -->
+<div class="space-y-2 pt-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Appetit aktuell</label>
+<div class="grid grid-cols-1 gap-3">
+<!-- Option 1 -->
+<label class="relative flex cursor-pointer rounded-xl bg-surface-container-low p-4 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="appetite" type="radio" value="low"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-headline text-title-lg font-medium text-on-surface peer-checked:text-primary">Eher gering</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+<!-- Option 2 -->
+<label class="relative flex cursor-pointer rounded-xl bg-surface-container-low p-4 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input checked="" class="peer sr-only" name="appetite" type="radio" value="normal"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-headline text-title-lg font-medium text-on-surface peer-checked:text-primary">Normal</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+<!-- Option 3 -->
+<label class="relative flex cursor-pointer rounded-xl bg-surface-container-low p-4 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="appetite" type="radio" value="high"/>
+<span class="flex flex-1">
+<span class="flex flex-col">
+<span class="block font-headline text-title-lg font-medium text-on-surface peer-checked:text-primary">Eher groß</span>
+</span>
+</span>
+<span class="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+</div>
+</div>
+<!-- Allergies Multi-select -->
+<div class="space-y-2 pt-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Allergien</label>
+<div class="flex flex-wrap gap-2">
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="allergies" type="checkbox" value="nuesse"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Nüsse</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="allergies" type="checkbox" value="soja"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Soja</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="allergies" type="checkbox" value="fisch"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Fisch</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="allergies" type="checkbox" value="eier"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Eier</span>
+</label>
+</div>
+</div>
+<!-- Intolerances Multi-select -->
+<div class="space-y-2 pt-2">
+<label class="block font-label text-label-md font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Unverträglichkeiten</label>
+<div class="flex flex-wrap gap-2">
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="intolerances" type="checkbox" value="laktose"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Laktose</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="intolerances" type="checkbox" value="gluten"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Gluten</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="intolerances" type="checkbox" value="fruktose"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Fruktose</span>
+</label>
+<label class="relative flex items-center justify-center cursor-pointer rounded-xl bg-surface-container-low px-4 py-3 focus:outline-none border border-transparent hover:bg-surface-variant transition-colors has-[:checked]:bg-primary-container/10 has-[:checked]:border-primary/20">
+<input class="peer sr-only" name="intolerances" type="checkbox" value="histamin"/>
+<span class="font-headline text-body-lg font-medium text-on-surface peer-checked:text-primary">Histamin</span>
+</label>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-surface/80 backdrop-blur-xl z-50 flex justify-center pb-8 shadow-[0_-8px_30px_rgba(0,110,39,0.04)]">
+<button class="w-full max-w-md rounded-[1.5rem] bg-gradient-to-br from-primary to-primary-container py-4 px-6 text-center font-headline text-title-lg font-medium text-on-primary shadow-lg shadow-primary/20 hover:scale-[0.98] transition-transform flex items-center justify-center gap-2" type="button">
+<span>Weiter</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FOOD 4 RECOVERY - Scan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#b2f2b2",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-tertiary-fixed-variant": "#7e2a27",
+                        "background": "#f3fcee",
+                        "surface-dim": "#d4ddd0",
+                        "tertiary-container": "#ff8e86",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#52e16e",
+                        "on-surface": "#161d15",
+                        "secondary-fixed": "#b2f2b2",
+                        "inverse-surface": "#2b322a",
+                        "on-secondary-fixed-variant": "#165122",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3d4a3c",
+                        "secondary-fixed-dim": "#97d598",
+                        "on-tertiary-container": "#772523",
+                        "on-tertiary-fixed": "#410004",
+                        "on-primary-container": "#004d19",
+                        "surface-container-highest": "#dde5d8",
+                        "on-secondary-container": "#37703d",
+                        "primary-fixed-dim": "#52e16e",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#eef6e9",
+                        "tertiary": "#9c413d",
+                        "on-primary-fixed": "#002107",
+                        "primary-container": "#33c758",
+                        "primary": "#006e27",
+                        "secondary": "#306a38",
+                        "primary-fixed": "#71fe87",
+                        "tertiary-fixed": "#ffdad7",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#006e27",
+                        "on-primary-fixed-variant": "#00531c",
+                        "outline": "#6d7b6b",
+                        "on-secondary-fixed": "#002107",
+                        "surface-bright": "#f3fcee",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e2ebdd",
+                        "inverse-on-surface": "#ebf3e6",
+                        "surface-container": "#e8f0e3",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#bccbb8",
+                        "surface": "#f3fcee",
+                        "on-background": "#161d15",
+                        "surface-variant": "#dde5d8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- TopAppBar (from JSON, adapted for hidden mobile/visible web if needed, but per instructions sticky top-0) -->
+<header class="bg-[#f3fcee]/90 dark:bg-emerald-950/90 backdrop-blur-md w-full sticky top-0 z-50 flex justify-between items-center px-6 py-4 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden flex-shrink-0">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close up portrait of a young woman with a calm expression, soft natural lighting, health wellness context" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt5lopRGHe6dBIaHZ8gexHroD_MoEna91DirwLnzfUAyuHGQL4vpDfEWmHetxDS-VZ66GB866CTXZROqnIhF2u8UmPwJ-HoBh6j_IYdjhZlz6Utb09LspSGkNZuAfPH0JlIfAy9sXL0HioU3qtBcoi5Xv93wA1HIsLA13YXm5jTOcWaVXoxPB4YdAjJIBcoQqeJ0w0Y2vX0s4sRkTzbHgw8XnZ1mF4CV0rBPrDFx3UogsSkwE7To3jNZ11pXVftFG4uW4WKjnYQ5E"/>
+</div>
+<h1 class="font-headline text-lg font-bold tracking-tight text-emerald-600 dark:text-emerald-400">FOOD 4 RECOVERY</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-emerald-100/50 dark:hover:bg-emerald-800/50 transition-colors text-emerald-600 dark:text-emerald-400 active:scale-[0.98]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas (Scan Simulation) -->
+<main class="flex-1 flex flex-col items-center justify-center p-6 relative pb-24 z-10">
+<!-- Ambient Background Glow to add that "Sanctuary" depth -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40 z-0">
+<div class="w-[300px] h-[300px] bg-gradient-to-br from-primary/10 to-primary-container/20 rounded-full blur-[60px]"></div>
+</div>
+<div class="relative z-10 flex flex-col items-center max-w-sm w-full">
+<!-- Scanning Container: High-end glassmorphism card -->
+<div class="bg-surface-container-lowest/80 backdrop-blur-2xl rounded-[1.5rem] p-10 w-full flex flex-col items-center shadow-[0_12px_40px_rgba(0,110,39,0.06)] border border-outline-variant/20 relative overflow-hidden group">
+<!-- Scanning Line Overlay (Static representation) -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-primary-container shadow-[0_0_15px_rgba(51,199,88,0.8)] z-20"></div>
+<div class="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-primary/5 to-transparent z-10"></div>
+<!-- Icon -->
+<div class="w-24 h-24 rounded-[1.5rem] bg-surface-container-low flex items-center justify-center mb-8 relative z-0">
+<span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 0, 'wght' 200;">document_scanner</span>
+</div>
+<!-- Text Content -->
+<h2 class="font-headline text-[1.75rem] font-semibold text-on-surface mb-2 text-center tracking-tight">Arztbrief scannen</h2>
+<p class="font-body text-base text-on-surface-variant text-center mb-8">KI analysiert Daten...</p>
+<!-- Progress Indicator -->
+<div class="w-full max-w-[200px] h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container w-[65%] rounded-full shadow-[0_0_10px_rgba(51,199,88,0.4)]"></div>
+</div>
+<!-- Helper text for progress -->
+<span class="font-label text-[10px] uppercase font-bold tracking-wider text-primary mt-4">65% abgeschlossen</span>
+</div>
+<!-- Cancel Button (Secondary Ghost Style) -->
+<button class="mt-8 px-8 py-3 rounded-xl border border-outline-variant/40 text-primary font-headline text-sm font-medium hover:bg-surface-container-low active:scale-95 transition-all">
+                Abbrechen
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (from JSON - Semantic Shell Mandate: Present on "Scan" destination) -->
+<nav class="bg-[#ffffff]/80 dark:bg-emerald-950/80 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-[1.5rem] shadow-[0_-8px_30px_rgba(0,110,39,0.08)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-3 hidden md:flex md:hidden lg:hidden">
+<!-- Dashboard (Inactive) -->
+<a class="flex flex-col items-center justify-center text-emerald-900/40 dark:text-emerald-100/40 px-5 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-headline text-[10px] font-bold uppercase tracking-wider">Dashboard</span>
+</a>
+<!-- Scan (Active - Semantic Match) -->
+<a class="flex flex-col items-center justify-center bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-100 rounded-2xl px-5 py-1.5 active:scale-95 transition-transform duration-200 pointer-events-none" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">document_scanner</span>
+<span class="font-headline text-[10px] font-bold uppercase tracking-wider">Scan</span>
+</a>
+<!-- Shop (Inactive) -->
+<a class="flex flex-col items-center justify-center text-emerald-900/40 dark:text-emerald-100/40 px-5 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-headline text-[10px] font-bold uppercase tracking-wider">Shop</span>
+</a>
+</nav>
+<!-- Desktop/Tablet Nav Override (Web representation of Bottom Nav) -->
+<nav class="hidden md:flex fixed bottom-0 w-full z-50 bg-[#ffffff]/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-8px_30px_rgba(0,110,39,0.08)] justify-center gap-12 px-6 pb-6 pt-4">
+<a class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors opacity-60" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest">Dashboard</span>
+</a>
+<a class="flex flex-col items-center text-primary bg-primary/10 px-6 py-2 rounded-2xl pointer-events-none" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl" style="font-variation-settings: 'FILL' 1;">document_scanner</span>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest">Scan</span>
+</a>
+<a class="flex flex-col items-center text-on-surface-variant hover:text-primary transition-colors opacity-60" href="#">
+<span class="material-symbols-outlined mb-1 text-2xl" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-label text-[11px] font-bold uppercase tracking-widest">Shop</span>
+</a>
+</nav>
+</body></html>

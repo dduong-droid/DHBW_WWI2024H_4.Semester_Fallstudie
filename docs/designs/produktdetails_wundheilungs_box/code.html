@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Detail - Wundheilungs-Box</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#97d598",
+                        "surface-container-highest": "#dde5d8",
+                        "primary-fixed-dim": "#52e16e",
+                        "primary": "#006e27",
+                        "inverse-surface": "#2b322a",
+                        "on-primary-fixed": "#002107",
+                        "on-surface-variant": "#3d4a3c",
+                        "secondary": "#306a38",
+                        "secondary-fixed": "#b2f2b2",
+                        "surface-bright": "#f3fcee",
+                        "on-tertiary-fixed-variant": "#7e2a27",
+                        "on-primary": "#ffffff",
+                        "background": "#f3fcee",
+                        "surface-variant": "#dde5d8",
+                        "error": "#ba1a1a",
+                        "on-surface": "#161d15",
+                        "on-background": "#161d15",
+                        "surface-container": "#e8f0e3",
+                        "inverse-on-surface": "#ebf3e6",
+                        "primary-fixed": "#71fe87",
+                        "surface-container-high": "#e2ebdd",
+                        "on-primary-container": "#004d19",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eef6e9",
+                        "outline": "#6d7b6b",
+                        "outline-variant": "#bccbb8",
+                        "on-secondary-container": "#37703d",
+                        "tertiary-container": "#ff8e86",
+                        "inverse-primary": "#52e16e",
+                        "on-tertiary-container": "#772523",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-primary-fixed-variant": "#00531c",
+                        "on-tertiary-fixed": "#410004",
+                        "on-secondary-fixed": "#002107",
+                        "on-secondary-fixed-variant": "#165122",
+                        "surface-tint": "#006e27",
+                        "surface-dim": "#d4ddd0",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#9c413d",
+                        "primary-container": "#33c758",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#b2f2b2",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f3fcee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-[#f3fcee]/80 dark:bg-stone-950/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#33c758] dark:text-[#33c758]">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] text-lg font-semibold tracking-tight text-[#33c758] dark:text-[#33c758]">Product Detail</h1>
+</div>
+<!-- Navigation items hidden on mobile, shown on md+ -->
+<nav class="hidden md:flex gap-6">
+<a class="text-stone-500 dark:text-stone-400 hover:opacity-80 transition-opacity" href="#">Home</a>
+<a class="text-[#33c758] font-bold hover:opacity-80 transition-opacity" href="#">Shop</a>
+<a class="text-stone-500 dark:text-stone-400 hover:opacity-80 transition-opacity" href="#">Recovery</a>
+<a class="text-stone-500 dark:text-stone-400 hover:opacity-80 transition-opacity" href="#">Profile</a>
+</nav>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12 space-y-12">
+<!-- Hero Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
+<div class="rounded-[1.5rem] overflow-hidden aspect-square md:aspect-auto md:h-full bg-surface-container-low flex items-center justify-center p-8 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
+<img alt="Wundheilungs-Box" class="object-contain w-full h-full relative z-10 max-h-[400px]" data-alt="Premium medical wound healing kit box in minimalist bright clinical setting with soft natural lighting and elegant presentation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8ZDHeIPpxzckzv6DNZn7gRrNwHtojcC6sra5yIClMtug8Cyuc8d5ZyAwaMhJFYax5fO_Oj-MjU9lR4e8CISZ_pF23gH6mo6aw00jr5hQDiBqKQAhVx7DKl33NMyYDgSgh-pKfCvYfCxAy7A0UTfQjpw8sewKqrsAOmYA9FD6jHnnz_eDRabZDidlby4_21DrkNnC45XKbI-BW5ps3mxQoJ_GaMnwzHWSxaQDvgC_pf7dyzlHyCGMJ2y3R6qngxDU8A9_UavLxnSs"/>
+</div>
+<div class="flex flex-col space-y-6">
+<div>
+<span class="inline-flex items-center rounded-full bg-surface-container-low px-3 py-1 text-sm font-semibold text-on-secondary-container mb-4">Therapy Kit</span>
+<h2 class="text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-2">Wundheilungs-Box</h2>
+<p class="text-xl font-medium text-primary">Accelerated Recovery Protocol</p>
+</div>
+<p class="text-lg text-on-surface-variant leading-relaxed">
+                    Designed to optimize tissue regeneration and reduce inflammation post-surgery or trauma. This comprehensive box contains specialized nutrition to support the body's natural healing processes, focusing on critical macro and micronutrients.
+                </p>
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 shadow-sm border border-outline-variant/20">
+<h3 class="text-lg font-semibold text-on-surface mb-4">Clinical Benefits</h3>
+<ul class="space-y-3">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">Promotes collagen synthesis</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">Reduces localized inflammation</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">Provides essential amino acids for tissue repair</span>
+</li>
+</ul>
+</div>
+<div class="pt-4">
+<button class="w-full md:w-auto bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-[1.5rem] px-8 py-4 font-semibold text-lg shadow-[0_8px_24px_rgba(0,110,39,0.15)] hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_task</span>
+                        In den Therapieplan aufnehmen
+                    </button>
+</div>
+</div>
+</section>
+<!-- Daily Plan Section -->
+<section class="space-y-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl md:text-3xl font-bold text-on-surface tracking-tight">Therapeutic Daily Plan</h3>
+<span class="text-sm font-semibold text-primary-container uppercase tracking-wider">Nutrition Protocol</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Breakfast Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 border border-outline-variant/20 transition-all hover:bg-surface-container-low group">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Breakfast</p>
+<h4 class="text-lg font-bold text-on-surface">Kollagen-Porridge</h4>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Protein</span>
+<span class="text-sm font-bold text-on-surface">35g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 70%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Carbs</span>
+<span class="text-sm font-bold text-on-surface">45g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Fats</span>
+<span class="text-sm font-bold text-on-surface">12g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Lunch Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 border border-outline-variant/20 transition-all hover:bg-surface-container-low group">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Lunch</p>
+<h4 class="text-lg font-bold text-on-surface">Lachs-Quinoa-Bowl</h4>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Protein</span>
+<span class="text-sm font-bold text-on-surface">45g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 90%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Carbs</span>
+<span class="text-sm font-bold text-on-surface">65g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Fats</span>
+<span class="text-sm font-bold text-on-surface">25g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dinner Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-6 border border-outline-variant/20 transition-all hover:bg-surface-container-low group">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">clear_night</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Dinner</p>
+<h4 class="text-lg font-bold text-on-surface">Hühnerkraftbrühe</h4>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Protein</span>
+<span class="text-sm font-bold text-on-surface">35g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 70%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Carbs</span>
+<span class="text-sm font-bold text-on-surface">30g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-medium text-on-surface-variant">Fats</span>
+<span class="text-sm font-bold text-on-surface">18g</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-[#f3fcee]/90 dark:bg-stone-950/90 backdrop-blur-2xl docked full-width bottom-0 rounded-t-[24px] shadow-[0_-10px_40px_rgba(0,110,39,0.06)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:bg-[#33c758]/5 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">home_health</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:bg-[#33c758]/5 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">healing</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Recovery</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#33c758]/10 text-[#33c758] rounded-2xl px-5 py-2 hover:bg-[#33c758]/5 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest text-[#33c758]">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-5 py-2 hover:bg-[#33c758]/5 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-['Inter'] text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+</body></html>
