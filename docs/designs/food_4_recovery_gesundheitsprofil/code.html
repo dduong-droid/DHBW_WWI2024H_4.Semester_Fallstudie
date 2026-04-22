@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "accent-orange": "#f97316", // Recovery Orange accent
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Personalisieren Sie Ihre Genesung</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-[1200px] mx-auto px-4 py-8 md:py-12">
+<!-- Progress Header -->
+<div class="max-w-[640px] mx-auto mb-10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex flex-col">
+<h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Personalisieren Sie Ihre Genesung</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Schritt 2 von 4: Medizinischer Hintergrund</p>
+</div>
+<div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-xl">
+<span class="material-symbols-outlined text-primary text-2xl">health_metrics</span>
+</div>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Main Form Container -->
+<div class="max-w-[640px] mx-auto">
+<div class="bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 rounded-xl p-8 md:p-10">
+<!-- Personal Data Section -->
+<div class="mb-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-accent-orange">person</span>
+<h2 class="text-xl font-bold">Physisches Profil</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Alter</label>
+<input class="w-full h-14 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 focus:ring-2 focus:ring-accent-orange/50 focus:border-accent-orange transition-all outline-none" placeholder="28" type="number"/>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Gewicht (kg)</label>
+<input class="w-full h-14 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 focus:ring-2 focus:ring-accent-orange/50 focus:border-accent-orange transition-all outline-none" placeholder="72" type="number"/>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">Größe (cm)</label>
+<input class="w-full h-14 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg px-4 focus:ring-2 focus:ring-accent-orange/50 focus:border-accent-orange transition-all outline-none" placeholder="180" type="number"/>
+</div>
+</div>
+</div>
+<!-- Medical Conditions Section -->
+<div class="mb-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-accent-orange">medical_services</span>
+<h2 class="text-xl font-bold">Aktuelle Beschwerden</h2>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Wählen Sie alles Zutreffende aus, damit wir Ihre Aktivitäten anpassen können.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Post-OP Erholung</span>
+<span class="block text-xs text-slate-500 mt-1">Chirurgischer Eingriff in den letzten 6 Monaten</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-accent-orange bg-accent-orange/5 dark:bg-accent-orange/10 transition-all group">
+<input checked="" class="hidden peer" type="checkbox"/>
+<div class="absolute inset-0 border-2 border-accent-orange rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Chemotherapie</span>
+<span class="block text-xs text-slate-500 mt-1">Laufende oder kürzliche onkologische Behandlung</span>
+</div>
+<span class="material-symbols-outlined text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Chronische Schmerzen</span>
+<span class="block text-xs text-slate-500 mt-1">Anhaltende Beschwerden oder eingeschränkte Mobilität</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Herz-Kreislauf</span>
+<span class="block text-xs text-slate-500 mt-1">Vorgeschichte oder Überwachung des Herzens</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+</div>
+</div>
+<!-- Allergies Section (New) -->
+<div class="mb-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-accent-orange">warning</span>
+<h2 class="text-xl font-bold">Allergien &amp; Unverträglichkeiten</h2>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Bitte wählen Sie alle bekannten Allergien oder Nahrungsmittel-Unverträglichkeiten aus.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Laktoseintoleranz</span>
+<span class="block text-xs text-slate-500 mt-1">Unverträglichkeit von Milchprodukten</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Glutenfrei</span>
+<span class="block text-xs text-slate-500 mt-1">Zöliakie oder Gluten-Sensitivität</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Nussallergie</span>
+<span class="block text-xs text-slate-500 mt-1">Allergie gegen Schalenfrüchte oder Erdnüsse</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+<label class="relative flex items-start p-4 cursor-pointer rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-accent-orange/30 transition-all group">
+<input class="hidden peer" type="checkbox"/>
+<div class="peer-checked:border-accent-orange absolute inset-0 border-2 border-transparent rounded-xl pointer-events-none"></div>
+<div class="flex-1">
+<span class="block font-bold text-slate-800 dark:text-slate-200">Sonstige</span>
+<span class="block text-xs text-slate-500 mt-1">Andere spezifische Unverträglichkeiten</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-accent-orange peer-checked:text-accent-orange">check_circle</span>
+</label>
+</div>
+</div>
+<!-- Additional Info -->
+<div class="mb-8">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Weitere Anmerkungen oder Bedürfnisse</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg p-4 focus:ring-2 focus:ring-accent-orange/50 focus:border-accent-orange transition-all outline-none resize-none" placeholder="Erzählen Sie uns mehr über Ihre spezifischen Bedürfnisse..." rows="3"></textarea>
+</div>
+<!-- Footer Actions -->
+<div class="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800">
+<button class="px-6 py-3 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                        Zurück
+                    </button>
+<button class="bg-primary hover:bg-primary/90 text-white px-10 py-3.5 rounded-full font-bold shadow-lg shadow-primary/25 transition-transform active:scale-95 flex items-center gap-2">
+                        Weiter
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Trust Badge -->
+<div class="mt-8 flex items-center justify-center gap-4 text-slate-400">
+<div class="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">lock</span>
+                    HIPAA Konform
+                </div>
+<div class="w-1 h-1 rounded-full bg-slate-300"></div>
+<div class="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">encrypted</span>
+                    Ende-zu-Ende verschlüsselt
+                </div>
+</div>
+</div>
+</div>
+</body></html>

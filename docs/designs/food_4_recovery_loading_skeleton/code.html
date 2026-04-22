@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Food 4 Recovery - Loading Skeleton</title>
+<!-- BEGIN: External Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- END: External Scripts -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="animations">
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+    .skeleton-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      background-color: #e5e7eb; /* tailwind gray-200 */
+    }
+  </style>
+<style data-purpose="layout-styling">
+    body {
+      background-color: #f9fafb; /* Off-white background */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .upload-card-dashed {
+      border: 2px dashed #d1d5db; /* gray-300 */
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- BEGIN: MainHeader Skeleton -->
+<header class="w-full bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg skeleton-pulse" data-purpose="logo-skeleton"></div>
+<div class="w-32 h-6 rounded skeleton-pulse" data-purpose="brand-name-skeleton"></div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-6 h-6 rounded-full skeleton-pulse" data-purpose="notification-icon-skeleton"></div>
+<div class="h-8 w-px bg-gray-200"></div>
+<div class="flex items-center gap-3 border border-gray-200 rounded-full px-4 py-1.5">
+<div class="w-6 h-6 rounded-full skeleton-pulse"></div>
+<div class="w-20 h-4 rounded skeleton-pulse"></div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader Skeleton -->
+<!-- BEGIN: MainContent Skeleton -->
+<main class="flex-grow flex flex-col items-center pt-12 pb-20 px-4">
+<!-- Top Badge -->
+<div class="mb-6">
+<div class="w-48 h-8 rounded-full skeleton-pulse" data-purpose="status-badge-skeleton"></div>
+</div>
+<!-- Title and Subtitle -->
+<div class="text-center space-y-4 mb-12">
+<div class="w-96 h-12 rounded-lg skeleton-pulse mx-auto" data-purpose="headline-skeleton"></div>
+<div class="w-[500px] h-4 rounded skeleton-pulse mx-auto"></div>
+<div class="w-[450px] h-4 rounded skeleton-pulse mx-auto"></div>
+</div>
+<!-- Upload Card -->
+<section class="w-full max-w-4xl bg-white rounded-3xl p-16 shadow-sm border border-gray-100 upload-card-dashed relative" data-purpose="upload-card-skeleton">
+<div class="flex flex-col items-center">
+<!-- Icon Container -->
+<div class="w-20 h-24 rounded-2xl skeleton-pulse mb-8" data-purpose="upload-icon-skeleton"></div>
+<!-- Text Placeholders -->
+<div class="w-64 h-8 rounded skeleton-pulse mb-4"></div>
+<div class="w-80 h-4 rounded skeleton-pulse mb-10"></div>
+<!-- Action Button -->
+<div class="w-56 h-14 rounded-full skeleton-pulse mb-12" data-purpose="button-skeleton"></div>
+<!-- Divider & Requirements -->
+<div class="w-full border-t border-gray-100 pt-8 flex justify-center gap-8">
+<div class="w-24 h-4 rounded skeleton-pulse"></div>
+<div class="w-24 h-4 rounded skeleton-pulse"></div>
+</div>
+</div>
+</section>
+<!-- Trust Features -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-20 w-full max-w-5xl" data-purpose="trust-features-skeleton">
+<!-- Feature 1 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full skeleton-pulse mb-4"></div>
+<div class="w-32 h-5 rounded skeleton-pulse mb-3"></div>
+<div class="w-48 h-3 rounded skeleton-pulse mb-2"></div>
+<div class="w-40 h-3 rounded skeleton-pulse"></div>
+</div>
+<!-- Feature 2 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full skeleton-pulse mb-4"></div>
+<div class="w-32 h-5 rounded skeleton-pulse mb-3"></div>
+<div class="w-48 h-3 rounded skeleton-pulse mb-2"></div>
+<div class="w-40 h-3 rounded skeleton-pulse"></div>
+</div>
+<!-- Feature 3 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full skeleton-pulse mb-4"></div>
+<div class="w-32 h-5 rounded skeleton-pulse mb-3"></div>
+<div class="w-48 h-3 rounded skeleton-pulse mb-2"></div>
+<div class="w-40 h-3 rounded skeleton-pulse"></div>
+</div>
+</section>
+</main>
+<!-- END: MainContent Skeleton -->
+<!-- BEGIN: Footer Skeleton -->
+<footer class="w-full bg-white border-t border-gray-100 px-8 py-6 flex flex-col md:flex-row justify-between items-center text-sm gap-4">
+<div class="flex gap-6">
+<div class="w-20 h-4 rounded skeleton-pulse"></div>
+<div class="w-20 h-4 rounded skeleton-pulse"></div>
+<div class="w-32 h-4 rounded skeleton-pulse"></div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full skeleton-pulse"></div>
+<div class="w-32 h-4 rounded skeleton-pulse"></div>
+</div>
+</footer>
+<!-- END: Footer Skeleton -->
+</body></html>

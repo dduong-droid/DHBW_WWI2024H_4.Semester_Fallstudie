@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mahlzeit hinzufügen - Food 4 Recovery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Main Container -->
+<div class="mx-auto w-full max-w-[480px] flex flex-col min-h-screen bg-background-light dark:bg-background-dark pb-32">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 px-6 pt-8 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="flex items-center justify-between mb-6">
+<button class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-slate-800 shadow-sm">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">chevron_left</span>
+</button>
+<div class="flex gap-3">
+<button class="flex items-center justify-center size-10 rounded-full bg-white dark:bg-slate-800 shadow-sm">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">history</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-full bg-primary text-white shadow-md">
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+</div>
+</div>
+<h1 class="font-serif text-3xl text-slate-900 dark:text-slate-50 mb-6">Mahlzeit hinzufügen</h1>
+<!-- Glassmorphism Search Bar -->
+<div class="relative mb-6">
+<div class="glass flex items-center w-full h-14 px-5 rounded-2xl shadow-sm border border-slate-200/50">
+<span class="material-symbols-outlined text-slate-400 mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-lg placeholder:text-slate-400" placeholder="Lebensmittel suchen..." type="text"/>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-5 py-2 rounded-full bg-primary text-white font-semibold text-sm whitespace-nowrap">Suche</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium text-sm border border-slate-100 dark:border-slate-700 whitespace-nowrap">Favoriten</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium text-sm border border-slate-100 dark:border-slate-700 whitespace-nowrap">Eigene Rezepte</button>
+<button class="px-5 py-2 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium text-sm border border-slate-100 dark:border-slate-700 whitespace-nowrap">Scanner</button>
+</div>
+</header>
+<!-- Content Area -->
+<main class="px-6 flex-1">
+<!-- Frequent Items -->
+<section class="mb-8">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 ml-1">Häufig gewählt</h3>
+<div class="space-y-3">
+<!-- Item 1 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">eco</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Haferflocken</h4>
+<p class="text-sm text-slate-500">100g • 368 kcal</p>
+</div>
+<button class="size-8 rounded-full border-2 border-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<!-- Item 2 (Selected State) -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl flex flex-col gap-4 shadow-md border-2 border-primary">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-xl bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white">nutrition</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Beeren-Mix (TK)</h4>
+<p class="text-sm text-slate-500">Portion • 54 kcal</p>
+</div>
+<button class="size-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">check</span>
+</button>
+</div>
+<!-- Portion Selector -->
+<div class="pt-2 pb-1">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-400">Portionsgröße</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold text-primary">125</span>
+<span class="text-sm font-medium text-slate-400">Gramm</span>
+</div>
+</div>
+<div class="relative w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full">
+<div class="absolute top-0 left-0 h-full w-[40%] bg-primary rounded-full"></div>
+<div class="absolute top-1/2 left-[40%] -translate-y-1/2 size-5 bg-white border-2 border-primary rounded-full shadow-lg"></div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">grain</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Leinsamen</h4>
+<p class="text-sm text-slate-500">10g • 53 kcal</p>
+</div>
+<button class="size-8 rounded-full border-2 border-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Nutritional Preview -->
+<section class="bg-primary/5 dark:bg-primary/10 rounded-2xl p-5 border border-primary/10">
+<h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">analytics</span>
+                    Einfluss auf Tagesbilanz
+                </h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="text-center">
+<div class="text-[10px] font-bold uppercase text-slate-400 mb-1">Kalorien</div>
+<div class="text-lg font-bold text-slate-800 dark:text-slate-100">+68</div>
+<div class="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-primary w-[75%]"></div>
+</div>
+</div>
+<div class="text-center border-x border-slate-200 dark:border-slate-700">
+<div class="text-[10px] font-bold uppercase text-slate-400 mb-1">Protein</div>
+<div class="text-lg font-bold text-slate-800 dark:text-slate-100">+1.2g</div>
+<div class="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-blue-400 w-[45%]"></div>
+</div>
+</div>
+<div class="text-center">
+<div class="text-[10px] font-bold uppercase text-slate-400 mb-1">Zink</div>
+<div class="text-lg font-bold text-slate-800 dark:text-slate-100">+0.4mg</div>
+<div class="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-amber-400 w-[90%]"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 flex justify-center">
+<div class="w-full max-w-[480px]">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                    Zur Mahlzeit hinzufügen
+                </button>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

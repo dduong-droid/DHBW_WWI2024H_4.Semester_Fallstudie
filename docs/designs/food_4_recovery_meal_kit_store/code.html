@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Food 4 Recovery | Medizinische Ernährung</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                        "slate-custom": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(246, 248, 246, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header / Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-primary/10">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-2 rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">healing</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">Food 4 Recovery</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Über uns</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Wissenschaft</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Ernährungsplan</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm relative">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">2</span>
+</button>
+<button class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">person</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-20">
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-6 py-8">
+<div class="relative w-full h-[550px] rounded-3xl overflow-hidden group shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A gourmet salmon dish with vibrant green vegetables on a white plate" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDARbNcerq5HAtA3dk_TSXdLnZ_6I8JCe-TjsFecGX51miaqszn_tafPQBorX7dch10oqOCKrfmuyLRjdGRwZaAtwbfbjJdPElWc1xa-DQb-bj3F0B2xzgyYGFNgZwP29ExDir9NhSBo1JmBK9_Qg9XXBpLr74fv6T9xJwlRDeVTmoOkwf799Sn5Tx0su7lNJkw-5UFakw690Hp6wtMfuBCw5BJ_5Swih-IauomkN32h7TyNOM6q4LcBl4h0wpSQY94n9OuS3tE8S0");'></div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+<div class="relative h-full flex flex-col justify-center px-8 md:px-16 max-w-2xl text-white">
+<span class="bg-primary/90 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full w-fit mb-6">Empfehlung der Woche</span>
+<h2 class="font-serif text-5xl md:text-7xl mb-6 leading-[1.1]">Wundheilungs-Box</h2>
+<p class="text-lg md:text-xl text-slate-200 mb-8 font-light leading-relaxed">
+                        Beschleunigen Sie Ihre Genesung mit unserer wissenschaftlich fundierten Nährstoffkombination.
+                    </p>
+<div class="flex flex-wrap gap-4 mb-10">
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-sm font-medium">Entzündungshemmend</span>
+</div>
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+<span class="text-sm font-medium">Hochproteinreich</span>
+</div>
+<div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-primary">biotech</span>
+<span class="text-sm font-medium">Zink &amp; Vitamin C+</span>
+</div>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-4 px-10 rounded-2xl w-fit transition-all shadow-lg flex items-center gap-3">
+                        Jetzt Entdecken
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Filters / Tabs -->
+<section class="max-w-7xl mx-auto px-6 py-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<h3 class="font-serif text-3xl text-slate-900 dark:text-white mb-2">Kuratierte Medizinische Meal-Kits</h3>
+<p class="text-slate-500 dark:text-slate-400">Wählen Sie das passende Set für Ihren therapeutischen Fokus.</p>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+<button class="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap">Alle Boxen</button>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-6 py-2.5 rounded-full text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-primary transition-all whitespace-nowrap">Wundheilung</button>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-6 py-2.5 rounded-full text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-primary transition-all whitespace-nowrap">Onkologie</button>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-6 py-2.5 rounded-full text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-primary transition-all whitespace-nowrap">Regeneration</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Card 1: Onko-Box -->
+<div class="group card-hover flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="Fresh colorful salad bowl with avocado and berries" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBq-e4TTB3Rgv1ldnp-yKCryd9lXj1azDLuLkCpdVniyS6TeCYjt98MFyA_lJTLadttccftmOv29zoAfIGFn8ckxg3D9cs9m8901D5pW_ndT0IQ8dt0-u8KY2tEYXbpidUA77r6jXumA7m7rrR7o8XCKLY0NEPWPT_D29pANDY4WYkIrYAkA_t1NFPgDy5mjVknO3WnbH6uzo9VWs5fghXwkvuF6ZdXOWCuvoBf4S2k8ynHxCvxV1KifcSuq7rbdVfEODvcFSLfbQQ");'></div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<h4 class="font-serif text-2xl mb-3 dark:text-white">Onko-Box</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 flex-1">
+                            Nährstoffdichte Unterstützung während der Therapie. Fokus auf Verträglichkeit und Erhalt der Muskelmasse.
+                        </p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-xl text-primary">€89,00</span>
+<button class="bg-background-light dark:bg-slate-800 p-3 rounded-2xl hover:bg-primary/10 transition-colors group/btn">
+<span class="material-symbols-outlined text-slate-900 dark:text-white group-hover/btn:text-primary transition-colors">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Post-OP-Darm-Box -->
+<div class="group card-hover flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="Steaming vegetable soup in a rustic bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_mBoWW1b1WSVaYSqfADQQyoqnq-pjOZmwVBo9CIkK1KAc0cRUU-Q2RF1fkMREZZaG_OrCbxONzuZyGekz-Ye9NK0vk2HPN6k_3eBOizCLYFnoaT7RpLVkzSYsvY2bVMqBGkNHNq0rVuxhOqFbmolVRjIpxgFQoSPka_mRyZgWmT0pZP2SSXoTBBP4AVvspABsShzGp8S0h7zkwcSP7oMMRWPL1D7AP8WLSZUQr0jUr6z988GKhy_B6cwdFGkdruElVRWB_lHu7ZM");'></div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<h4 class="font-serif text-2xl mb-3 dark:text-white">Post-OP-Darm</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 flex-1">
+                            Schonende Kost für die Phase nach dem Eingriff. Leicht verdaulich, ballaststoffmoduliert und wohltuend.
+                        </p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-xl text-primary">€75,00</span>
+<button class="bg-background-light dark:bg-slate-800 p-3 rounded-2xl hover:bg-primary/10 transition-colors group/btn">
+<span class="material-symbols-outlined text-slate-900 dark:text-white group-hover/btn:text-primary transition-colors">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Immun-Boost-Box -->
+<div class="group card-hover flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="Healthy meal prep containers with citrus and greens" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCkmsiYsa0JEKt2ZQ3ivBtoG0cDlNI924AFeGB8sRGe6BRkJLEQhds9KmlWVIxSjx0mfeMn15nrpO3bUkoyzuS2xg5TizzMiK-a9FJPrclTGITWlXJcXDcWqhaPfqYV0MlkShBMnOgY4LA-Va4BqqxwpxeLNotTz-yiThQjs9cTiVY223SNU6a2hKHFNjzDC83tH5vbPxEG4Ht0Z80IFZDBjRMnnbvBwOX-mSp07jn2GI_CzmJxP8TPlG21aOzBsvkUX6GItLJeYdI");'></div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<h4 class="font-serif text-2xl mb-3 dark:text-white">Immun-Boost</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 flex-1">
+                            Maximale Vitamin-Power und Antioxidantien. Stärkt das Immunsystem durch sekundäre Pflanzenstoffe.
+                        </p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-xl text-primary">€69,00</span>
+<button class="bg-background-light dark:bg-slate-800 p-3 rounded-2xl hover:bg-primary/10 transition-colors group/btn">
+<span class="material-symbols-outlined text-slate-900 dark:text-white group-hover/btn:text-primary transition-colors">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Herz-Kreislauf-Box -->
+<div class="group card-hover flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="relative h-64 w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="Steamed sea bass with herbs and olive oil" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB07tjeIURpQ6mRdPM8W7_6XGAEjtmiyEiF5d3KVy5df2WWVwhvuIjLocMMn8rN1tmQHrDfTZ4LEo58ruJfmrXyEEWAPpXwMvnfVPh3DGTGh_xikLlp7dqWKpbbpJxTnMkjiiO6CA_o0nPo21iIZD2ctWiSdsAyb0JHPKhwuGa2p8R23s5juwvLCRo8PJMUxpV7z3bot9_9e5gJpot6eUi_HxDIANnNlyTsPfl8L0CP0-AjdrmfQKJl1Fmx70vbQSi233EAI5MzSmw");'></div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<h4 class="font-serif text-2xl mb-3 dark:text-white">Herz-Kreislauf</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 flex-1">
+                            Herzgesunde Fette und natriumarme Rezepturen. Zur Unterstützung der kardiovaskulären Gesundheit.
+                        </p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-bold text-xl text-primary">€92,00</span>
+<button class="bg-background-light dark:bg-slate-800 p-3 rounded-2xl hover:bg-primary/10 transition-colors group/btn">
+<span class="material-symbols-outlined text-slate-900 dark:text-white group-hover/btn:text-primary transition-colors">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Floating Cart Preview -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="flex items-center gap-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-2 pl-6 rounded-full shadow-2xl hover:scale-105 transition-transform">
+<div class="flex flex-col items-start pr-4 border-r border-white/20 dark:border-slate-200">
+<span class="text-[10px] uppercase tracking-widest font-bold opacity-70">Warenkorb</span>
+<span class="font-bold leading-none">164,00 €</span>
+</div>
+<div class="bg-primary p-3 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white">shopping_cart</span>
+</div>
+</button>
+</div>
+<!-- Trust Section -->
+<section class="max-w-7xl mx-auto px-6 py-16">
+<div class="bg-primary/5 rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-12">
+<div class="md:w-1/2 space-y-6">
+<h2 class="font-serif text-4xl leading-snug">Von Medizinern entwickelt, von Sterneköchen verfeinert.</h2>
+<p class="text-slate-600 dark:text-slate-400 text-lg">
+                        Jede Box wird nach neuesten klinischen Leitlinien zusammengestellt und bietet den Komfort einer Premium-Küche. Heilung beginnt beim ersten Bissen.
+                    </p>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-3">
+<div class="h-12 w-12 rounded-full border-2 border-white bg-slate-200" data-alt="Portrait of a male doctor" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZJbNM8mXDCVH7xMngSLxC3R8v4e2MqRjqYEYP-sA6jW_aSlggKmlgexzVJV3uNRmyylVBXmXkeCPPItvdlS1QFS37tPnkGK3Ot9giDNjclx4PorCVxhEHIESk43NgmBT5rHqtgoEzcKfbJbCCm0WgI-L8zP5B3Pqapc9gEtopSZXlYdczYwDn5Kqwb7vwpHQGvAbYzSHnZuGYx1mkpNrLCDPlcGtXL6dojcSDx2rGV5rTmm0O8Mp7MKRo7lETt2kkqHwY_dgn86A"); background-size: cover;'></div>
+<div class="h-12 w-12 rounded-full border-2 border-white bg-slate-200" data-alt="Portrait of a female doctor" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY2ePEALI4o-L0hZM-Hsuu_nk-BIkcwo1XHnWl241L8TI1MdGgfL9qqoylUH9B238iyeIjroZgIZuBA5FyoWc8fB06_09fl7b6tAzhuSkeC4Rjm3lPyz6DWLB8TLg2E24mv8tiIrf7KSLPvL3qrh6OziWvdZg7jaRwLTH1yeByoU3d8ZcZMDN6GCT9bmIEQwTfU8ZxrH2EIEFXie_qcBUEs26VrALgc0lvCBz-Lt-ssmfoVNa3xLKAyvXuSjjz3kmtsjw2OuD4xZw"); background-size: cover;'></div>
+<div class="h-12 w-12 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center bg-primary text-white text-xs font-bold">+12</div>
+</div>
+<p class="text-sm font-semibold">Geprüft von 14 führenden Ernährungsexperten.</p>
+</div>
+</div>
+<div class="md:w-1/2 relative">
+<div class="w-full aspect-square rounded-3xl overflow-hidden shadow-xl rotate-3">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Doctor explaining nutrition to a patient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXZoJvsoPbehSlrcqcfqngcpKOcTKXyv8nndlzI63b2Jun-hI0hogPjK-Zosgk7DsD2W_XVSI55L_hwQesvhQM2gf0tCgpO309-04UMnfQUpC58j6ZzSSfZfd04GWY6fY-3xEqxN-63UGfGY-1IWlw1TZSIY1Nqrh6cMB7D5dxz9jURFR19FkAbjMQRRcFcN4_2n2G21EET5yYxf-DrW1P8_94YCh0zRN0nxLTrK5h_N0b9-vUF7rlTyV0697-gHKTuKe-DXcjFT4");'></div>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl max-w-[200px]">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">verified_user</span>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Zertifiziert</p>
+<p class="text-sm font-bold">Klinisch validierte Rezepte</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 pt-16 pb-12">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-primary p-2 rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">healing</span>
+</div>
+<h1 class="text-lg font-extrabold tracking-tight">Food 4 Recovery</h1>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed mb-6">
+                    Die Zukunft der medizinischen Versorgung zu Hause. Frisch, wissenschaftlich, köstlich.
+                </p>
+</div>
+<div>
+<h5 class="font-bold mb-4">Programme</h5>
+<ul class="space-y-3 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Onkologie</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Nach Operationen</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Darmgesundheit</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Herz-Kreislauf</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-4">Unternehmen</h5>
+<ul class="space-y-3 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Über uns</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Wissenschaft</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Partner</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Kontakt</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-4">Newsletter</h5>
+<p class="text-sm text-slate-500 mb-4">Erhalten Sie Experten-Tipps für Ihre Genesung.</p>
+<div class="flex gap-2">
+<input class="bg-background-light dark:bg-slate-800 border-none rounded-xl text-sm px-4 flex-1 focus:ring-2 focus:ring-primary" placeholder="E-Mail Adresse" type="email"/>
+<button class="bg-primary p-2 rounded-xl text-white">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<p>© 2024 Food 4 Recovery. Alle Rechte vorbehalten.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">Impressum</a>
+<a class="hover:text-primary" href="#">Datenschutz</a>
+<a class="hover:text-primary" href="#">AGB</a>
+</div>
+</div>
+</footer>
+</body></html>

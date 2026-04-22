@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Food 4 Recovery - Dashboard with Doctor Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Instrument Serif", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "24px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .glass-sidebar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        /* Custom scrollbar for chat */
+        .chat-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(51, 199, 88, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-40 glass-nav border-b border-primary/10">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined fill-1">restaurant</span>
+</div>
+<span class="text-xl font-extrabold tracking-tight font-display">Food 4 Recovery</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-semibold text-primary" href="#">Dashboard</a>
+<a class="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity" href="#">Mein Plan</a>
+<a class="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity" href="#">Rezepte</a>
+<a class="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity" href="#">Shop</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary/20 p-0.5">
+<div class="h-full w-full rounded-full bg-cover bg-center" data-alt="Portrait von Daniel, dem Benutzer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY')"></div>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 pt-32 pb-24 transition-all duration-500" id="main-content">
+<!-- Hero Section -->
+<section class="mb-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Willkommen zurück, Daniel</h1>
+<div class="flex items-center gap-3">
+<span class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-bold rounded-full">Heute: Tag 3</span>
+<p class="text-slate-500 font-medium">Wundheilungs-Diät • Phase 1</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2 min-w-[200px]">
+<div class="flex justify-between w-full text-sm font-bold">
+<span>Wochenfortschritt</span>
+<span class="text-primary">42%</span>
+</div>
+<div class="w-full h-2.5 bg-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%] rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Content: Today's Meals -->
+<div class="lg:col-span-2 space-y-8">
+<h2 class="text-2xl font-bold">Heutige Mahlzeiten</h2>
+<div class="grid gap-6">
+<!-- Frühstück -->
+<div class="group relative bg-white dark:bg-slate-800/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row border border-primary/5">
+<div class="md:w-56 h-48 md:h-auto overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Gesundes Frühstück mit Avocado und Eiern" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnM0xrmZ9Gc1bqwOYy5z81O_7DJFTNI5iFeJF3Az0kEC_59cihGMldM5z739eo_IMfipv6s_dQySX7R8oFZX2vm4TsC7qd5Gu2WaSHaefxqEXgZUnUITasiMdbwnBtfIDYHlPybxv8HP4dZgoKyYrE07WpSTzL89mq94VEfA0KXeccnd3GXYvgGyTIuGZmg5Z02yMYrfkQeGaWVNbEV_GbUIKzAWhpx6SZtPFJ3VNWs8Sm7CSOguzsZ8wj-al7JgDrwEXwyhsr5UI')"></div>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] uppercase tracking-widest font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">Frühstück</span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">08:30 Uhr</span>
+</div>
+<h3 class="text-3xl font-serif text-slate-800 dark:text-slate-100 mb-2">Avocado-Vollkornbrot mit pochierten Eiern</h3>
+<p class="text-slate-500 text-sm line-clamp-2">Reich an Omega-3-Fettsäuren und Vitamin C zur Unterstützung der Kollagensynthese.</p>
+</div>
+<div class="mt-6 flex items-center gap-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">local_fire_department</span>
+<span class="text-xs font-bold">420 kcal</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">timer</span>
+<span class="text-xs font-bold">15 Min</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mittag -->
+<div class="group relative bg-white dark:bg-slate-800/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row border border-primary/5">
+<div class="md:w-56 h-48 md:h-auto overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Lachssteak mit buntem Grillgemüse" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9frIVGPGbHXtCM4o-9NR8WeAJOVU1PAW04JChrZk8QSKKjzQPfkP95yAVq4bV9w5IyWHb8bR9RovaIe-Y05HUaZWTHR16HFrjiFpN1LGHxJLRYuJgy8xyKMLId5Sv_HWP_KFIG9eWjYuTCGyT4CAkA1RaSTrMzf6jge0p8UWK1LA1LCHRkv_qk3wifARSmyl0szfA48UnqVoH9X6Dftz5dBY2lqvPivPziP-AAniJcJGupocgdqq9Mayv1Ry0176Xuy2Mltm-SAE')"></div>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] uppercase tracking-widest font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">Mittagessen</span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">13:00 Uhr</span>
+</div>
+<h3 class="text-3xl font-serif text-slate-800 dark:text-slate-100 mb-2">Gegrillter Lachs mit Zink-reichem Quinoa</h3>
+<p class="text-slate-500 text-sm line-clamp-2">Optimiert für die Zellregeneration mit hohem Proteingehalt und essentiellen Mikronährstoffen.</p>
+</div>
+<div class="mt-6 flex items-center gap-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">local_fire_department</span>
+<span class="text-xs font-bold">580 kcal</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">timer</span>
+<span class="text-xs font-bold">25 Min</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Abend -->
+<div class="group relative bg-white dark:bg-slate-800/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row border border-primary/5">
+<div class="md:w-56 h-48 md:h-auto overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Leichte Buddha Bowl mit Süßkartoffel" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGazVMJeBFtiBKvhOf30sB_0jtYfkXUjLwt7C3PD8QK8oDGq0dZFveZsvFQYFi680cTlHdMUmc1zQIe71X4ymwHlCnGhSjups3rIzb7WqgQOQ4q0wfWRLanpYG1lNhG-aRRJaLLy8np-D1F4FVjEIl6hUkSevAK3VFoNEVdD8flL_HiCwbvMFzGETgbw3VIv74INyXEEXgU7j68v5m0p0nmNbg8srviFM5rzb4Xp0GKo22YVGLq96-GJ4pLaXoAPrtWYju1HfV6VM')"></div>
+</div>
+<div class="p-8 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] uppercase tracking-widest font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">Abendessen</span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">19:00 Uhr</span>
+</div>
+<h3 class="text-3xl font-serif text-slate-800 dark:text-slate-100 mb-2">Süßkartoffel-Bowl mit Kurkuma-Dressing</h3>
+<p class="text-slate-500 text-sm line-clamp-2">Entzündungshemmende Inhaltsstoffe fördern eine ruhige Nacht und effektive Wundheilung.</p>
+</div>
+<div class="mt-6 flex items-center gap-6">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">local_fire_department</span>
+<span class="text-xs font-bold">350 kcal</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">timer</span>
+<span class="text-xs font-bold">20 Min</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar: Tracker & Shop -->
+<div class="space-y-8">
+<!-- Progress Tracker -->
+<div class="bg-white dark:bg-slate-800/50 rounded-2xl p-8 shadow-sm border border-primary/5">
+<h2 class="text-xl font-bold mb-6">Nährstoff-Tracker</h2>
+<div class="space-y-6">
+<!-- Protein -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-semibold">Protein</span>
+<span class="text-slate-400">82g / 120g</span>
+</div>
+<div class="h-2 bg-primary/10 rounded-full">
+<div class="h-full bg-primary w-[68%] rounded-full"></div>
+</div>
+</div>
+<!-- Vitamin C -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-semibold">Vitamin C</span>
+<span class="text-slate-400">110mg / 150mg</span>
+</div>
+<div class="h-2 bg-primary/10 rounded-full">
+<div class="h-full bg-primary w-[73%] rounded-full"></div>
+</div>
+</div>
+<!-- Zink -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-semibold">Zink</span>
+<span class="text-slate-400">12mg / 15mg</span>
+</div>
+<div class="h-2 bg-primary/10 rounded-full">
+<div class="h-full bg-primary w-[80%] rounded-full"></div>
+</div>
+</div>
+<!-- Hydration Visualization -->
+<div class="pt-4 mt-6 border-t border-primary/5">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400">water_drop</span>
+<span class="font-bold">Flüssigkeit</span>
+</div>
+<span class="text-xl font-extrabold">1.8 <span class="text-sm font-medium text-slate-400">/ 2.5L</span></span>
+</div>
+<div class="flex gap-1.5 justify-between">
+<div class="h-8 flex-1 bg-blue-100 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-200 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-300 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-400 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-100/30 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-100/30 rounded-sm"></div>
+<div class="h-8 flex-1 bg-blue-100/30 rounded-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Meal Kits -->
+<div class="bg-primary/5 rounded-2xl p-8 border border-primary/20 relative overflow-hidden group">
+<div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none transition-transform group-hover:scale-110 duration-500">
+<span class="material-symbols-outlined text-[160px]">shopping_bag</span>
+</div>
+<h2 class="text-xl font-bold mb-2">Meal-Kits</h2>
+<p class="text-slate-600 text-sm mb-6 leading-relaxed">Bestellen Sie Ihre vorportionierten Zutaten für die nächste Woche.</p>
+<div class="space-y-4 mb-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-white bg-cover bg-center shadow-sm" data-alt="Gesundes Meal Kit Box" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaSQqV8x-hG53uPYWTtRghBFYiKQ9wU7hHtx8Cjk-ytgZnlf4ZZSWaP9IuwKqMU8CmQb3Fw9xgxJyuVPaTU9P2FiiWfhvRrYbN7ZtTTus6QJyEFIqVcfgqvwMnzxpqj7bXw3SBhNNdCMxj1iiJevP9CzFbxB6gvVVsbzdcFQtorBl8V6OR835s7EbcBBNVznkbC1jpsnYmX8JuYiUjPJKAKs9BzWhbMI-hgAqpmt7BIH_12DQBCrUR5LDdu9xfyUiqQP8nRq8tllA')"></div>
+<div class="flex-1">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-400">Lieferung: Di, 24. Okt</p>
+<p class="text-sm font-bold">Wundheilung Basis Kit</p>
+</div>
+</div>
+</div>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline" href="#">
+                    Zum Store
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Toggle Button -->
+<button class="fixed bottom-8 right-8 w-16 h-16 rounded-full glass-card border border-white/40 shadow-2xl flex items-center justify-center text-primary hover:scale-110 active:scale-95 transition-all group z-50" id="chat-toggle">
+<span class="material-symbols-outlined text-3xl font-light" id="toggle-icon">chat</span>
+<div class="absolute -top-12 right-0 bg-white shadow-lg py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-sm font-bold pointer-events-none border border-primary/5">
+        Chat mit Dr. Weber
+    </div>
+</button>
+<!-- Collapsable Chat Sidebar -->
+<aside class="fixed top-0 right-0 h-full w-[400px] glass-sidebar border-l border-primary/10 translate-x-full transition-transform duration-500 ease-in-out z-40 flex flex-col shadow-2xl" id="chat-sidebar">
+<!-- Sidebar Header -->
+<div class="pt-24 px-6 pb-6 border-b border-primary/10">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-14 h-14 rounded-full bg-slate-200 bg-cover bg-center border-2 border-primary/20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCH09s_3k-y0P768FhD7u6rP6n0A3_rX6Z_4z8i5u-K6-0rE_9Kx9g-H4-R3P-p=s96-c')"></div>
+<div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-primary border-2 border-white rounded-full"></div>
+</div>
+<div>
+<h2 class="font-bold text-lg">Dr. Weber</h2>
+<p class="text-xs font-medium text-primary">Ernährungsmediziner • Online</p>
+</div>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 chat-scroll">
+<!-- Message: Dr. Weber -->
+<div class="flex flex-col items-start gap-1 max-w-[85%]">
+<div class="bg-white dark:bg-slate-700 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed border border-primary/5">
+                Guten Tag Daniel, wie fühlen Sie sich heute nach der ersten Phase Ihrer Wundheilungs-Diät?
+            </div>
+<span class="text-[10px] text-slate-400 font-bold ml-1">10:24</span>
+</div>
+<!-- Message: User -->
+<div class="flex flex-col items-end gap-1 ml-auto max-w-[85%]">
+<div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm leading-relaxed">
+                Hallo Dr. Weber, mir geht es gut. Die Mahlzeiten sind sehr lecker und ich fühle mich fitter.
+            </div>
+<span class="text-[10px] text-slate-400 font-bold mr-1">10:26</span>
+</div>
+<!-- Message: Dr. Weber -->
+<div class="flex flex-col items-start gap-1 max-w-[85%]">
+<div class="bg-white dark:bg-slate-700 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed border border-primary/5">
+                Das freut mich zu hören! Ihre Analyseergebnisse sind bereit. Ihre Entzündungswerte sind bereits leicht gesunken. Wir machen so weiter.
+            </div>
+<span class="text-[10px] text-slate-400 font-bold ml-1">10:28</span>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-6 border-t border-primary/10 bg-white/30">
+<div class="relative">
+<input class="w-full bg-white dark:bg-slate-800 border-none rounded-2xl py-4 pl-4 pr-12 text-sm focus:ring-2 focus:ring-primary/20 shadow-sm transition-shadow" placeholder="Nachricht schreiben..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</aside>
+<script>
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatSidebar = document.getElementById('chat-sidebar');
+    const mainContent = document.getElementById('main-content');
+    const toggleIcon = document.getElementById('toggle-icon');
+    let isSidebarOpen = false;
+
+    chatToggle.addEventListener('click', () => {
+        isSidebarOpen = !isSidebarOpen;
+        
+        if (isSidebarOpen) {
+            chatSidebar.style.transform = 'translateX(0)';
+            toggleIcon.textContent = 'close';
+            // Optional: push content on large screens
+            if (window.innerWidth > 1280) {
+                mainContent.style.marginRight = '400px';
+            }
+        } else {
+            chatSidebar.style.transform = 'translateX(100%)';
+            toggleIcon.textContent = 'chat';
+            mainContent.style.marginRight = 'auto';
+        }
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isSidebarOpen) {
+            chatToggle.click();
+        }
+    });
+</script>
+</body></html>

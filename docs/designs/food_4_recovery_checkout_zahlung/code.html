@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kasse - Food 4 Recovery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33c758",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f16",
+                        "deep-space": "#0a0f0b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "1.5rem",
+                        "3xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-deep-space dark:text-slate-100 antialiased">
+<div class="min-h-screen w-full flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">eco</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight">Food 4 Recovery</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+</button>
+<div class="h-8 w-px bg-primary/20"></div>
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">JD</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-10 w-full grow">
+<div class="mb-10">
+<h2 class="text-4xl font-extrabold text-deep-space dark:text-white tracking-tight">Kasse</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2">Schließen Sie Ihre Bestellung für Ihre Genesung ab.</p>
+</div>
+<!-- Two Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Left Column: Forms -->
+<div class="lg:col-span-7 space-y-10">
+<!-- Lieferdetails section -->
+<section class="bg-white dark:bg-slate-900/50 p-8 rounded-3xl shadow-sm border border-primary/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<h3 class="text-xl font-bold">Lieferdetails</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Calendar Placeholder UI -->
+<div class="bg-background-light dark:bg-slate-800 p-4 rounded-2xl border border-primary/10">
+<div class="flex items-center justify-between mb-4 px-2">
+<span class="font-bold text-sm">Oktober 2023</span>
+<div class="flex gap-1">
+<button class="p-1 rounded hover:bg-white dark:hover:bg-slate-700"><span class="material-symbols-outlined text-sm leading-none">chevron_left</span></button>
+<button class="p-1 rounded hover:bg-white dark:hover:bg-slate-700"><span class="material-symbols-outlined text-sm leading-none">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">
+<div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center text-sm">
+<div class="py-2 text-slate-300">28</div><div class="py-2 text-slate-300">29</div><div class="py-2 text-slate-300">30</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">1</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">2</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">3</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">4</div>
+<div class="py-2 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/30">5</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">6</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">7</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">8</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">9</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">10</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">11</div>
+<div class="py-2 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer">12</div>
+</div>
+</div>
+<!-- Time Slots -->
+<div class="flex flex-col gap-3">
+<label class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Zeitfenster wählen</label>
+<button class="flex items-center justify-between p-4 rounded-xl border-2 border-primary bg-primary/5 text-primary font-bold transition-all">
+<span>08:00 - 10:00</span>
+<span class="material-symbols-outlined text-sm">check_circle</span>
+</button>
+<button class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all">
+<span>10:00 - 12:00</span>
+<span class="material-symbols-outlined text-sm opacity-0">circle</span>
+</button>
+<button class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all">
+<span>18:00 - 20:00</span>
+<span class="material-symbols-outlined text-sm opacity-0">circle</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Lieferadresse section -->
+<section class="bg-white dark:bg-slate-900/50 p-8 rounded-3xl shadow-sm border border-primary/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<h3 class="text-xl font-bold">Lieferadresse</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="md:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Vollständiger Name</label>
+<input class="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Max Mustermann" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Straße &amp; Hausnummer</label>
+<input class="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Beispielstraße 123" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Postleitzahl</label>
+<input class="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="10115" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Stadt</label>
+<input class="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Berlin" type="text"/>
+</div>
+</div>
+</section>
+<!-- Zahlungsmethode section -->
+<section class="bg-white dark:bg-slate-900/50 p-8 rounded-3xl shadow-sm border border-primary/5">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+<h3 class="text-xl font-bold">Zahlungsmethode</h3>
+</div>
+<div class="space-y-4">
+<!-- Apple Pay (Primary UI Choice) -->
+<button class="w-full flex items-center justify-between p-5 rounded-2xl bg-black text-white hover:opacity-90 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-2xl">ios</span>
+<span class="font-bold text-lg">Apple Pay</span>
+</div>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 hover:border-primary/40 transition-all bg-white dark:bg-slate-800 group">
+<span class="material-symbols-outlined text-3xl mb-2 text-slate-400 group-hover:text-primary">credit_card</span>
+<span class="font-semibold text-sm">Kreditkarte</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 hover:border-primary/40 transition-all bg-white dark:bg-slate-800 group">
+<div class="h-8 mb-2 flex items-center justify-center">
+<span class="font-bold italic text-blue-600 dark:text-blue-400 text-xl">PayPal</span>
+</div>
+<span class="font-semibold text-sm">PayPal</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Summary Card -->
+<div class="lg:col-span-5">
+<div class="sticky top-28">
+<div class="glass dark:bg-slate-900/60 p-8 rounded-[2rem] shadow-2xl shadow-primary/10 border border-white/40">
+<h3 class="text-2xl font-extrabold mb-8 tracking-tight">Bestellübersicht</h3>
+<!-- Order Item -->
+<div class="flex gap-4 pb-8 mb-8 border-b border-primary/10">
+<div class="w-24 h-24 rounded-2xl overflow-hidden bg-background-light flex-shrink-0">
+<img alt="Healthy food box with medical nutrition" class="w-full h-full object-cover" data-alt="Healthy organic meal kit box for recovery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr__IAetehXRKt7B20hMPoSz9e7S91ps5Lg2H1dJNtBSdC16bGnbtebH2Fdc2yHPTU5-lspRCHBsLv8hFhOfCR4ONpeDSdBMvJjdq1doAoGlWabaYSMkXUIiwI00qS6CMkid7ySFfj4IB7OCax6MOm5kRLF7HzPCD7qV6Vsqcolf_DmVGJUGDT4N0kV3e7sTRceKCItGOsMouFX61LpmtRPnVT6wWEz3rkH_wOBXDhOBDw3DJigFywEyXiAExGf9QYJ_AfRmlhS_Q"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<h4 class="font-bold text-deep-space dark:text-white leading-snug">Wundheilungs-Box (Intensiv)</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">7 Tage Paket • Vitamin C &amp; Zink</p>
+</div>
+<span class="font-extrabold text-primary">129,00 €</span>
+</div>
+</div>
+<!-- Calculations -->
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center text-slate-600 dark:text-slate-300">
+<span>Zwischensumme</span>
+<span class="font-medium">129,00 €</span>
+</div>
+<div class="flex justify-between items-center text-slate-600 dark:text-slate-300">
+<span>Versandkosten</span>
+<span class="font-medium text-primary">Kostenlos</span>
+</div>
+<div class="flex justify-between items-center text-slate-400 text-xs">
+<span>Inkl. MwSt. (7%)</span>
+<span>8,44 €</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-10 pt-6 border-t border-primary/10">
+<span class="text-xl font-bold">Gesamtsumme</span>
+<span class="text-3xl font-extrabold text-deep-space dark:text-white">129,00 €</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-primary/25 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">lock</span>
+                            Jetzt zahlungspflichtig bestellen
+                        </button>
+<p class="text-center text-xs text-slate-400 mt-6 px-4">
+                            Durch Klicken auf den Button akzeptieren Sie unsere AGB und Datenschutzbestimmungen.
+                        </p>
+</div>
+<!-- Trust Badge -->
+<div class="mt-6 flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all">
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                            SSL Gesichert
+                        </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+                            CO2 Neutral
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-950/50 border-t border-primary/5 py-12 mt-20">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">eco</span>
+<span class="font-bold">Food 4 Recovery GmbH</span>
+</div>
+<div class="flex gap-8 text-sm font-medium text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Impressum</a>
+<a class="hover:text-primary transition-colors" href="#">Datenschutz</a>
+<a class="hover:text-primary transition-colors" href="#">AGB</a>
+<a class="hover:text-primary transition-colors" href="#">Kontakt</a>
+</div>
+<p class="text-xs text-slate-400">© 2023 Food 4 Recovery. Alle Rechte vorbehalten.</p>
+</div>
+</footer>
+</div>
+</body></html>
