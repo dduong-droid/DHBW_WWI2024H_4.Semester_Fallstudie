@@ -28,7 +28,7 @@ class OrderItemCreate(BaseModel):
 
 class OrderCreate(BaseModel):
     patient_id: str
-    items: list[OrderItemCreate] = Field(min_items=1)
+    items: list[OrderItemCreate] = Field(min_length=1)
     shipping_address: ShippingAddress
     payment_method: PaymentMethod
     contact_email: str
@@ -54,8 +54,14 @@ class Order(BaseModel):
     contact_email: str
     contact_phone: str
     notes: str | None = None
+    currency: str
     subtotal: float
     shipping_cost: float
     total: float
     estimated_delivery_window: str
+    recommendation_fit_note: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class OrderStatusUpdate(BaseModel):
+    status: OrderStatus

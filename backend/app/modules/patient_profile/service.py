@@ -16,7 +16,7 @@ def create_patient_profile(payload: PatientProfileCreate) -> PatientProfile:
     profile = PatientProfile(
         patient_id=patient_id,
         created_at=datetime.now(timezone.utc),
-        **payload.dict(exclude={"patient_id"}),
+        **payload.model_dump(exclude={"patient_id"}),
     )
     return save_patient_profile(profile)
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.modules.meal_kit_catalog.schemas import MealKit
 from app.modules.questionnaire_intake.schemas import DerivedFlags, QuestionnaireIntakeRecord
 from app.modules.recommendation_engine.schemas import DailyPlan, DailyPlanMeals, Recipe, WeeklyPlanRecommendation
@@ -129,41 +131,282 @@ _TEMPLATE_RECIPES = {
 }
 
 
-def choose_template_id(flags: DerivedFlags) -> str:
-    if flags.chemo_related_appetite_loss:
-        return "chemo_easy_digest"
-    if flags.gut_sensitivity:
-        return "gut_balance_recovery"
-    if flags.post_op_recovery and flags.high_protein_need:
-        return "post_op_high_protein"
-    if flags.high_fatigue or flags.energy_support:
-        return "energy_rebuild"
-    return "balanced_general_recovery"
+@dataclass(frozen=True)
+class RecommendationRuleContext:
+    post_op_recovery: bool
+    chemo_related_appetite_loss: bool
+    gut_sensitivity: bool
+    high_fatigue: bool
+    needs_easy_prep: bool
+    high_protein_need: bool
+    anti_inflammatory_focus: bool
+    immune_focus: bool
+    oncology_context: bool
+    energy_support: bool
+    appetite_reduced: bool
+    appetite_minimal: bool
+    support_required: bool
+    digestive_symptom_count: int
+    intolerances: frozenset[str]
+    dietary_warnings: frozenset[str]
 
 
-def score_meal_kit(meal_kit: MealKit, flags: DerivedFlags) -> int:
+@dataclass(frozen=True)
+class TemplateSelection:
+    template_id: str
+    score: int
+    rationale: list[str]
+    all_scores: dict[str, int]
+
+
+@dataclass(frozen=True)
+class MealKitEvaluation:
+    score: int
+    positive_reasons: list[str]
+    negative_reasons: list[str]
+    exclusion_reasons: list[str]
+
+
+_TEMPLATE_PRIORITY = [
+    "chemo_easy_digest",
+    "gut_balance_recovery",
+    "post_op_high_protein",
+    "energy_rebuild",
+    "balanced_general_recovery",
+]
+
+_TEMPLATE_RULES: dict[str, list[tuple[str, int, str]]] = {
+    "chemo_easy_digest": [
+        ("chemo_related_appetite_loss", 12, "Onkologischer Kontext mit Appetitmangel priorisiert leicht verdauliche Kost."),
+        ("oncology_context", 4, "Der Therapiekontext spricht fuer eine sanfte, niedrigschwellige Vorlage."),
+        ("appetite_minimal", 3, "Sehr geringer Appetit verlangt kleine, einfache Mahlzeiten mit Snack-Fokus."),
+        ("needs_easy_prep", 2, "Einfach vorbereitbare Mahlzeiten entlasten im Alltag."),
+    ],
+    "gut_balance_recovery": [
+        ("gut_sensitivity", 11, "Verdauungsbeschwerden und Intoleranzen sprechen fuer eine darmfreundliche Vorlage."),
+        ("digestive_symptom_count", 2, "Mehrere Verdauungssymptome verstaerken den Bedarf an milder Kost."),
+        ("needs_easy_prep", 1, "Eine einfach umsetzbare Alltagsstruktur bleibt hilfreich."),
+    ],
+    "post_op_high_protein": [
+        ("post_op_recovery", 8, "Die Regeneration nach Eingriffen erfordert einen klaren Wundheilungsfokus."),
+        ("high_protein_need", 5, "Erhoehter Proteinbedarf stuetzt Gewebeaufbau und Stabilisierung."),
+        ("anti_inflammatory_focus", 2, "Entzuendungsarme Optionen passen gut in die postoperative Phase."),
+    ],
+    "energy_rebuild": [
+        ("high_fatigue", 7, "Erschoepfung spricht fuer energiedichtere und alltagstaugliche Mahlzeiten."),
+        ("energy_support", 4, "Der Fokus auf Energieaufbau stuetzt eine kalorien- und snackbetonte Vorlage."),
+        ("needs_easy_prep", 2, "Alltagstauglichkeit bleibt bei geringer Belastbarkeit wichtig."),
+    ],
+    "balanced_general_recovery": [
+        ("post_op_recovery", 1, "Regeneration bleibt ein allgemeiner Grundfokus."),
+        ("immune_focus", 1, "Ein ausgewogener Regenerationsplan deckt leichte Immununterstuetzung mit ab."),
+    ],
+}
+
+_TEMPLATE_PENALTIES: dict[str, list[tuple[str, int, str]]] = {
+    "energy_rebuild": [
+        ("gut_sensitivity", -2, "Stark energiedichte Mahlzeiten sind bei sensibler Verdauung nicht erste Wahl."),
+        ("chemo_related_appetite_loss", -2, "Bei Appetitmangel ist eine sanftere Vorlage haeufig passender."),
+    ],
+    "post_op_high_protein": [
+        ("chemo_related_appetite_loss", -2, "Sehr proteindichte Optionen koennen bei Appetitmangel zu belastend wirken."),
+    ],
+    "chemo_easy_digest": [
+        ("high_protein_need", -1, "Ein reiner Easy-Digest-Fokus deckt hohen Proteinbedarf allein weniger gut ab."),
+    ],
+}
+
+_MEAL_KIT_POSITIVE_RULES: dict[str, tuple[str, int, str]] = {
+    "post_op_recovery": ("post_op_recovery", 4, "unterstuetzt den postoperativen Regenerationsbedarf"),
+    "high_protein_need": ("high_protein_need", 4, "liefert einen passenden Protein-Fokus"),
+    "chemo_related_appetite_loss": ("chemo_related_appetite_loss", 5, "passt zu onkologischer Belastung und Appetitmangel"),
+    "gut_sensitivity": ("gut_sensitivity", 5, "ist auf sensible Verdauung ausgerichtet"),
+    "immune_focus": ("immune_focus", 3, "stuetzt den immunbezogenen Schwerpunkt"),
+    "high_fatigue": ("high_fatigue", 4, "adressiert Erschoepfung und geringe Belastbarkeit"),
+    "energy_support": ("energy_support", 3, "liefert energiedichte Unterstuetzung"),
+    "anti_inflammatory_focus": ("anti_inflammatory_focus", 2, "passt zum entzuendungsarmen Schwerpunkt"),
+    "oncology_context": ("oncology_context", 2, "beruecksichtigt den onkologischen Kontext"),
+}
+
+
+def _build_rule_context(
+    flags: DerivedFlags,
+    questionnaire: QuestionnaireIntakeRecord | None = None,
+    dietary_warnings: list[str] | None = None,
+) -> RecommendationRuleContext:
+    appetite_level = questionnaire.nutrition_status.appetite_level if questionnaire else "good"
+    digestive_symptom_count = len(questionnaire.nutrition_status.digestive_symptoms) if questionnaire else 0
+    intolerances = frozenset(item.lower() for item in questionnaire.gut_health.food_intolerances) if questionnaire else frozenset()
+    return RecommendationRuleContext(
+        post_op_recovery=flags.post_op_recovery,
+        chemo_related_appetite_loss=flags.chemo_related_appetite_loss,
+        gut_sensitivity=flags.gut_sensitivity,
+        high_fatigue=flags.high_fatigue,
+        needs_easy_prep=flags.needs_easy_prep,
+        high_protein_need=flags.high_protein_need,
+        anti_inflammatory_focus=flags.anti_inflammatory_focus,
+        immune_focus=flags.immune_focus,
+        oncology_context=flags.oncology_context,
+        energy_support=flags.energy_support,
+        appetite_reduced=appetite_level in {"reduced", "minimal"},
+        appetite_minimal=appetite_level == "minimal",
+        support_required=flags.needs_easy_prep,
+        digestive_symptom_count=digestive_symptom_count,
+        intolerances=intolerances,
+        dietary_warnings=frozenset(item.lower() for item in (dietary_warnings or [])),
+    )
+
+
+def _context_value(context: RecommendationRuleContext, key: str) -> bool:
+    value = getattr(context, key)
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        return value > 0
+    return bool(value)
+
+
+def evaluate_template_selection(
+    flags: DerivedFlags,
+    questionnaire: QuestionnaireIntakeRecord | None = None,
+) -> TemplateSelection:
+    context = _build_rule_context(flags, questionnaire)
+    scores: dict[str, int] = {}
+    rationales: dict[str, list[str]] = {}
+
+    for template_id in _TEMPLATE_PRIORITY:
+        score = 1 if template_id == "balanced_general_recovery" else 0
+        reasons: list[str] = []
+        for key, weight, reason in _TEMPLATE_RULES.get(template_id, []):
+            if _context_value(context, key):
+                score += weight
+                reasons.append(reason)
+        for key, weight, reason in _TEMPLATE_PENALTIES.get(template_id, []):
+            if _context_value(context, key):
+                score += weight
+                reasons.append(reason)
+        scores[template_id] = score
+        rationales[template_id] = reasons or ["Ausgewogene Standardvorlage fuer die allgemeine Regeneration."]
+
+    best_template_id = max(
+        _TEMPLATE_PRIORITY,
+        key=lambda template_id: (scores[template_id], -_TEMPLATE_PRIORITY.index(template_id)),
+    )
+    return TemplateSelection(
+        template_id=best_template_id,
+        score=scores[best_template_id],
+        rationale=rationales[best_template_id],
+        all_scores=scores,
+    )
+
+
+def choose_template_id(
+    flags: DerivedFlags,
+    questionnaire: QuestionnaireIntakeRecord | None = None,
+) -> str:
+    return evaluate_template_selection(flags, questionnaire).template_id
+
+
+def evaluate_meal_kit(
+    meal_kit: MealKit,
+    flags: DerivedFlags,
+    *,
+    dietary_warnings: list[str] | None = None,
+    questionnaire: QuestionnaireIntakeRecord | None = None,
+) -> MealKitEvaluation:
+    context = _build_rule_context(flags, questionnaire, dietary_warnings)
+    contraindication_hits = sorted(set(meal_kit.contraindications) & set(context.dietary_warnings))
+    if contraindication_hits:
+        return MealKitEvaluation(
+            score=0,
+            positive_reasons=[],
+            negative_reasons=[],
+            exclusion_reasons=[f"enthaelt Ausschluesse fuer: {', '.join(contraindication_hits)}"],
+        )
+
     score = 0
-    if flags.post_op_recovery and "post_op_recovery" in meal_kit.condition_tags:
-        score += 4
-    if flags.high_protein_need and "high_protein_need" in meal_kit.condition_tags:
-        score += 3
-    if flags.chemo_related_appetite_loss and "chemo_related_appetite_loss" in meal_kit.condition_tags:
-        score += 5
-    if flags.gut_sensitivity and "gut_sensitivity" in meal_kit.condition_tags:
-        score += 5
-    if flags.immune_focus and "immune_focus" in meal_kit.condition_tags:
-        score += 3
-    if flags.high_fatigue and "high_fatigue" in meal_kit.condition_tags:
-        score += 4
-    if flags.energy_support and "energy_support" in meal_kit.condition_tags:
-        score += 3
-    if flags.needs_easy_prep and meal_kit.prep_difficulty == "easy":
+    positive_reasons: list[str] = []
+    negative_reasons: list[str] = []
+
+    for tag in meal_kit.condition_tags:
+        rule = _MEAL_KIT_POSITIVE_RULES.get(tag)
+        if rule is None:
+            continue
+        context_key, weight, reason = rule
+        if _context_value(context, context_key):
+            score += weight
+            positive_reasons.append(reason)
+
+    if context.needs_easy_prep and meal_kit.prep_difficulty == "easy":
         score += 2
-    if flags.anti_inflammatory_focus and "anti_inflammatory_focus" in meal_kit.condition_tags:
+        positive_reasons.append("laesst sich einfach in den Alltag integrieren")
+    if context.high_protein_need and meal_kit.nutritional_values.protein >= 40:
         score += 2
-    if flags.oncology_context and "oncology_context" in meal_kit.condition_tags:
-        score += 2
-    return score
+        positive_reasons.append("liefert zusaetzlich eine hohe Proteindichte")
+    if context.appetite_reduced and meal_kit.nutritional_values.calories >= 650:
+        score += 1
+        positive_reasons.append("konzentriert Energie bei reduziertem Appetit")
+
+    if context.needs_easy_prep and meal_kit.prep_difficulty == "advanced":
+        score -= 4
+        negative_reasons.append("aufwendige Zubereitung passt schlecht zur aktuellen Belastbarkeit")
+    if context.gut_sensitivity and not {"gut_friendly", "easy_digest"} & set(meal_kit.dietary_tags):
+        score -= 2
+        negative_reasons.append("bei sensibler Verdauung ist die Vertraeglichkeit weniger klar")
+    if context.chemo_related_appetite_loss and "easy_digest" not in meal_kit.dietary_tags:
+        score -= 2
+        negative_reasons.append("bei Appetitmangel waeren noch sanftere Komponenten ideal")
+
+    return MealKitEvaluation(
+        score=score,
+        positive_reasons=positive_reasons,
+        negative_reasons=negative_reasons,
+        exclusion_reasons=[],
+    )
+
+
+def score_meal_kit(
+    meal_kit: MealKit,
+    flags: DerivedFlags,
+    *,
+    dietary_warnings: list[str] | None = None,
+    questionnaire: QuestionnaireIntakeRecord | None = None,
+) -> int:
+    return evaluate_meal_kit(
+        meal_kit,
+        flags,
+        dietary_warnings=dietary_warnings,
+        questionnaire=questionnaire,
+    ).score
+
+
+_INGREDIENT_CONFLICTS: dict[str, set[str]] = {
+    "gluten": {"hafer", "pasta", "gries", "polenta"},
+    "lactose": {"joghurt", "skyr", "kefir", "milch", "quark"},
+    "nuts": {"mandel", "mandeln", "nuss", "nuesse"},
+}
+
+
+def _recipe_conflicts_with_intolerances(recipe: Recipe, intolerances: frozenset[str]) -> bool:
+    lowered_ingredients = {ingredient.lower() for ingredient in recipe.ingredients}
+    for intolerance in intolerances:
+        conflicts = _INGREDIENT_CONFLICTS.get(intolerance, set())
+        if lowered_ingredients & conflicts:
+            return True
+    return False
+
+
+def _select_recipe_variant(
+    candidates: list[Recipe],
+    *,
+    day_index: int,
+    intolerances: frozenset[str],
+) -> Recipe:
+    ordered_candidates = [candidates[(day_index + offset) % len(candidates)] for offset in range(len(candidates))]
+    for candidate in ordered_candidates:
+        if not _recipe_conflicts_with_intolerances(candidate, intolerances):
+            return candidate
+    return ordered_candidates[0]
 
 
 def build_weekly_plan(
@@ -173,6 +416,7 @@ def build_weekly_plan(
     questionnaire: QuestionnaireIntakeRecord,
 ) -> WeeklyPlanRecommendation:
     template = _TEMPLATE_RECIPES[template_id]
+    context = _build_rule_context(flags, questionnaire)
     adjustments: list[str] = []
     if flags.high_protein_need:
         adjustments.append("Protein-Ziel wurde angehoben.")
@@ -182,22 +426,45 @@ def build_weekly_plan(
         adjustments.append("Darmfreundliche, milde Zutaten stehen im Vordergrund.")
     if flags.needs_easy_prep:
         adjustments.append("Einfach vorzubereitende Mahlzeiten wurden bevorzugt.")
+    if context.appetite_minimal:
+        adjustments.append("Es wurden zusaetzliche Snack-Fenster fuer sehr geringe Essmengen aktiviert.")
+    if flags.high_fatigue:
+        adjustments.append("Kalorien- und Energieziel wurden fuer Fatigue moderat angehoben.")
     if questionnaire.gut_health.food_intolerances:
         adjustments.append(
             "Ruecksicht auf Unvertraeglichkeiten: " + ", ".join(questionnaire.gut_health.food_intolerances)
         )
 
     days: list[DailyPlan] = []
-    calories_boost = 150 if flags.energy_support else 0
-    protein_boost = 10 if flags.high_protein_need else 0
-    include_two_snacks = questionnaire.nutrition_status.appetite_level in {"reduced", "minimal"}
+    calories_boost = 200 if flags.energy_support else 0
+    if context.appetite_minimal:
+        calories_boost += 100
+    protein_boost = 15 if flags.high_protein_need else 0
+    include_two_snacks = context.appetite_reduced or flags.high_fatigue
     for day_index in range(7):
-        breakfast = template["breakfast"][day_index % len(template["breakfast"])]
-        lunch = template["lunch"][day_index % len(template["lunch"])]
-        dinner = template["dinner"][day_index % len(template["dinner"])]
-        snacks = [template["snacks"][0]]
+        breakfast = _select_recipe_variant(
+            template["breakfast"],
+            day_index=day_index,
+            intolerances=context.intolerances,
+        )
+        lunch = _select_recipe_variant(
+            template["lunch"],
+            day_index=day_index,
+            intolerances=context.intolerances,
+        )
+        dinner = _select_recipe_variant(
+            template["dinner"],
+            day_index=day_index,
+            intolerances=context.intolerances,
+        )
+        snack_recipe = _select_recipe_variant(
+            template["snacks"],
+            day_index=day_index,
+            intolerances=context.intolerances,
+        )
+        snacks = [snack_recipe]
         if include_two_snacks:
-            snacks.append(template["snacks"][0].copy(update={"id": f"{template['snacks'][0].id}_extra_{day_index}"}))
+            snacks.append(snack_recipe.model_copy(update={"id": f"{snack_recipe.id}_extra_{day_index}"}))
 
         total_calories = breakfast.calories + lunch.calories + dinner.calories + sum(item.calories for item in snacks)
         total_protein = breakfast.protein + lunch.protein + dinner.protein + sum(item.protein for item in snacks)
