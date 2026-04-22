@@ -117,6 +117,10 @@ Das Backend wird als API-first MVP aufgebaut und stellt bzw. plant mindestens di
 - `GET /api/meal-kits/{meal_kit_id}`
 - `POST /api/orders`
 - `GET /api/orders/{order_id}`
+- `PATCH /api/orders/{order_id}/status`
+
+Zusaetzlich existiert bereits ein Frontend-BFF-Layer unter `/api/frontend/...`, der frontend-kompatible Contracts liefert.
+Das ist fuer dich wichtig, weil eine spaetere Persistenz- oder Auth-Anbindung sowohl die Domain-Endpunkte als auch diesen BFF-Layer stabil mittragen muss.
 
 Wichtig fuer dich:
 

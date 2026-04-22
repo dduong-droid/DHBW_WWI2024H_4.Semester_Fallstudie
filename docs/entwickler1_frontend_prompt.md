@@ -29,7 +29,7 @@ Wichtig:
 
 ## Deine Rolle im Team
 
-Du bist **nur fuer Frontend, UI/UX, Mock-Daten und Browser-Validierung** verantwortlich.
+Du bist **nur fuer Frontend, UI/UX, Frontend-Datenzugriff, Mock-Daten und Browser-Validierung** verantwortlich.
 
 Das bedeutet:
 
@@ -94,7 +94,7 @@ Es gibt bereits vorhandene Frontend-Typen in:
 
 - `frontend/src/types/apiContracts.ts`
 
-Es gibt vorhandene Mock-APIs in:
+Es gibt einen vorhandenen Mock-/Service-Layer in:
 
 - `frontend/src/services/mockApi.ts`
 
@@ -119,6 +119,7 @@ Das Backend wird als API-first MVP gebaut und deckt fachlich bereits diese Berei
 - Wochenplan-Auswahl
 - Meal-Kit-Katalog
 - Bestellung und Bestellstatus
+- Frontend-BFF / Compatibility Layer
 
 Geplante bzw. vorbereitete Endpunkte sind:
 
@@ -133,13 +134,27 @@ Geplante bzw. vorbereitete Endpunkte sind:
 - `GET /api/meal-kits/{meal_kit_id}`
 - `POST /api/orders`
 - `GET /api/orders/{order_id}`
+- `PATCH /api/orders/{order_id}/status`
+
+Fuer das Frontend besonders wichtig sind die zusaetzlichen BFF-Endpunkte:
+
+- `POST /api/frontend/intake/full-analyze`
+- `GET /api/frontend/nutrition-plan/{patient_id}`
+- `GET /api/frontend/shop/inventory`
+- `GET /api/frontend/shop/meal-kits/{meal_kit_id}`
+- `GET /api/frontend/recipes/curated/{patient_id}`
+- `GET /api/frontend/tracking/daily/{patient_id}`
+- `POST /api/frontend/tracking/daily/{patient_id}/meal-box`
+- `GET /api/frontend/tracking/hydration/{patient_id}`
+- `POST /api/frontend/tracking/hydration/{patient_id}/water`
 
 Wichtig fuer dich:
 
 - Auth ist im MVP noch nicht aktiv
 - echte Datenbank ist fuer den ersten Backend-Stand nicht Pflicht
 - Recommendation und Analyse sind regelbasiert, nicht LLM-basiert
-- du sollst die UI so bauen, dass diese Endpunkte spaeter leicht angebunden werden koennen
+- du sollst die UI so bauen, dass bevorzugt der BFF-Layer angebunden werden kann
+- `frontend/src/services/mockApi.ts` kann schrittweise durch echte Calls auf `/api/frontend/...` ersetzt werden
 
 ## Arbeitsregeln fuer deine KI
 
@@ -245,6 +260,7 @@ Du baust:
 - Komponenten
 - Seiten
 - Mock-Daten-Anbindung
+- Frontend-Service-Anbindung
 - Browser-Validierung
 - praesentationsreife Benutzerfluesse
 

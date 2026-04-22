@@ -1,7 +1,7 @@
 # Design Artefakte
 
 Diese Sammlung enthaelt exportierte UI-Artefakte fuer `Food 4 Recovery`.
-Jeder Screen liegt in einem eigenen Ordner und besteht in der Regel aus:
+Jeder Screen liegt in der Regel in einem eigenen Ordner und besteht aus:
 
 - `code.html`: exportierter HTML-Code
 - `screen.png`: exportierter Screenshot
@@ -10,20 +10,18 @@ Jeder Screen liegt in einem eigenen Ordner und besteht in der Regel aus:
 
 - Ordnernamen bleiben flach unter `docs/designs/`
 - Slugs sind ASCII-basiert und in `snake_case`
-- Umlaute werden normalisiert, z. B. `ae`, `oe`, `ue`
+- Umlaute werden normalisiert, zum Beispiel `ae`, `oe`, `ue`
 - Wenn ein bereinigter Name mit einem bereits vorhandenen Screen kollidiert, bleibt die aeltere Variante mit dem Suffix `_alt` erhalten
 
-## Bereinigte Ordnernamen
+## Aktueller Stand
 
-- Aeltere Slugs mit kaputten Umlauten oder gemischten Sprachen wurden vereinheitlicht
-- Alle Screen-Ordner tragen jetzt nur noch den eigentlichen Screen-Namen
-- Historische Duplikate bleiben, falls noetig, mit dem Suffix `_alt` erhalten
+- Die frueheren `food_4_recovery_*`-Praefixe wurden aus den Screen-Ordnernamen entfernt.
+- Historische Duplikate bleiben nur dort erhalten, wo sie fuer Rueckverfolgung oder Vergleich noetig sind.
+- Neuere Stitch-Exporte sind im Manifest dokumentiert.
 
 ## Stitch Manifest
 
-Die neueren Stitch-Exporte sind im Manifest dokumentiert:
-
-- [stitch_manifest.json](/C:/Code/Fallstudie/DHBW_WWI2024H_4.Semester_Fallstudie/docs/designs/stitch_manifest.json)
+- [stitch_manifest.json](stitch_manifest.json)
 
 ## Wichtige Screen-Ordner
 
@@ -44,4 +42,5 @@ Die neueren Stitch-Exporte sind im Manifest dokumentiert:
 
 ## Hinweis
 
-Einige aeltere Imports enthalten keine oder nur unvollstaendige `<title>`-Metadaten in `code.html`. Die Ordnernamen sind deshalb die verlässlichste Referenz fuer die Zuordnung.
+Einige aeltere Imports enthalten keine oder nur unvollstaendige `<title>`-Metadaten in `code.html`.
+Die Ordnernamen sind deshalb die verlaesslichste Referenz fuer die Zuordnung.
