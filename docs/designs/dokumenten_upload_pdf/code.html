@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dokumente hochladen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#ff8e86",
+                        "surface-variant": "#dde5d8",
+                        "on-surface-variant": "#3d4a3c",
+                        "primary-fixed-dim": "#52e16e",
+                        "background": "#f3fcee",
+                        "on-secondary-fixed": "#002107",
+                        "inverse-on-surface": "#ebf3e6",
+                        "secondary-fixed": "#b2f2b2",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#002107",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-background": "#161d15",
+                        "outline": "#6d7b6b",
+                        "inverse-primary": "#52e16e",
+                        "surface-container-high": "#e2ebdd",
+                        "on-primary-fixed-variant": "#00531c",
+                        "outline-variant": "#bccbb8",
+                        "inverse-surface": "#2b322a",
+                        "error": "#ba1a1a",
+                        "tertiary": "#9c413d",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#71fe87",
+                        "error-container": "#ffdad6",
+                        "primary": "#006e27",
+                        "on-error": "#ffffff",
+                        "surface": "#f3fcee",
+                        "on-tertiary-fixed-variant": "#7e2a27",
+                        "surface-container-highest": "#dde5d8",
+                        "secondary-fixed-dim": "#97d598",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d4ddd0",
+                        "surface-container": "#e8f0e3",
+                        "secondary-container": "#b2f2b2",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "secondary": "#306a38",
+                        "on-surface": "#161d15",
+                        "on-secondary-container": "#37703d",
+                        "primary-container": "#33c758",
+                        "on-primary-container": "#004d19",
+                        "surface-tint": "#006e27",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#165122",
+                        "on-tertiary-fixed": "#410004",
+                        "on-tertiary-container": "#772523",
+                        "surface-container-low": "#eef6e9",
+                        "surface-bright": "#f3fcee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-[#f3fcee]/80 dark:bg-slate-900/80 backdrop-blur-xl docked full-width top-0 sticky z-40">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-3xl mx-auto">
+<button class="text-[#006e27] dark:text-[#33c758] active:scale-95 duration-200 hover:bg-[#eef6e9] dark:hover:bg-slate-800 transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] font-semibold text-[1.75rem] tracking-tight text-[#006e27] dark:text-[#33c758]">Records</h1>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center px-6 pt-8 max-w-3xl mx-auto w-full">
+<!-- Progress Indicator -->
+<div class="w-full flex justify-between items-center mb-8 px-2">
+<div class="flex flex-col items-start gap-1">
+<span class="text-label-md font-label uppercase tracking-wider text-outline">Schritt 2 von 3</span>
+<div class="flex gap-2">
+<div class="h-1.5 w-12 bg-primary rounded-full"></div>
+<div class="h-1.5 w-12 bg-primary rounded-full"></div>
+<div class="h-1.5 w-12 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Title -->
+<div class="w-full mb-10">
+<h2 class="text-display-lg font-headline font-bold text-on-surface leading-tight tracking-tight mb-2">Dokumente<br/>hochladen</h2>
+<p class="text-body-lg text-on-surface-variant mt-2 max-w-md">Bitte laden Sie Ihre medizinischen Befunde, Laborergebnisse oder Arztbriefe als PDF hoch.</p>
+</div>
+<!-- Upload Dropzone -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-8 mb-8 flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/40 hover:border-primary/40 transition-colors cursor-pointer min-h-[240px]">
+<div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 0;">cloud_upload</span>
+</div>
+<h3 class="text-title-lg font-headline font-medium text-on-surface mb-2">PDF hier ablegen</h3>
+<p class="text-body-lg text-on-surface-variant text-center mb-6">oder durchsuchen Sie Ihre Dateien</p>
+<button class="bg-surface-container-high text-on-surface px-6 py-3 rounded-full font-label font-medium text-sm flex items-center gap-2 hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-sm">folder_open</span>
+                Datei auswählen
+            </button>
+<p class="text-label-md text-outline mt-6">Max. Dateigröße: 10MB pro PDF</p>
+</div>
+<!-- Uploaded Files List -->
+<div class="w-full mb-12">
+<h4 class="text-label-md font-label uppercase tracking-wider text-outline mb-4 px-2">Hochgeladene Dateien (1)</h4>
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center justify-between mb-3 group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+</div>
+<div>
+<p class="text-title-sm font-headline font-medium text-on-surface">Arztbrief_Knie.pdf</p>
+<p class="text-label-md text-on-surface-variant mt-0.5">2.4 MB • Bereit zur Analyse</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error-container transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="w-full mt-auto pb-10">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary text-title-sm font-headline font-medium py-4 rounded-xl flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(0,110,39,0.15)] hover:opacity-90 transition-opacity">
+<span>Weiter zur Analyse</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on md and above) -->
+<nav class="md:hidden bg-[#f3fcee]/80 dark:bg-slate-900/80 backdrop-blur-2xl fixed bottom-0 w-full z-50 rounded-t-[1.5rem] shadow-[0_-4px_24px_rgba(0,110,39,0.06)] fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-5 py-2 hover:opacity-80 transition-opacity active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-['Inter'] text-[0.75rem] font-semibold uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#33c758]/10 text-[#006e27] dark:text-[#33c758] rounded-[1.25rem] px-5 py-2 hover:opacity-80 transition-opacity active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="font-['Inter'] text-[0.75rem] font-semibold uppercase tracking-wider">Records</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-5 py-2 hover:opacity-80 transition-opacity active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">pill</span>
+<span class="font-['Inter'] text-[0.75rem] font-semibold uppercase tracking-wider">Meds</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-5 py-2 hover:opacity-80 transition-opacity active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">medical_services</span>
+<span class="font-['Inter'] text-[0.75rem] font-semibold uppercase tracking-wider">Support</span>
+</a>
+</nav>
+</body></html>

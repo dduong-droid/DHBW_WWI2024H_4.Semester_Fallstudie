@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bestellbestätigung - Food 4 Recovery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#006e27",
+                        "on-primary-fixed-variant": "#00531c",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdad7",
+                        "secondary": "#306a38",
+                        "primary-fixed": "#71fe87",
+                        "primary-container": "#33c758",
+                        "primary": "#006e27",
+                        "primary-fixed-dim": "#52e16e",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#9c413d",
+                        "surface-container-low": "#eef6e9",
+                        "on-primary-fixed": "#002107",
+                        "on-primary-container": "#004d19",
+                        "surface-container-highest": "#dde5d8",
+                        "on-secondary-container": "#37703d",
+                        "surface": "#f3fcee",
+                        "surface-variant": "#dde5d8",
+                        "on-background": "#161d15",
+                        "outline-variant": "#bccbb8",
+                        "surface-container-high": "#e2ebdd",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ebf3e6",
+                        "surface-container": "#e8f0e3",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f3fcee",
+                        "outline": "#6d7b6b",
+                        "on-secondary-fixed": "#002107",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#165122",
+                        "inverse-surface": "#2b322a",
+                        "secondary-fixed": "#b2f2b2",
+                        "on-surface": "#161d15",
+                        "inverse-primary": "#52e16e",
+                        "tertiary-container": "#ff8e86",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d4ddd0",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-tertiary-fixed-variant": "#7e2a27",
+                        "background": "#f3fcee",
+                        "secondary-container": "#b2f2b2",
+                        "on-tertiary-fixed": "#410004",
+                        "on-tertiary-container": "#772523",
+                        "secondary-fixed-dim": "#97d598",
+                        "on-surface-variant": "#3d4a3c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-6 h-16 bg-[#f3fcee]/80 dark:bg-[#161d15]/80 backdrop-blur-xl">
+<button class="text-[#006e27] dark:text-[#33c758] hover:bg-[#eef6e9] dark:hover:bg-[#1c261b] transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-['Inter'] font-semibold text-lg tracking-tight text-[#006e27] dark:text-[#33c758]">Bestätigung</h1>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high border-2 border-primary/20">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Portrait of a young woman with a soft smile in natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByV6_snpB_5TivYoYmUtSRp3nHLei3kIPRkHMZxywG2ojgdrnjZRXmqVviK6qOS6E60pn-g2_okgnwR9-3zd2AKSklTOJvbijWGsCuS2GUVn2rnIwCufn4bNtkyClfEYMPsk3wHUCVzWHI2B7wcMyg3MW5PA9wtu7AxMN1sFHIU1V3__M7ldiWS4BrbQl4_lkyBJB5AeO9NtvH3zWiYLWJKnsQ60I4nirfHFZvmXvVjPv0y0YgAeixqhGzC0sf7ofvCDS4Yw0lUfg"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center p-6 md:p-12 pb-24 md:pb-12">
+<div class="max-w-2xl w-full flex flex-col items-center text-center space-y-12">
+<!-- Success Hero -->
+<div class="flex flex-col items-center space-y-6">
+<div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[48px] text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h2 class="font-headline text-[3.5rem] leading-tight font-bold text-on-surface">Vielen Dank für<br/>deine Bestellung,<br/>Maria!</h2>
+<p class="font-body text-lg text-on-surface-variant max-w-md">Deine Wundheilungs-Box wird gerade vorbereitet und ist bald auf dem Weg zu dir.</p>
+</div><!-- Email Confirmation Request -->
+<div class="w-full bg-surface-container-low rounded-[1.5rem] p-6 md:p-8 space-y-4">
+<div class="text-left">
+<h4 class="font-headline text-lg font-semibold text-on-surface">Bestätigung per E-Mail erhalten</h4>
+<p class="font-body text-sm text-on-surface-variant">Möchtest du eine Kopie deiner Bestellung per E-Mail? Gib hier deine Adresse ein.</p>
+</div>
+<form class="flex flex-col sm:flex-row gap-3" onsubmit="return false;">
+<div class="relative flex-grow">
+<input class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary rounded-xl px-4 py-3.5 text-on-surface placeholder:text-on-surface-variant/60 transition-all outline-none" placeholder="Deine E-Mail-Adresse" required="" type="email"/>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary font-medium px-8 py-3.5 rounded-xl transition-all active:scale-[0.98] whitespace-nowrap shadow-sm" type="submit">
+            Senden
+        </button>
+</form>
+</div>
+<!-- Order Details Card -->
+<div class="w-full bg-surface-container-lowest rounded-[1.5rem] p-8 shadow-[0_8px_32px_rgba(0,110,39,0.04)] flex flex-col space-y-6">
+<div class="flex justify-between items-center border-b border-surface-container-high pb-4">
+<span class="font-label text-sm font-semibold uppercase tracking-wider text-on-surface-variant">Bestellnummer</span>
+<span class="font-body font-medium text-on-surface">#F4R-8923-MC</span>
+</div>
+<div class="flex justify-between items-center pb-2">
+<span class="font-label text-sm font-semibold uppercase tracking-wider text-on-surface-variant">Geschätzte Lieferung</span>
+<span class="font-body font-medium text-primary">12. - 14. Okt</span>
+</div>
+</div>
+<!-- Next Steps Bento -->
+<div class="w-full bg-surface-container-low rounded-[1.5rem] p-8 text-left space-y-4">
+<h3 class="font-headline text-[1.375rem] font-medium text-on-surface">Nächste Schritte</h3>
+<ul class="space-y-6">
+<li class="flex items-start space-x-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-sm text-primary">package</span>
+</div>
+<div>
+<h4 class="font-body font-medium text-on-surface">Verpackung</h4>
+<p class="font-body text-sm text-on-surface-variant mt-1">Wir stellen deine Box mit hochwertigen, regenerativen Nährstoffen zusammen.</p>
+</div>
+</li>
+<li class="flex items-start space-x-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center flex-shrink-0 mt-1 opacity-50">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">local_shipping</span>
+</div>
+<div>
+<h4 class="font-body font-medium text-on-surface opacity-50">Versand</h4>
+<p class="font-body text-sm text-on-surface-variant mt-1 opacity-50">Du erhältst eine Tracking-Nummer, sobald das Paket unser Haus verlässt.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col space-y-4 pt-4">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-body font-medium py-4 px-8 rounded-[1.5rem] shadow-[0_8px_24px_rgba(0,110,39,0.15)] hover:shadow-[0_12px_32px_rgba(0,110,39,0.2)] transition-all active:scale-[0.98]">
+                    Zurück zum Dashboard
+                </button>
+<button class="w-full bg-transparent text-primary font-body font-medium py-4 px-8 rounded-[1.5rem] border border-outline-variant/40 hover:bg-surface-container-low transition-colors">
+                    Bestelldetails ansehen
+                </button>
+</div>
+</div>
+</main>
+</body></html>

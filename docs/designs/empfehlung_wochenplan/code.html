@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FOOD 4 RECOVERY - Recommendation &amp; Weekly Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f3fcee",
+                      "outline": "#6d7b6b",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#71fe87",
+                      "inverse-primary": "#52e16e",
+                      "inverse-on-surface": "#ebf3e6",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#e2ebdd",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#006e27",
+                      "on-tertiary-container": "#772523",
+                      "tertiary-fixed-dim": "#ffb3ad",
+                      "on-secondary-fixed-variant": "#165122",
+                      "on-surface-variant": "#3d4a3c",
+                      "surface-variant": "#dde5d8",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#52e16e",
+                      "tertiary-fixed": "#ffdad7",
+                      "outline-variant": "#bccbb8",
+                      "secondary": "#306a38",
+                      "primary-container": "#33c758",
+                      "on-tertiary-fixed-variant": "#7e2a27",
+                      "on-error-container": "#93000a",
+                      "on-background": "#161d15",
+                      "on-tertiary-fixed": "#410004",
+                      "surface-dim": "#d4ddd0",
+                      "surface-bright": "#f3fcee",
+                      "tertiary": "#9c413d",
+                      "on-error": "#ffffff",
+                      "on-surface": "#161d15",
+                      "surface-container": "#e8f0e3",
+                      "secondary-fixed": "#b2f2b2",
+                      "on-secondary-fixed": "#002107",
+                      "secondary-container": "#b2f2b2",
+                      "primary": "#006e27",
+                      "error-container": "#ffdad6",
+                      "on-secondary-container": "#37703d",
+                      "on-primary-fixed-variant": "#00531c",
+                      "surface-container-highest": "#dde5d8",
+                      "on-primary-fixed": "#002107",
+                      "on-primary-container": "#004d19",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#97d598",
+                      "background": "#f3fcee",
+                      "tertiary-container": "#ff8e86",
+                      "surface-container-low": "#eef6e9",
+                      "inverse-surface": "#2b322a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Inter"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+          body {
+              font-family: 'Inter', sans-serif;
+              background-color: #f3fcee; /* Fallback */
+              color: #161d15;
+          }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-[#f3fcee]/80 backdrop-blur-lg dark:bg-emerald-950/80 font-['Inter'] font-semibold tracking-tight docked full-width top-0 sticky flex justify-between items-center px-6 py-4 w-full z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500 dark:text-emerald-400">clinical_notes</span>
+<span class="text-xl font-bold tracking-tighter text-emerald-900 dark:text-emerald-50">FOOD 4 RECOVERY</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<!-- Nav Items for Web -->
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span>Plan</span>
+</a>
+<a class="text-emerald-900/40 dark:text-emerald-100/40 hover:bg-emerald-500/10 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span>Orders</span>
+</a>
+<a class="text-emerald-900/40 dark:text-emerald-100/40 hover:bg-emerald-500/10 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span>Health</span>
+</a>
+<a class="text-emerald-900/40 dark:text-emerald-100/40 hover:bg-emerald-500/10 transition-colors flex items-center gap-2 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Profile</span>
+</a>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a young professional in soft natural lighting against a neutral clinical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC32vHUcc2fCwDXFcZTy_gCWDq_2Gd_Sjx_ph5LURq3BN1er0jY0lZ34egSGnVbuWFBcH-Tm6bqOvIG8ulUf97_J19exk_z991TIBbZit2ZbAu6tVGfIs3MyDr4lCRhJ__OZJ1jPgrmawgeZY_w7oJcL3yFBJ8PpMEB3oW84PNN06VnI_CM8um0YK-crmPV_d-_G9qD_VW7tMJn5sZq9ZH37hjYkRPjBnOzbwGYhBVTw2BbbbTeqccjlAxeGQMDuG1avtxUKO62vsA"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-5xl mx-auto px-6 py-8 md:py-12 flex flex-col gap-12">
+<!-- Header Section -->
+<section class="flex flex-col gap-4 max-w-2xl">
+<h1 class="text-[3.5rem] font-bold leading-tight tracking-tight text-on-surface font-headline">Deine Empfehlung</h1>
+<p class="text-base text-on-surface-variant font-body">Basierend auf deinem Arztbrief (Knie-OP) empfehlen wir die Wundheilungs-Box.</p>
+</section>
+<!-- Recommendation Card (Bento Style) -->
+<section class="bg-surface-container-lowest rounded-[1.5rem] p-6 md:p-8 flex flex-col md:flex-row gap-8 shadow-[0_8px_30px_rgb(0,110,39,0.06)] relative overflow-hidden">
+<!-- Glassmorphism Background Flare -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container opacity-10 rounded-full blur-[40px] pointer-events-none"></div>
+<div class="w-full md:w-2/5 aspect-square rounded-[1rem] overflow-hidden bg-surface-container">
+<img alt="Wundheilungs-Box" class="w-full h-full object-cover" data-alt="a curated selection of fresh organic vegetables, lean proteins, and citrus fruits arranged neatly on a pristine white medical surface, shot from directly above with bright soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdvcPdSSXcZHHs-R9kjQO0FP7zibiFXV76eNb03QE-6t3h9BJk_187IJ-lijEdReZLhSlcRN7ZQHd55dKHIFY0DC-pzKnQ0IZvBIKYOvty7jU0jb3eb_pBlCsRtfXYdU3qSyA54CPDxQtgFzeFtpjSk2kYvBEU8GlA7QJpcdIaMLkWhBHlWS-NCJ8Fnk5K6M-TDt6KyjmK05hwNodVQQ97R4i-SnmxL3O9sE_HzrMX7QNzCoy-i0AWp7-nmOlEdKtfIYQ35RlDr7c"/>
+</div>
+<div class="w-full md:w-3/5 flex flex-col justify-between z-10">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<h2 class="text-[1.75rem] font-semibold text-on-surface font-headline">Wundheilungs-Box</h2>
+<span class="text-xl font-bold text-primary">€ 89.90</span>
+</div>
+<p class="text-base text-on-surface-variant font-body">Eine speziell abgestimmte Auswahl an Mahlzeiten, reich an Vitamin C, Zink und Proteinen, um die Geweberegeneration nach operativen Eingriffen optimal zu unterstützen.</p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="inline-flex items-center gap-1 px-3 py-1 bg-surface-container-low rounded-full text-xs font-semibold text-on-secondary-container font-label uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">nutrition</span>
+                            High Protein
+                        </span>
+<span class="inline-flex items-center gap-1 px-3 py-1 bg-surface-container-low rounded-full text-xs font-semibold text-on-secondary-container font-label uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">medication</span>
+                            Zink &amp; Vit C
+                        </span>
+<span class="inline-flex items-center gap-1 px-3 py-1 bg-surface-container-low rounded-full text-xs font-semibold text-on-secondary-container font-label uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">healing</span>
+                            Anti-inflammatory
+                        </span>
+</div>
+</div>
+<button class="mt-8 w-full md:w-auto self-start bg-gradient-to-br from-primary to-primary-container text-on-primary font-medium text-[1.375rem] py-4 px-8 rounded-[1.5rem] shadow-[0_8px_24px_rgba(0,110,39,0.2)] hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    Diesen Plan wählen
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Weekly Plan Section -->
+<section class="flex flex-col gap-6">
+<h2 class="text-[1.75rem] font-semibold text-on-surface font-headline">Wochenplan</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Day 1 -->
+<div class="bg-surface-container-low rounded-[1.5rem] p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-semibold text-primary font-label uppercase tracking-wider">Montag</span>
+<span class="material-symbols-outlined text-outline-variant">check_circle</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-medium text-on-surface">Lachsfilet mit Quinoa</h3>
+<p class="text-sm text-on-surface-variant">Reich an Omega-3 für Entzündungshemmung.</p>
+</div>
+</div>
+<!-- Day 2 -->
+<div class="bg-surface-container-low rounded-[1.5rem] p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-semibold text-on-surface-variant font-label uppercase tracking-wider">Dienstag</span>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-medium text-on-surface">Hühnerbrühe mit Wurzelgemüse</h3>
+<p class="text-sm text-on-surface-variant">Kollagen und Vitamine für den Gewebeaufbau.</p>
+</div>
+</div>
+<!-- Day 3 -->
+<div class="bg-surface-container-low rounded-[1.5rem] p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-semibold text-on-surface-variant font-label uppercase tracking-wider">Mittwoch</span>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-medium text-on-surface">Spinat-Kichererbsen-Curry</h3>
+<p class="text-sm text-on-surface-variant">Pflanzliches Protein und Eisen.</p>
+</div>
+</div>
+<!-- Day 4 -->
+<div class="bg-surface-container-low rounded-[1.5rem] p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-semibold text-on-surface-variant font-label uppercase tracking-wider">Donnerstag</span>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-medium text-on-surface">Rindersteak mit Brokkoli</h3>
+<p class="text-sm text-on-surface-variant">Zink und hochwertiges Protein für Heilung.</p>
+</div>
+</div>
+<!-- Day 5 -->
+<div class="bg-surface-container-low rounded-[1.5rem] p-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-semibold text-on-surface-variant font-label uppercase tracking-wider">Freitag</span>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-medium text-on-surface">Linsensuppe mit Zitronengras</h3>
+<p class="text-sm text-on-surface-variant">Leicht verdaulich, Vitamin C Booster.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-[#f3fcee]/80 backdrop-blur-2xl dark:bg-emerald-950/80 fixed bottom-0 w-full rounded-t-[1.5rem] z-50 flex justify-around items-center px-4 pb-6 pt-3 shadow-[0_-8px_30px_rgb(0,110,39,0.04)]">
+<a class="flex flex-col items-center justify-center bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 rounded-2xl px-5 py-2 font-['Inter'] text-[11px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+            Plan
+        </a>
+<a class="flex flex-col items-center justify-center text-emerald-900/40 dark:text-emerald-100/40 px-5 py-2 font-['Inter'] text-[11px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mb-1">shopping_bag</span>
+            Orders
+        </a>
+<a class="flex flex-col items-center justify-center text-emerald-900/40 dark:text-emerald-100/40 px-5 py-2 font-['Inter'] text-[11px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mb-1">monitoring</span>
+            Health
+        </a>
+<a class="flex flex-col items-center justify-center text-emerald-900/40 dark:text-emerald-100/40 px-5 py-2 font-['Inter'] text-[11px] font-semibold uppercase tracking-wider" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+            Profile
+        </a>
+</nav>
+</body></html>
