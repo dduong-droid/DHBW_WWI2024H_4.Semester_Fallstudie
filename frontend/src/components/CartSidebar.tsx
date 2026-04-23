@@ -37,20 +37,20 @@ export default function CartSidebar() {
             <ul className={styles.itemList}>
               {items.map(item => (
                 <li key={item.id} className={styles.item}>
-                  <div className={styles.itemImage} style={{backgroundImage: `url(${item.imageUrl || ''})`}}></div>
+                  <div className={styles.itemImage} style={{ backgroundImage: `url(${item.imageUrl || ''})` }}></div>
                   <div className={styles.itemDetails}>
                     <div className={styles.itemTitleRow}>
                       <h4>{item.name}</h4>
                       <button className={styles.removeBtn} onClick={() => removeFromCart(item.id)}>
-                        <X size={16}/>
+                        <X size={16} />
                       </button>
                     </div>
                     <div className={styles.itemPriceRow}>
                       <span className={styles.itemPrice}>{(item.price * item.quantity).toFixed(2)} €</span>
                       <div className={styles.quantityControls}>
-                        <button onClick={() => updateQuantity(item.id, -1)}><Minus size={14}/></button>
+                        <button onClick={() => updateQuantity(item.id, -1)}><Minus size={14} /></button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, 1)}><Plus size={14}/></button>
+                        <button onClick={() => updateQuantity(item.id, 1)}><Plus size={14} /></button>
                       </div>
                     </div>
                   </div>
@@ -68,7 +68,7 @@ export default function CartSidebar() {
             </div>
             <div className={styles.summaryRow}>
               <span>Therapie-Versand (Kühltransport)</span>
-              <span style={{color: 'var(--color-primary)', fontWeight: 600}}>Kostenlos</span>
+              <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>Kostenlos</span>
             </div>
             <div className={styles.summaryTotal}>
               <span>Gesamt</span>

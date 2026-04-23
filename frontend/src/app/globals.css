@@ -28,26 +28,13 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--color-background-dark);
-    --text: var(--color-text-dark);
-    --text-muted: var(--color-text-muted-dark);
-    --surface: var(--color-surface-dark);
-    --border: var(--color-border-dark);
-  }
+:root {
+  --background: var(--color-background-light);
+  --text: var(--color-text-light);
+  --text-muted: var(--color-text-muted-light);
+  --surface: var(--color-surface-light);
+  --border: var(--color-border-light);
 }
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: var(--color-background-light);
-    --text: var(--color-text-light);
-    --text-muted: var(--color-text-muted-light);
-    --surface: var(--color-surface-light);
-    --border: var(--color-border-light);
-  }
-}
-
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
@@ -80,9 +67,3 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  .glass {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}

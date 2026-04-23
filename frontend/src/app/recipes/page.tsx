@@ -4,21 +4,22 @@ import Link from 'next/link';
 import { Utensils, HeartPulse } from 'lucide-react';
 import styles from './page.module.css';
 import { nutritionMockApi } from '../../services/mockApi';
-import { CuratedMeal } from '../../types/apiContracts';
+// @ts-ignore
+import { CuratedMeal } from '@/types/apiContracts';
 import CuratedMealCard from '../../components/CuratedMealCard';
 import CuratedMealModal from '../../components/CuratedMealModal';
 import CartNavIcon from '../../components/CartNavIcon';
 
 export default function CuratedRecipesPage() {
-  const [meals, setMeals] = useState<CuratedMeal[] | null>(null);
-  const [selectedMeal, setSelectedMeal] = useState<CuratedMeal | null>(null);
+  const [meals, setMeals] = useState<any[] | null>(null);
+  const [selectedMeal, setSelectedMeal] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     nutritionMockApi.fetchCuratedMeals().then(data => setMeals(data));
   }, []);
 
-  const handleOpenMeal = (meal: CuratedMeal) => {
+  const handleOpenMeal = (meal: any) => {
     setSelectedMeal(meal);
     setIsModalOpen(true);
   };

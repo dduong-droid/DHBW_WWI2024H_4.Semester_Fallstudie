@@ -23,12 +23,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .nav {
-    background: rgba(19, 31, 22, 0.7);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-}
+
 
 .navInner {
   max-width: 80rem;
@@ -228,11 +223,7 @@
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@media (prefers-color-scheme: dark) {
-  .dropzone {
-    background: rgba(19, 31, 22, 0.7);
-  }
-}
+
 
 .dropzone:hover {
   border-color: var(--color-primary);

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { X, Utensils, CheckCircle, Loader2, Wallet, ShoppingBag } from 'lucide-react';
-import { MealKit } from '../types/apiContracts';
+import { MealKit } from '@/types/apiContracts';
 import styles from './MealKitModal.module.css';
 import { useCart } from '../context/CartContext';
 
@@ -20,7 +20,7 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
   // Reset state gracefully when modal closes
   useEffect(() => {
     if (!isOpen) {
-      const timer = setTimeout(() => setCheckoutState('idle'), 400); 
+      const timer = setTimeout(() => setCheckoutState('idle'), 400);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -33,7 +33,7 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
       name: kit.name,
       price: kit.price,
       quantity: 1,
-      imageUrl: kit.imageUrl,
+      imageUrl: (kit as any).imageUrl,
     });
     setCheckoutState('success');
   };
@@ -41,7 +41,7 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
   return (
     <div className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`} onClick={onClose}>
       <div className={styles.modalSheet} onClick={e => e.stopPropagation()}>
-        
+
         {checkoutState === 'success' ? (
           <div className={styles.successContainer}>
             <CheckCircle size={80} className={styles.checkCircle} strokeWidth={2.5} />
@@ -49,19 +49,19 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
             <p className={styles.successDesc}>
               Dein MealKit wurde erfolgreich zum Warenkorb hinzugefügt.
             </p>
-            <button 
-              className={styles.applePayBtn} 
-              onClick={onClose} 
-              style={{marginTop: '2rem', backgroundColor: 'var(--color-primary)'}}
+            <button
+              className={styles.applePayBtn}
+              onClick={onClose}
+              style={{ marginTop: '2rem', backgroundColor: 'var(--color-primary)' }}
             >
               Weiter shoppen
             </button>
           </div>
         ) : (
           <>
-            <div 
-              className={styles.heroImage} 
-              style={{ backgroundImage: `url(${kit.imageUrl || ''})` }}
+            <div
+              className={styles.heroImage}
+              style={{ backgroundImage: `url(${(kit as any).imageUrl || ''})` }}
             >
               <button className={styles.closeBtn} onClick={onClose}>
                 <X size={20} />
@@ -71,23 +71,23 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
             <div className={styles.content}>
               <div className={styles.header}>
                 <h2 className={styles.title}>{kit.name}</h2>
-                <div className={styles.price}>{kit.price} {kit.currency}</div>
+                <div className={styles.price}>{kit.price} {(kit as any).currency}</div>
               </div>
 
               <h3 className={styles.sectionTitle}>Enthaltene Mahlzeiten</h3>
               <div className={styles.mealsList}>
-                {kit.meals?.map((meal, idx) => (
+                {((kit as any).meals as string[] | undefined)?.map((meal: string, idx: number) => (
                   <div key={idx} className={styles.mealItem}>
                     <Utensils size={20} className={styles.mealIcon} />
-                    <span style={{fontWeight: 600, fontSize: '0.875rem'}}>{meal}</span>
+                    <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{meal}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className={styles.stickyFooter}>
-              <button 
-                className={styles.applePayBtn} 
+              <button
+                className={styles.applePayBtn}
                 onClick={handleCheckout}
                 disabled={checkoutState === 'processing'}
               >

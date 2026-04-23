@@ -20,12 +20,7 @@
   border-bottom: 1px solid rgba(51, 199, 88, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  .nav {
-    background: rgba(19, 31, 22, 0.7);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-}
+
 
 .navContainer {
   max-width: 80rem;
