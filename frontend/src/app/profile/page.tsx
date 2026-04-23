@@ -1,0 +1,317 @@
+"use client";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import {
+  Utensils, Bell, User, HeartPulse, AlertTriangle,
+  CheckCircle2, Lock, Shield, ArrowRight, ArrowLeft
+} from 'lucide-react';
+import styles from './page.module.css';
+import { nutritionMockApi, type PatientProfile } from '../../services/mockApi';
+import CartNavIcon from '../../components/CartNavIcon';
+
+// --- Konfiguration: Beschwerden und Allergien ---
+
+const CONDITIONS = [
+  { id: 'post_op', label: 'Post-OP Erholung', desc: 'Chirurgischer Eingriff in den letzten 6 Monaten' },
+  { id: 'chemotherapy', label: 'Chemotherapie', desc: 'Laufende oder kürzliche onkologische Behandlung' },
+  { id: 'chronic_pain', label: 'Chronische Schmerzen', desc: 'Anhaltende Beschwerden oder eingeschränkte Mobilität' },
+  { id: 'cardiovascular', label: 'Herz-Kreislauf', desc: 'Vorgeschichte oder Überwachung des Herzens' },
+];
+
+const ALLERGIES = [
+  { id: 'lactose', label: 'Laktoseintoleranz', desc: 'Unverträglichkeit von Milchprodukten' },
+  { id: 'gluten', label: 'Glutenfrei', desc: 'Zöliakie oder Gluten-Sensitivität' },
+  { id: 'nuts', label: 'Nussallergie', desc: 'Allergie gegen Schalenfrüchte oder Erdnüsse' },
+  { id: 'other', label: 'Sonstige', desc: 'Andere spezifische Unverträglichkeiten' },
+];
+
+export default function ProfilePage() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  // Form State
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
+  const [conditions, setConditions] = useState<Set<string>>(new Set());
+  const [allergies, setAllergies] = useState<Set<string>>(new Set());
+  const [notes, setNotes] = useState('');
+
+  // Lade bestehende Profildaten
+  useEffect(() => {
+    nutritionMockApi.fetchPatientProfile().then(profile => {
+      setAge(profile.age ? String(profile.age) : '');
+      setWeight(profile.weight ? String(profile.weight) : '');
+      setHeight(profile.height ? String(profile.height) : '');
+      setConditions(new Set(profile.conditions));
+      setAllergies(new Set(profile.allergies));
+      setNotes(profile.notes);
+      setLoading(false);
+    });
+  }, []);
+
+  const toggleItem = (set: Set<string>, id: string, setter: React.Dispatch<React.SetStateAction<Set<string>>>) => {
+    const next = new Set(set);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    setter(next);
+  };
+
+  // Fortschrittsberechnung (reine Frontend-Logik)
+  const completionPercent = (() => {
+    let filled = 0;
+    const total = 4;
+    if (age) filled++;
+    if (weight) filled++;
+    if (height) filled++;
+    if (conditions.size > 0 || allergies.size > 0 || notes) filled++;
+    return Math.round((filled / total) * 100);
+  })();
+
+  const canSubmit = age && weight && height;
+
+  const handleSave = async () => {
+    if (!canSubmit) return;
+    setSaving(true);
+    setSaved(false);
+    await nutritionMockApi.savePatientProfile({
+      age: Number(age),
+      weight: Number(weight),
+      height: Number(height),
+      conditions: Array.from(conditions),
+      allergies: Array.from(allergies),
+      notes,
+    });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <nav className={styles.nav}>
+          <div className={styles.navContainer}>
+            <div className={styles.logoArea}>
+              <div className={styles.logoIcon}><Utensils size={20} strokeWidth={2.5} /></div>
+              <span className={styles.logoText}>Food 4 Recovery</span>
+            </div>
+          </div>
+        </nav>
+        <main className={styles.main}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--color-primary)' }}>
+            <div style={{ width: '3rem', height: '3rem', border: '4px solid rgba(51,199,88,0.2)', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+            <p style={{ fontWeight: 600 }}>Lade Profil...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      {/* Navigation */}
+      <nav className={styles.nav}>
+        <div className={styles.navContainer}>
+          <div className={styles.logoArea}>
+            <div className={styles.logoIcon}>
+              <Utensils size={20} strokeWidth={2.5} />
+            </div>
+            <span className={styles.logoText}>Food 4 Recovery</span>
+          </div>
+          <div className={styles.navLinks}>
+            <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
+            <Link href="/profile" className={`${styles.navLink} ${styles.navLinkActive}`}>Profil</Link>
+            <Link href="/recipes" className={styles.navLink}>Rezepte</Link>
+            <Link href="/shop" className={styles.navLink}>Shop</Link>
+          </div>
+          <div className={styles.userArea}>
+            <button className={styles.iconBtn} aria-label="Benachrichtigungen">
+              <Bell size={20} />
+            </button>
+            <CartNavIcon />
+            <div className={styles.avatar}>
+              <div className={styles.avatarImg} style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY')" }} />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main className={styles.main}>
+        {/* Header mit Fortschritt */}
+        <div className={styles.header}>
+          <div className={styles.headerTop}>
+            <div>
+              <h1 className={styles.title}>Gesundheitsprofil</h1>
+              <p className={styles.subtitle}>Schritt 2 von 4: Medizinischer Hintergrund</p>
+            </div>
+            <div className={styles.iconBox}>
+              <HeartPulse size={24} />
+            </div>
+          </div>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFill} style={{ width: `${completionPercent}%` }} />
+          </div>
+        </div>
+
+        {/* Form Card */}
+        <div className={styles.formCard}>
+          {/* Physisches Profil */}
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionIcon}><User size={22} /></span>
+              <h2 className={styles.sectionTitle}>Physisches Profil</h2>
+            </div>
+            <div className={styles.grid3}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="profile-age" className={styles.label}>Alter</label>
+                <input
+                  id="profile-age"
+                  type="number"
+                  className={styles.input}
+                  placeholder="28"
+                  value={age}
+                  onChange={e => setAge(e.target.value)}
+                  min={1}
+                  max={120}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="profile-weight" className={styles.label}>Gewicht (kg)</label>
+                <input
+                  id="profile-weight"
+                  type="number"
+                  className={styles.input}
+                  placeholder="72"
+                  value={weight}
+                  onChange={e => setWeight(e.target.value)}
+                  min={20}
+                  max={300}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="profile-height" className={styles.label}>Größe (cm)</label>
+                <input
+                  id="profile-height"
+                  type="number"
+                  className={styles.input}
+                  placeholder="180"
+                  value={height}
+                  onChange={e => setHeight(e.target.value)}
+                  min={100}
+                  max={250}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Aktuelle Beschwerden */}
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionIcon}><HeartPulse size={22} /></span>
+              <h2 className={styles.sectionTitle}>Aktuelle Beschwerden</h2>
+            </div>
+            <p className={styles.sectionDesc}>Wähle alles Zutreffende aus, damit wir deine Ernährung anpassen können.</p>
+            <div className={styles.grid2}>
+              {CONDITIONS.map(c => (
+                <label
+                  key={c.id}
+                  className={`${styles.checkboxLabel} ${conditions.has(c.id) ? styles.checkboxChecked : ''}`}
+                >
+                  <input
+                    type="checkbox"
+                    className={styles.checkboxInput}
+                    checked={conditions.has(c.id)}
+                    onChange={() => toggleItem(conditions, c.id, setConditions)}
+                  />
+                  <div className={styles.checkboxContent}>
+                    <span className={styles.checkboxTitle}>{c.label}</span>
+                    <span className={styles.checkboxDesc}>{c.desc}</span>
+                  </div>
+                  <CheckCircle2 size={22} className={styles.checkIcon} />
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Allergien */}
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionIcon}><AlertTriangle size={22} /></span>
+              <h2 className={styles.sectionTitle}>Allergien & Unverträglichkeiten</h2>
+            </div>
+            <p className={styles.sectionDesc}>Bitte wähle alle bekannten Allergien oder Nahrungsmittel-Unverträglichkeiten aus.</p>
+            <div className={styles.grid2}>
+              {ALLERGIES.map(a => (
+                <label
+                  key={a.id}
+                  className={`${styles.checkboxLabel} ${allergies.has(a.id) ? styles.checkboxChecked : ''}`}
+                >
+                  <input
+                    type="checkbox"
+                    className={styles.checkboxInput}
+                    checked={allergies.has(a.id)}
+                    onChange={() => toggleItem(allergies, a.id, setAllergies)}
+                  />
+                  <div className={styles.checkboxContent}>
+                    <span className={styles.checkboxTitle}>{a.label}</span>
+                    <span className={styles.checkboxDesc}>{a.desc}</span>
+                  </div>
+                  <CheckCircle2 size={22} className={styles.checkIcon} />
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Notizen */}
+          <div className={styles.section}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="profile-notes" className={styles.label}>Weitere Anmerkungen oder Bedürfnisse</label>
+              <textarea
+                id="profile-notes"
+                className={styles.textarea}
+                placeholder="Erzähle uns mehr über deine spezifischen Bedürfnisse..."
+                rows={3}
+                value={notes}
+                onChange={e => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className={styles.formActions}>
+            <Link href="/dashboard" className={styles.backBtn}>
+              <ArrowLeft size={16} style={{ display: 'inline', marginRight: '0.25rem', verticalAlign: 'middle' }} />
+              Zurück
+            </Link>
+            <button
+              className={styles.nextBtn}
+              onClick={handleSave}
+              disabled={!canSubmit || saving}
+            >
+              {saving ? 'Speichere...' : saved ? 'Gespeichert ✓' : 'Speichern & Weiter'}
+              {!saving && !saved && <ArrowRight size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Trust Badges */}
+        <div className={styles.trustBadge}>
+          <div className={styles.trustItem}>
+            <Lock size={14} />
+            DSGVO Konform
+          </div>
+          <div className={styles.trustDot} />
+          <div className={styles.trustItem}>
+            <Shield size={14} />
+            Ende-zu-Ende verschlüsselt
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
