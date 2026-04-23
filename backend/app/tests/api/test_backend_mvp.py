@@ -35,6 +35,7 @@ def create_patient_profile(*, known_conditions: list[str] | None = None, allergi
             "known_conditions": known_conditions or ["post_op_recovery"],
             "allergies": allergies or [],
             "dietary_preferences": ["balanced"],
+            "consent_data_processing": True,
             "notes": "Testprofil",
         },
     )

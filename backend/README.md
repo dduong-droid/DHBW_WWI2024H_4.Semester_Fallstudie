@@ -10,6 +10,9 @@ FastAPI-Backend fuer `Food 4 Recovery`.
 - Meal-Kit-Katalog
 - Order Handling
 - Frontend-BFF unter `/api/frontend`
+- SQLite-Persistenz fuer Patienten, Frageboegen, Empfehlungen, Bestellungen und Tracking
+- API-Key-Schutz fuer sensible Endpunkte, wenn `API_KEY` gesetzt ist
+- Privacy Export und Loeschung patientenbezogener Daten
 - API-, Unit- und Integrationstests
 
 ## API-Ebenen
@@ -27,8 +30,11 @@ Der BFF-Layer liefert camelCase-Responses in den Frontend-Contracts aus `fronten
 Domain:
 
 - `GET /health`
+- `GET /ready`
 - `POST /api/patient-profile`
 - `GET /api/patient-profile/{patient_id}`
+- `GET /api/patient-profile/{patient_id}/export`
+- `DELETE /api/patient-profile/{patient_id}`
 - `POST /api/questionnaire-intake`
 - `GET /api/questionnaire-intake/{intake_id}`
 - `POST /api/recommendations/analyze`
@@ -56,6 +62,32 @@ Frontend-BFF:
 ```bash
 uvicorn app.main:app --reload
 ```
+
+## Konfiguration
+
+Standardwerte fuer die lokale Entwicklung:
+
+```bash
+APP_NAME="Food 4 Recovery Backend"
+APP_ENV=development
+APP_PORT=8000
+DATABASE_URL=sqlite:///./food4recovery.db
+API_KEY=
+```
+
+Wenn `API_KEY` leer bleibt, sind lokale Requests ohne Header moeglich.
+Wenn `API_KEY` gesetzt ist, muessen sensible Reads und alle Write-Endpunkte den Header `X-API-Key: <wert>` senden.
+`/health`, `/ready` und der Meal-Kit-Katalog bleiben oeffentlich.
+
+Die SQLite-Datei wird beim Start automatisch angelegt. Es ist keine Alembic-Migration fuer dieses MVP-Paket noetig.
+
+## Datenschutz-Endpunkte
+
+- `GET /api/patient-profile/{patient_id}/export` liefert Profil, Frageboegen, Empfehlungen, Bestellungen und Trackingdaten.
+- `DELETE /api/patient-profile/{patient_id}` entfernt alle patientenbezogenen Daten und gibt `204` zurueck.
+- Neue Patientenprofile muessen `consent_data_processing: true` senden.
+
+Fehler werden einheitlich als `{"error": {"code": "...", "message": "...", "details": ...}}` ausgegeben.
 
 ## Tests
 

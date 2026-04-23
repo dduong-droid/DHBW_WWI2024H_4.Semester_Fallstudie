@@ -25,6 +25,7 @@ class PatientProfileBase(BaseModel):
     known_conditions: list[str] = Field(default_factory=list)
     allergies: list[str] = Field(default_factory=list)
     dietary_preferences: list[str] = Field(default_factory=list)
+    consent_data_processing: bool
     notes: str | None = None
 
 

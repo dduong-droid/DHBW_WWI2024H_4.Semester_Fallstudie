@@ -1,7 +1,13 @@
-"""In-memory tracking repository for the frontend BFF demo endpoints."""
+"""SQLite-backed tracking repository for the frontend BFF demo endpoints."""
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
+from sqlalchemy import delete
+
+from app.db.base import TrackingRecord
+from app.db.session import db_session
 from app.modules.frontend_bff.schemas import FrontendDailyProgress, FrontendHydrationProgress
 
 
@@ -15,12 +21,40 @@ _DEFAULT_HYDRATION_PROGRESS = FrontendHydrationProgress(
     targetMl=2500,
 )
 
-_DAILY_PROGRESS_BY_PATIENT: dict[str, FrontendDailyProgress] = {}
-_HYDRATION_PROGRESS_BY_PATIENT: dict[str, FrontendHydrationProgress] = {}
+def _get_record(patient_id: str) -> TrackingRecord | None:
+    with db_session() as session:
+        return session.get(TrackingRecord, patient_id)
+
+
+def _save_record(
+    patient_id: str,
+    *,
+    daily: FrontendDailyProgress | None = None,
+    hydration: FrontendHydrationProgress | None = None,
+) -> None:
+    with db_session() as session:
+        existing = session.get(TrackingRecord, patient_id)
+        daily_payload = existing.daily_payload if existing is not None else None
+        hydration_payload = existing.hydration_payload if existing is not None else None
+        if daily is not None:
+            daily_payload = daily.model_dump_json()
+        if hydration is not None:
+            hydration_payload = hydration.model_dump_json()
+        session.merge(
+            TrackingRecord(
+                patient_id=patient_id,
+                daily_payload=daily_payload,
+                hydration_payload=hydration_payload,
+                updated_at=datetime.now(timezone.utc),
+            )
+        )
 
 
 def get_daily_progress(patient_id: str) -> FrontendDailyProgress:
-    return _DAILY_PROGRESS_BY_PATIENT.get(patient_id, _DEFAULT_DAILY_PROGRESS)
+    record = _get_record(patient_id)
+    if record is None or record.daily_payload is None:
+        return _DEFAULT_DAILY_PROGRESS
+    return FrontendDailyProgress.model_validate_json(record.daily_payload)
 
 
 def mark_meal_box_eaten(patient_id: str) -> FrontendDailyProgress:
@@ -29,12 +63,15 @@ def mark_meal_box_eaten(patient_id: str) -> FrontendDailyProgress:
         energyPercent=100,
         isMealBoxEaten=True,
     )
-    _DAILY_PROGRESS_BY_PATIENT[patient_id] = progress
+    _save_record(patient_id, daily=progress)
     return progress
 
 
 def get_hydration_progress(patient_id: str) -> FrontendHydrationProgress:
-    return _HYDRATION_PROGRESS_BY_PATIENT.get(patient_id, _DEFAULT_HYDRATION_PROGRESS)
+    record = _get_record(patient_id)
+    if record is None or record.hydration_payload is None:
+        return _DEFAULT_HYDRATION_PROGRESS
+    return FrontendHydrationProgress.model_validate_json(record.hydration_payload)
 
 
 def add_water(patient_id: str, amount_ml: int) -> FrontendHydrationProgress:
@@ -43,10 +80,22 @@ def add_water(patient_id: str, amount_ml: int) -> FrontendHydrationProgress:
         currentMl=min(current.currentMl + amount_ml, current.targetMl),
         targetMl=current.targetMl,
     )
-    _HYDRATION_PROGRESS_BY_PATIENT[patient_id] = updated
+    _save_record(patient_id, hydration=updated)
     return updated
 
 
+def export_tracking_state(patient_id: str) -> dict[str, object]:
+    return {
+        "daily": get_daily_progress(patient_id).model_dump(mode="json"),
+        "hydration": get_hydration_progress(patient_id).model_dump(mode="json"),
+    }
+
+
+def delete_tracking_state(patient_id: str) -> None:
+    with db_session() as session:
+        session.execute(delete(TrackingRecord).where(TrackingRecord.patient_id == patient_id))
+
+
 def clear_tracking_state() -> None:
-    _DAILY_PROGRESS_BY_PATIENT.clear()
-    _HYDRATION_PROGRESS_BY_PATIENT.clear()
+    with db_session() as session:
+        session.execute(delete(TrackingRecord))

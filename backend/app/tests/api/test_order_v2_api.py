@@ -35,6 +35,7 @@ def _create_patient() -> str:
             "known_conditions": ["post_op_recovery"],
             "allergies": [],
             "dietary_preferences": ["balanced"],
+            "consent_data_processing": True,
             "notes": "Testprofil",
         },
     )
