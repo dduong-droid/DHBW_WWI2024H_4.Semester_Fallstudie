@@ -67,3 +67,24 @@ class RecommendationResult(BaseModel):
     dietary_warnings: list[str] = Field(default_factory=list)
     rationale: list[str] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class MealKitScoreExplanation(BaseModel):
+    meal_kit_id: str
+    name: str
+    score: int
+    positive_reasons: list[str] = Field(default_factory=list)
+    negative_reasons: list[str] = Field(default_factory=list)
+    exclusion_reasons: list[str] = Field(default_factory=list)
+    recommended: bool
+
+
+class RecommendationExplanation(BaseModel):
+    recommendation_id: str
+    patient_id: str
+    selected_template_id: str
+    template_scores: dict[str, int]
+    template_rationale: list[str] = Field(default_factory=list)
+    derived_flags: dict[str, bool]
+    meal_kit_scores: list[MealKitScoreExplanation] = Field(default_factory=list)
+    final_rationale: list[str] = Field(default_factory=list)

@@ -49,6 +49,17 @@ class RecommendationRecord(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
 
 
+class NutritionPlanRecord(Base):
+    __tablename__ = "nutrition_plans"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    patient_id: Mapped[str] = mapped_column(String(80), index=True, nullable=False)
+    status: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    payload: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
+
+
 class OrderRecord(Base):
     __tablename__ = "orders"
 

@@ -22,7 +22,13 @@ from app.modules.recommendation_engine.rules import (
     evaluate_meal_kit,
     evaluate_template_selection,
 )
-from app.modules.recommendation_engine.schemas import RecommendationAnalyzeRequest, RecommendationResult, RecommendedMealKit
+from app.modules.recommendation_engine.schemas import (
+    MealKitScoreExplanation,
+    RecommendationAnalyzeRequest,
+    RecommendationExplanation,
+    RecommendationResult,
+    RecommendedMealKit,
+)
 from app.modules.recommendation_engine.templates import build_detected_needs, build_rationale_lines, build_summary
 
 
@@ -123,3 +129,45 @@ def get_latest_recommendation_for_patient_or_404(patient_id: str) -> Recommendat
             detail=f"No recommendation found for patient '{patient_id}'.",
         )
     return record
+
+
+def build_recommendation_explanation(
+    recommendation: RecommendationResult,
+    questionnaire: QuestionnaireIntakeRecord,
+) -> RecommendationExplanation:
+    profile = get_patient_profile_or_404(recommendation.patient_id)
+    dietary_warnings = _merge_allergy_filters(profile.allergies, questionnaire)
+    template_selection = evaluate_template_selection(questionnaire.derived_flags, questionnaire)
+    recommended_ids = {item.meal_kit_id for item in recommendation.recommended_meal_kits}
+    meal_kit_scores: list[MealKitScoreExplanation] = []
+
+    for meal_kit in get_active_meal_kits():
+        evaluation = evaluate_meal_kit(
+            meal_kit,
+            questionnaire.derived_flags,
+            dietary_warnings=dietary_warnings,
+            questionnaire=questionnaire,
+        )
+        meal_kit_scores.append(
+            MealKitScoreExplanation(
+                meal_kit_id=meal_kit.id,
+                name=meal_kit.name,
+                score=evaluation.score,
+                positive_reasons=evaluation.positive_reasons,
+                negative_reasons=evaluation.negative_reasons,
+                exclusion_reasons=evaluation.exclusion_reasons,
+                recommended=meal_kit.id in recommended_ids,
+            )
+        )
+
+    meal_kit_scores.sort(key=lambda item: (item.recommended, item.score), reverse=True)
+    return RecommendationExplanation(
+        recommendation_id=recommendation.recommendation_id,
+        patient_id=recommendation.patient_id,
+        selected_template_id=recommendation.recommended_weekly_plan.template_id,
+        template_scores=template_selection.all_scores,
+        template_rationale=template_selection.rationale,
+        derived_flags=questionnaire.derived_flags.model_dump(),
+        meal_kit_scores=meal_kit_scores,
+        final_rationale=recommendation.rationale,
+    )

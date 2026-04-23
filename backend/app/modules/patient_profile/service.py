@@ -8,6 +8,7 @@ from uuid import uuid4
 from fastapi import HTTPException, status
 
 from app.modules.frontend_bff.tracking_repository import delete_tracking_state, export_tracking_state
+from app.modules.nutrition_plan.repository import delete_nutrition_plans_for_patient, list_nutrition_plans_for_patient
 from app.modules.order_handling.repository import delete_orders_for_patient, list_orders_for_patient
 from app.modules.patient_profile.repository import delete_patient_profile, get_patient_profile, save_patient_profile
 from app.modules.patient_profile.schemas import PatientProfile, PatientProfileCreate
@@ -44,11 +45,13 @@ def export_patient_data(patient_id: str) -> dict[str, object]:
     profile = get_patient_profile_or_404(patient_id)
     questionnaires = list_questionnaires_for_patient(patient_id)
     recommendations = list_recommendations_for_patient(patient_id)
+    nutrition_plans = list_nutrition_plans_for_patient(patient_id)
     orders = list_orders_for_patient(patient_id)
     return {
         "profile": profile.model_dump(mode="json"),
         "questionnaires": [item.model_dump(mode="json") for item in questionnaires],
         "recommendations": [item.model_dump(mode="json") for item in recommendations],
+        "nutrition_plans": [item.model_dump(mode="json") for item in nutrition_plans],
         "orders": [item.model_dump(mode="json") for item in orders],
         "tracking": export_tracking_state(patient_id),
     }
@@ -61,6 +64,7 @@ def delete_patient_data(patient_id: str) -> None:
             detail=f"Patient profile '{patient_id}' was not found.",
         )
     delete_orders_for_patient(patient_id)
+    delete_nutrition_plans_for_patient(patient_id)
     delete_recommendations_for_patient(patient_id)
     delete_questionnaires_for_patient(patient_id)
     delete_tracking_state(patient_id)

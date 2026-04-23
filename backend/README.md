@@ -11,6 +11,9 @@ FastAPI-Backend fuer `Food 4 Recovery`.
 - Order Handling
 - Frontend-BFF unter `/api/frontend`
 - SQLite-Persistenz fuer Patienten, Frageboegen, Empfehlungen, Bestellungen und Tracking
+- persistierte Nutrition Plans aus Empfehlungen
+- Safety Check fuer Allergien, Unvertraeglichkeiten und Meal-Kit-Kontraindikationen
+- Recommendation Explanation mit Scores, Flags und Begruendungen
 - API-Key-Schutz fuer sensible Endpunkte, wenn `API_KEY` gesetzt ist
 - Privacy Export und Loeschung patientenbezogener Daten
 - API-, Unit- und Integrationstests
@@ -39,6 +42,11 @@ Domain:
 - `GET /api/questionnaire-intake/{intake_id}`
 - `POST /api/recommendations/analyze`
 - `GET /api/recommendations/{recommendation_id}`
+- `GET /api/recommendations/{recommendation_id}/explanation`
+- `POST /api/nutrition-plans/from-recommendation`
+- `GET /api/nutrition-plans/{plan_id}`
+- `GET /api/nutrition-plans/patient/{patient_id}/latest`
+- `POST /api/safety-check`
 - `GET /api/meal-kits`
 - `GET /api/meal-kits/{meal_kit_id}`
 - `POST /api/orders`
@@ -88,6 +96,21 @@ Die SQLite-Datei wird beim Start automatisch angelegt. Es ist keine Alembic-Migr
 - Neue Patientenprofile muessen `consent_data_processing: true` senden.
 
 Fehler werden einheitlich als `{"error": {"code": "...", "message": "...", "details": ...}}` ausgegeben.
+
+## Dev2 Demo-Flow
+
+Ein produktnaher Backend-Flow fuer die Fallstudie ist:
+
+1. `POST /api/patient-profile`
+2. `POST /api/questionnaire-intake`
+3. `POST /api/recommendations/analyze`
+4. `POST /api/nutrition-plans/from-recommendation`
+5. `GET /api/recommendations/{recommendation_id}/explanation`
+6. `POST /api/safety-check`
+7. `POST /api/orders`
+
+Die Nutrition-Plan-API speichert den aus der Recommendation erzeugten Wochenplan als eigenstaendigen Plan.
+Der Safety Check ist eine regelbasierte Plausibilitaetspruefung und ersetzt keine medizinische Freigabe.
 
 ## Tests
 
