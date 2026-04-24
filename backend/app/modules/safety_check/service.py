@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 from app.modules.meal_kit_catalog.service import get_meal_kit_or_404
 from app.modules.patient_profile.service import get_patient_profile_or_404
@@ -49,6 +49,11 @@ def _recipes_from_recommendation(recommendation_id: str | None, patient_id: str)
         recommendation = get_recommendation_or_404(recommendation_id)
     else:
         recommendation = get_latest_recommendation_for_patient_or_404(patient_id)
+    if recommendation.patient_id != patient_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Safety check patient_id must match the recommendation patient_id.",
+        )
     recipes: list[Recipe] = []
     for day in recommendation.recommended_weekly_plan.days:
         recipes.extend(

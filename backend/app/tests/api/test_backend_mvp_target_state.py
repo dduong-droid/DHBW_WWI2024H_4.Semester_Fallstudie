@@ -164,6 +164,7 @@ def test_shopping_list_tracking_mealkit_and_review_flow() -> None:
             "notes": "deutlich schlechter",
         },
     )
+    open_reviews_response = client.get("/api/professional-reviews?status=pending")
     mealkit_response = client.get(f"/api/patients/{patient_id}/meal-kit-suggestions")
     review_response = client.post(
         "/api/professional-reviews",
@@ -183,6 +184,8 @@ def test_shopping_list_tracking_mealkit_and_review_flow() -> None:
     assert shopping_response.json()["items"]
     assert tracking_response.status_code == 200
     assert any(flag["type"] == "tracking_low_intake" for flag in tracking_response.json()["generated_risk_flags"])
+    assert open_reviews_response.status_code == 200
+    assert any(review["source"] == "tracking" for review in open_reviews_response.json())
     assert mealkit_response.status_code == 200
     assert all(item["meal_kit_id"] != "produktdetails_immun_boost_box" for item in mealkit_response.json())
     assert review_response.status_code == 200
@@ -245,6 +248,29 @@ def test_professional_review_validates_plan_belongs_to_patient() -> None:
 
     assert missing_plan_response.status_code == 404
     assert mismatched_plan_response.status_code == 400
+
+
+def test_professional_review_rejects_invalid_status_filter() -> None:
+    response = client.get("/api/professional-reviews?status=done")
+
+    assert response.status_code == 422
+
+
+def test_safety_check_rejects_recommendation_from_other_patient() -> None:
+    patient_a = _create_profile("patient_safety_a")
+    patient_b = _create_profile("patient_safety_b")
+    intake_id = _create_intake(patient_a)
+    recommendation = _create_recommendation(intake_id)
+
+    response = client.post(
+        "/api/safety-check",
+        json={
+            "patient_id": patient_b,
+            "recommendation_id": recommendation["recommendation_id"],
+        },
+    )
+
+    assert response.status_code == 400
 
 
 def test_assessment_ids_do_not_collide_on_quick_repeated_generation() -> None:

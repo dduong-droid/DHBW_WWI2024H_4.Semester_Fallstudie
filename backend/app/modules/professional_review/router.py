@@ -1,5 +1,7 @@
 """Professional review routes."""
 
+from typing import Literal
+
 from fastapi import APIRouter
 
 from app.modules.professional_review.schemas import (
@@ -19,7 +21,7 @@ router = APIRouter()
 
 
 @router.get("/professional-reviews", response_model=list[ProfessionalReview])
-def get_reviews(status: str | None = None) -> list[ProfessionalReview]:
+def get_reviews(status: Literal["pending", "approved", "rejected", "changes_requested"] | None = None) -> list[ProfessionalReview]:
     return list_professional_reviews(status)
 
 

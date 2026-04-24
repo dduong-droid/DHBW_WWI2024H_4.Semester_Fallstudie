@@ -103,6 +103,15 @@ def create_tracking_entry(patient_id: str, payload: SymptomTrackingCreate) -> Sy
             )
             if flag.requires_professional_review:
                 record_event("review_required", patient_id=patient_id, metadata={"source": "tracking"})
+        if any(flag.requires_professional_review for flag in flags):
+            from app.modules.professional_review.service import create_review_if_missing
+
+            create_review_if_missing(
+                patient_id=patient_id,
+                plan_id=None,
+                source="tracking",
+                risk_flag_ids=[flag.id for flag in flags if flag.requires_professional_review],
+            )
     record = SymptomTrackingRecord(
         tracking_id=tracking_id,
         patient_id=patient_id,
