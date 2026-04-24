@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 
+from app.modules.analytics.service import record_event
 from app.modules.patient_profile.service import get_patient_profile_or_404
 from app.modules.questionnaire_intake.repository import get_questionnaire, save_questionnaire
 from app.modules.questionnaire_intake.schemas import (
@@ -66,6 +67,7 @@ def derive_flags(
 
 def create_questionnaire_intake(payload: QuestionnaireIntakeCreate) -> QuestionnaireIntakeRecord:
     profile = get_patient_profile_or_404(payload.patient_id)
+    record_event("intake_started", patient_id=payload.patient_id)
     questionnaire_content = QuestionnaireContent(**payload.model_dump(exclude={"patient_id"}))
     record = QuestionnaireIntakeRecord(
         intake_id=f"intake_{uuid4().hex[:10]}",
@@ -78,7 +80,9 @@ def create_questionnaire_intake(payload: QuestionnaireIntakeCreate) -> Questionn
         ),
         **questionnaire_content.model_dump(),
     )
-    return save_questionnaire(record)
+    saved = save_questionnaire(record)
+    record_event("intake_completed", patient_id=saved.patient_id, metadata={"intake_id": saved.intake_id})
+    return saved
 
 
 def get_questionnaire_or_404(intake_id: str) -> QuestionnaireIntakeRecord:

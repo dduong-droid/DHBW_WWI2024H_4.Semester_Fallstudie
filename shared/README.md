@@ -9,4 +9,4 @@ Moegliche Inhalte fuer spaetere Ausbaustufen:
 - Architektur- oder Integrationskonventionen
 - teamweit genutzte Seeds, Fixtures oder Beispieldaten
 
-Aktuell bleibt der Bereich bewusst leer, bis es wirklich geteilte Artefakte gibt, die nicht eindeutig zu `frontend/`, `backend/`, `infra/` oder `docs/` gehoeren.
+Aktuell enthaelt der Ordner mit `api_contracts.md` eine leichte Contract-Uebersicht fuer den MVP-Flow zwischen Frontend, Backend und Praesentation.

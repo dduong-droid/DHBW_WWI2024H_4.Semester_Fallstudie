@@ -15,11 +15,22 @@ class Recipe(BaseModel):
     name: str
     description: str
     prep_time_minutes: int = Field(ge=0)
+    preparation_time_minutes: int | None = Field(default=None, ge=0)
     calories: int = Field(ge=0)
     protein: int = Field(ge=0)
     carbs: int = Field(ge=0)
     fat: int = Field(ge=0)
     ingredients: list[str] = Field(default_factory=list)
+    allergens: list[str] = Field(default_factory=list)
+    intolerances: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+    suitable_for_symptoms: list[str] = Field(default_factory=list)
+    unsuitable_for_symptoms: list[str] = Field(default_factory=list)
+    difficulty: str = "low"
+    texture: str = "normal"
+    protein_level: str = "medium"
+    energy_level: str = "medium"
+    instructions: list[str] = Field(default_factory=list)
 
 
 class DailyPlanMeals(BaseModel):

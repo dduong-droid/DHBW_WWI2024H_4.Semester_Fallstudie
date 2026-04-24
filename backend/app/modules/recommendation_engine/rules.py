@@ -19,16 +19,40 @@ def _recipe(
     fat: int,
     ingredients: list[str],
 ) -> Recipe:
+    lowered = " ".join(ingredients).lower()
+    allergens = []
+    intolerances = []
+    if any(marker in lowered for marker in ["hafer", "pasta", "gries", "polenta"]):
+        allergens.append("gluten")
+        intolerances.append("gluten")
+    if any(marker in lowered for marker in ["mandel", "nuss"]):
+        allergens.append("nuts")
+    if any(marker in lowered for marker in ["joghurt", "skyr", "milch", "quark"]):
+        intolerances.append("lactose")
+    texture = "soft" if any(marker in lowered for marker in ["brei", "suppe", "congee", "porridge"]) else "normal"
+    protein_level = "high" if protein >= 28 else "medium" if protein >= 14 else "low"
+    energy_level = "high" if calories >= 560 else "medium" if calories >= 350 else "low"
     return Recipe(
         id=recipe_id,
         name=name,
         description=description,
         prep_time_minutes=15,
+        preparation_time_minutes=15,
         calories=calories,
         protein=protein,
         carbs=carbs,
         fat=fat,
         ingredients=ingredients,
+        allergens=allergens,
+        intolerances=intolerances,
+        tags=[],
+        suitable_for_symptoms=[],
+        unsuitable_for_symptoms=[],
+        difficulty="low",
+        texture=texture,
+        protein_level=protein_level,
+        energy_level=energy_level,
+        instructions=["Zutaten schonend vorbereiten.", "Mahlzeit mild abschmecken und portionsgerecht servieren."],
     )
 
 
@@ -388,12 +412,38 @@ _INGREDIENT_CONFLICTS: dict[str, set[str]] = {
 
 
 def _recipe_conflicts_with_intolerances(recipe: Recipe, intolerances: frozenset[str]) -> bool:
+    recipe_allergens = {item.lower() for item in recipe.allergens}
+    recipe_intolerances = {item.lower() for item in recipe.intolerances}
+    if intolerances & (recipe_allergens | recipe_intolerances):
+        return True
     lowered_ingredients = {ingredient.lower() for ingredient in recipe.ingredients}
     for intolerance in intolerances:
         conflicts = _INGREDIENT_CONFLICTS.get(intolerance, set())
         if lowered_ingredients & conflicts:
             return True
     return False
+
+
+def _safe_substitute_recipe(recipe_id: str) -> Recipe:
+    return _recipe(
+        f"{recipe_id}_allergen_safe_substitute",
+        "Allergenarme Ersatzmahlzeit",
+        "Milde Ersatzoption, wenn alle Planvarianten mit Allergien oder Unvertraeglichkeiten kollidieren.",
+        430,
+        24,
+        54,
+        10,
+        ["Reis", "Karotten", "Tofu"],
+    ).model_copy(
+        update={
+            "tags": ["allergen_safe_substitute"],
+            "texture": "soft",
+            "instructions": [
+                "Ersatzoption nur als sichere Demo-Alternative verwenden.",
+                "Bei komplexen Allergien oder Beschwerden fachliche Pruefung einplanen.",
+            ],
+        }
+    )
 
 
 def _select_recipe_variant(
@@ -406,7 +456,7 @@ def _select_recipe_variant(
     for candidate in ordered_candidates:
         if not _recipe_conflicts_with_intolerances(candidate, intolerances):
             return candidate
-    return ordered_candidates[0]
+    return _safe_substitute_recipe(ordered_candidates[0].id)
 
 
 def build_weekly_plan(
@@ -414,9 +464,10 @@ def build_weekly_plan(
     *,
     flags: DerivedFlags,
     questionnaire: QuestionnaireIntakeRecord,
+    dietary_warnings: list[str] | None = None,
 ) -> WeeklyPlanRecommendation:
     template = _TEMPLATE_RECIPES[template_id]
-    context = _build_rule_context(flags, questionnaire)
+    context = _build_rule_context(flags, questionnaire, dietary_warnings)
     adjustments: list[str] = []
     if flags.high_protein_need:
         adjustments.append("Protein-Ziel wurde angehoben.")
@@ -445,22 +496,22 @@ def build_weekly_plan(
         breakfast = _select_recipe_variant(
             template["breakfast"],
             day_index=day_index,
-            intolerances=context.intolerances,
+            intolerances=context.intolerances | context.dietary_warnings,
         )
         lunch = _select_recipe_variant(
             template["lunch"],
             day_index=day_index,
-            intolerances=context.intolerances,
+            intolerances=context.intolerances | context.dietary_warnings,
         )
         dinner = _select_recipe_variant(
             template["dinner"],
             day_index=day_index,
-            intolerances=context.intolerances,
+            intolerances=context.intolerances | context.dietary_warnings,
         )
         snack_recipe = _select_recipe_variant(
             template["snacks"],
             day_index=day_index,
-            intolerances=context.intolerances,
+            intolerances=context.intolerances | context.dietary_warnings,
         )
         snacks = [snack_recipe]
         if include_two_snacks:
@@ -495,3 +546,19 @@ def build_weekly_plan(
         adjustments=adjustments,
         days=days,
     )
+
+
+def list_all_recipe_templates() -> list[Recipe]:
+    recipes: dict[str, Recipe] = {}
+    for template in _TEMPLATE_RECIPES.values():
+        for key in ("breakfast", "lunch", "dinner", "snacks"):
+            for recipe in template[key]:
+                recipes[recipe.id] = recipe
+    return sorted(recipes.values(), key=lambda item: item.id)
+
+
+def get_recipe_template(recipe_id: str) -> Recipe | None:
+    for recipe in list_all_recipe_templates():
+        if recipe.id == recipe_id:
+            return recipe
+    return None

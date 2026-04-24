@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 
+from app.modules.analytics.service import record_event
 from app.modules.meal_kit_catalog.service import get_active_meal_kits
 from app.modules.patient_profile.service import create_patient_profile, get_patient_profile_or_404
 from app.modules.questionnaire_intake.schemas import QuestionnaireContent, QuestionnaireIntakeCreate, QuestionnaireIntakeRecord
@@ -70,7 +71,12 @@ def _build_recommendation_from_inputs(patient_id: str, questionnaire: Questionna
 
     kit_candidates.sort(key=lambda item: item.score, reverse=True)
     top_kit_names = [item.name for item in kit_candidates[:3]]
-    weekly_plan = build_weekly_plan(template_id, flags=flags, questionnaire=questionnaire)
+    weekly_plan = build_weekly_plan(
+        template_id,
+        flags=flags,
+        questionnaire=questionnaire,
+        dietary_warnings=dietary_warnings,
+    )
     rationale_lines = build_rationale_lines(flags, top_kit_names, dietary_warnings)
     for line in template_selection.rationale[:2]:
         if line not in rationale_lines:
@@ -87,7 +93,13 @@ def _build_recommendation_from_inputs(patient_id: str, questionnaire: Questionna
         dietary_warnings=dietary_warnings,
         rationale=rationale_lines,
     )
-    return save_recommendation(result)
+    saved = save_recommendation(result)
+    record_event(
+        "recommendation_created",
+        patient_id=saved.patient_id,
+        metadata={"recommendation_id": saved.recommendation_id, "template_id": saved.recommended_weekly_plan.template_id},
+    )
+    return saved
 
 
 def analyze_recommendation(payload: RecommendationAnalyzeRequest) -> RecommendationResult:

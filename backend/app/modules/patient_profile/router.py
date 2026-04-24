@@ -20,8 +20,18 @@ def create_profile(payload: PatientProfileCreate) -> PatientProfile:
     return create_patient_profile(payload)
 
 
+@router.post("/patients", response_model=PatientProfile)
+def create_patient(payload: PatientProfileCreate) -> PatientProfile:
+    return create_patient_profile(payload)
+
+
 @router.get("/patient-profile/{patient_id}", response_model=PatientProfile)
 def get_profile(patient_id: str) -> PatientProfile:
+    return get_patient_profile_or_404(patient_id)
+
+
+@router.get("/patients/{patient_id}", response_model=PatientProfile)
+def get_patient(patient_id: str) -> PatientProfile:
     return get_patient_profile_or_404(patient_id)
 
 
@@ -30,7 +40,18 @@ def export_profile_data(patient_id: str) -> dict[str, object]:
     return export_patient_data(patient_id)
 
 
+@router.get("/patients/{patient_id}/export")
+def export_patient_data_route(patient_id: str) -> dict[str, object]:
+    return export_patient_data(patient_id)
+
+
 @router.delete("/patient-profile/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_profile_data(patient_id: str) -> Response:
+    delete_patient_data(patient_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.delete("/patients/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_patient_data_route(patient_id: str) -> Response:
     delete_patient_data(patient_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
