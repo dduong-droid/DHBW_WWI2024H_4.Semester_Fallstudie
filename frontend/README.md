@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# Food4Recovery Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Next.js-Frontend fuer das Food4Recovery MVP. Die App nutzt den Next.js App Router, React 19, TypeScript, CSS Modules und `lucide-react`.
 
-Currently, two official plugins are available:
+## Struktur
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `src/app/`: Routen und Pages fuer Startseite, Login, Onboarding, Dashboard, Profil, Rezepte, Shop und Checkout.
+- `src/components/`: wiederverwendbare UI-Komponenten wie Warenkorb, Meal-Kit-Modal und kuratierte Meal-Cards.
+- `src/context/`: React Context, aktuell fuer den Warenkorb.
+- `src/services/mockApi.ts`: Frontend-Mock-API als Adapter fuer spaetere Backend-/BFF-Calls.
+- `src/types/apiContracts.ts`: Frontend-nahe API-/View-Model-Typen.
+- `public/`: statische Assets.
 
-## React Compiler
+## Design-Referenzen
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Die wichtigsten UI-Referenzen liegen nicht im Frontend-Ordner, sondern unter:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+../docs/designs/*/screen.png
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Bei Frontend-Aufgaben zuerst die passenden PNGs analysieren und Layout, Farben, Cards, Abstaende, Typografie und Tonalitaet daraus ableiten. Fehlende Screens sollen im gleichen Stil ergaenzt werden.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Mock-API und Backend-Anbindung
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Das Frontend arbeitet aktuell ueber `nutritionMockApi` in `src/services/mockApi.ts`.
+
+Wichtige Methoden:
+
+- `fetchDashboardData()`
+- `fetchShopInventory()`
+- `fetchMealKit(id)`
+- `fetchCuratedMeals()`
+- `fetchPatientProfile()`
+- `savePatientProfile(profile)`
+
+Die Kommentare in `mockApi.ts` zeigen die spaeter vorgesehenen Backend-/BFF-Endpunkte, z. B. `/api/frontend/nutrition-plan/{patient_id}`, `/api/frontend/shop/inventory` und `/api/patient-profile/{patient_id}`.
+
+## Scripts
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run start
+npm run lint
 ```
+
+Aktueller Stand:
+
+- `npm run build` funktioniert.
+- Manueller Typecheck funktioniert mit `npx tsc --noEmit`.
+- Es gibt kein `npm run test`.
+- Es gibt kein `npm run typecheck`.
+- `npm run lint` ist aktuell bekannt rot, weil `next lint` mit der vorhandenen Next-/ESLint-Kombination ungueltige ESLint-Optionen uebergibt.
+
+## Lokale Entwicklung
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Standard-URL:
+
+```text
+http://localhost:3000
+```
+
+Wenn PowerShell `npm.ps1` blockiert, `npm.cmd` verwenden:
+
+```powershell
+npm.cmd run dev
+```
+
+## Health-Tech-Hinweise
+
+- Keine echten Patientendaten hardcoden.
+- Mock-Daten klar als Mock behandeln.
+- Keine Diagnosen, Heilversprechen oder medizinische Freigaben formulieren.
+- Empfehlungen vorsichtig als Orientierung formulieren und nicht als Ersatz fuer aerztliche Beratung darstellen.

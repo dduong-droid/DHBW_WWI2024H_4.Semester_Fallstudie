@@ -182,9 +182,9 @@
 - `npm run lint` ist aktuell kaputt durch Next/ESLint-Options-Inkompatibilität.
 - Kein Frontend-Testscript vorhanden.
 - Kein Frontend-Typecheck-Script vorhanden; manueller Typecheck funktioniert.
-- `frontend/README.md` ist noch ein Vite-Template und widerspricht der tatsächlichen Next.js-App.
+- `frontend/README.md` wurde nach dem Setup-Check auf die tatsächliche Next.js-App aktualisiert.
 - Node `v24.15.0` ist sehr neu; Build und Dev-Smoke funktionieren, aber für Next.js-Projekte kann eine LTS-Version wie Node 20/22 stabiler sein.
-- Es gibt eine bestehende uncommitted Änderung in `frontend/src/components/MealKitModal.tsx`, die nicht Teil dieses Setup-Laufs ist.
+- Aktuell sind keine bekannten fremden uncommitted Code-Aenderungen als Setup-Blocker dokumentiert.
 - Keine fehlenden ENV-Variablen für den lokalen Frontend-Loop festgestellt; Backend kann mit leerem `API_KEY` lokal arbeiten.
 
 ## Empfehlung für den nächsten Frontend-Loop
@@ -195,7 +195,7 @@
   - Designreferenzen zuerst aus `docs/designs/*/screen.png` analysieren.
   - Medizinische Aussagen vorsichtig formulieren, keine Diagnosen oder Heilversprechen.
   - Bestehende Mock-Daten klar als Mock behandeln.
-  - Die uncommitted Änderung in `frontend/src/components/MealKitModal.tsx` nicht ungefragt überschreiben.
+  - Vor Code-Aenderungen immer `git status --short` pruefen und fremde lokale Aenderungen nicht ungefragt überschreiben.
 - Empfohlene Befehle im Loop:
   - `cd frontend`
   - `npm.cmd run dev`
@@ -208,4 +208,3 @@
   - Lint-Tooling ist rot.
   - Medizinisch zu starke bestehende UI-Texte koennen Safety-Guardrails verletzen.
   - Externe Bild-URLs in Mock-Daten koennen Demo-Stabilitaet beeinträchtigen.
-  - Frontend-README ist irrefuehrend, weil es Vite statt Next beschreibt.

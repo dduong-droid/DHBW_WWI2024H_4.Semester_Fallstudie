@@ -37,7 +37,7 @@
 - Keine erfundenen Backend-Endpunkte als produktionsreif verkaufen.
 - Wenn Daten fehlen, saubere Mock-Daten verwenden und klar als Mock behandeln.
 - Bestehende Projektstruktur respektieren.
-- Bestehende lokale Aenderungen anderer nicht zuruecksetzen; aktuell kann es uncommitted Frontend-Aenderungen geben.
+- Bestehende lokale Aenderungen anderer nicht zuruecksetzen; vor Aenderungen immer `git status --short` pruefen.
 
 ## Verification
 - Frontend-Arbeitsverzeichnis: `frontend/`.
