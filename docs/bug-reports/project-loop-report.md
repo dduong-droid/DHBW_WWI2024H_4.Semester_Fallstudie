@@ -171,15 +171,47 @@
   - Erster paralleler Typecheck waehrend `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
 - Ergebnis:
   - Frontend-Copy ist deutlich sicherer und die Rezept-Komponenten sind sauberer typisiert.
+- Commit erstellt: Ja.
+- Commit-Message: `fix: tighten frontend medical copy and recipe typing`.
+- Commit-Hash: `e87b52d`.
+- Push durchgeführt: Ja.
+- Push-Ergebnis: erfolgreich nach `origin/codex/food4recovery-project-loop`.
+- Aktueller Branch: `codex/food4recovery-project-loop`.
+- Nächste Schritte:
+  - Danach optional Dev-Smoke und Backend-Testlauf fuer Gesamtstatus.
+
+### Iteration 4
+- Ziel:
+  - Abschliessende Projektverifikation fuer den erreichten Demo-Stand.
+  - Build, Typecheck, Lint, Backend-Tests und Dev-Smoke dokumentieren.
+- Umsetzung:
+  - Keine Produkt-Code-Aenderungen.
+  - Finalen Check-Status in diesem Report festgehalten.
+- Dateien:
+  - `docs/bug-reports/project-loop-report.md`
+- Bugs gefunden:
+  - `npm run lint` bleibt rot durch bekannte `next lint`/ESLint-Options-Inkompatibilitaet.
+- Bugs behoben:
+  - Keine weiteren Code-Bugs in dieser Iteration.
+- Checks:
+  - `npm.cmd run lint`: rot, Invalid Options (`useEslintrc`, `extensions`, `resolvePluginsRelativeTo`, `rulePaths`, `ignorePath`, `reportUnusedDisableDirectives`).
+  - `npm.cmd run build`: gruen, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Warnung wird im Build ausgegeben, Build endet erfolgreich.
+  - `npx.cmd tsc --noEmit`: gruen.
+  - `.venv\Scripts\python.exe -m pytest app/tests`: gruen, 48 passed.
+  - Dev-Smoke mit `npm.cmd run dev -- --hostname 127.0.0.1 --port 3000`: gruen.
+  - Smoke-Routen: `/`, `/onboarding`, `/analysis`, `/dashboard` jeweils HTTP 200.
+- Ergebnis:
+  - Projekt ist fuer eine DHBW-Demo teilweise bis gut praesentierbar; die groessten Demo-Flow-Luecken sind geschlossen.
 - Commit erstellt: Nein, folgt nach Report-Update.
-- Commit-Message: geplant `fix: tighten frontend medical copy and recipe typing`.
+- Commit-Message: geplant `docs: record project loop verification`.
 - Commit-Hash: offen.
 - Push durchgeführt: Nein, folgt nach Commit.
 - Push-Ergebnis: offen.
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
-  - Committen und pushen.
-  - Danach optional Dev-Smoke und Backend-Testlauf fuer Gesamtstatus.
+  - Lint-Tooling separat reparieren.
+  - Browser-Screenshots visuell gegen Design-PNGs pruefen.
+  - API-Adapter mit Mock-Fallback als naechste technische Integration.
 
 ## Offene Bugs
 - Bug: `npm run lint` bricht wegen `next lint`/ESLint-Options-Inkompatibilitaet ab.
@@ -200,8 +232,8 @@
   - Empfohlener Fix: Demo-Analyse-State klar kennzeichnen.
 
 ## Präsentationsstatus
-- Teilweise.
-- Begründung: App startet und hat Kernseiten, Backend-Tests sind vorhanden, aber Designkonsistenz, sicherer Demo-Flow und API-/Mock-Trennung brauchen noch weitere Iterationen.
+- Teilweise bis gut.
+- Begründung: App startet lokal, Build und Typecheck laufen, Backend-Tests sind gruen, zentrale Demo-Routen sind per Dev-Smoke erreichbar. Der Flow Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop ist nachvollziehbar. Offen bleiben Lint-Tooling, Security-Update fuer Next, visuelle Feinpruefung im Browser und tiefere echte API-Anbindung.
 
 ## Restaufwand
 - Bis 100 Prozent fehlt:
@@ -214,6 +246,7 @@
   - Durchgehender Demo-Flow und serioese Health-Tech-Kommunikation.
   - Keine riskanten medizinischen Aussagen.
   - Build/Typecheck/Backend-Tests nachvollziehbar.
+  - Lint-Tooling als bekannter offener Punkt transparent dokumentieren.
 - Nice-to-have:
   - Echte Upload-Verarbeitung/OCR.
   - Vollstaendige API-Anbindung statt Mock-Fallback.
