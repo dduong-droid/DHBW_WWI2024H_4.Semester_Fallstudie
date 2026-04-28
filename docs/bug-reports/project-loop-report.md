@@ -89,15 +89,53 @@
   - Erster paralleler Typecheck waehrend `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
 - Ergebnis:
   - Startseite ist jetzt sichtbar gestylt, designnah und sicher formuliert.
+- Commit erstellt: Ja.
+- Commit-Message: `feat: align landing page with recovery demo flow`.
+- Commit-Hash: `372e34b`.
+- Push durchgeführt: Ja.
+- Push-Ergebnis: erfolgreich nach `origin/codex/food4recovery-project-loop`.
+- Aktueller Branch: `codex/food4recovery-project-loop`.
+- Nächste Schritte:
+  - Analyse-/Empfehlungsuebersicht in den Demo-Flow integrieren.
+
+### Iteration 2
+- Ziel:
+  - Fehlende Analyse-/Empfehlungsseite fuer den Demo-Flow ergaenzen.
+  - Onboarding nach Upload/Submit nicht direkt ins Dashboard, sondern in eine sichere Auswertung fuehren.
+  - Demo-Analyse klar als regelbasierte Orientierung kennzeichnen.
+- Umsetzung:
+  - Neue Route `/analysis` mit Progress-Card, empfohlener Meal-Kit-Orientierung, Scores, Sicherheitsnotizen und naechsten Schritten.
+  - `nutritionMockApi.fetchRecoveryAnalysis()` als gekapselte Mock-/Rule-Based-Datenquelle ergaenzt.
+  - Onboarding-Submit leitet nach `/analysis`.
+  - Zu starke Onboarding-Texte zu Dokumentenauswertung und fachlicher Sicherheit entschaerft.
+- Dateien:
+  - `frontend/src/app/analysis/page.tsx`
+  - `frontend/src/app/analysis/page.module.css`
+  - `frontend/src/app/onboarding/page.tsx`
+  - `frontend/src/services/mockApi.ts`
+- Bugs gefunden:
+  - Demo-Flow hatte keine eigenstaendige Analyse-/Empfehlungsuebersicht.
+  - Onboarding versprach "praezisere Empfehlungen" durch Upload, obwohl keine echte Dokumentenauswertung existiert.
+  - Trust-Copy "Medizinisch geprüft" war fuer die Demo zu stark.
+- Bugs behoben:
+  - Analyse-Seite eingefuegt.
+  - Dokumenten-Upload als Demo-Prozess ohne echte medizinische Auswertung gekennzeichnet.
+  - Safety-Copy vorsichtiger formuliert.
+- Checks:
+  - `npm.cmd run build`: gruen, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Options-Warnung bleibt.
+  - `npx.cmd tsc --noEmit`: gruen.
+  - Suche nach riskanten UI-Claims in App/Mock-Dateien: keine Treffer fuer die geprueften Muster.
+- Ergebnis:
+  - Demo-Flow ist jetzt logisch: Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop.
 - Commit erstellt: Nein, folgt nach Report-Update.
-- Commit-Message: geplant `feat: align landing page with recovery demo flow`.
+- Commit-Message: geplant `feat: add recovery analysis demo flow`.
 - Commit-Hash: offen.
 - Push durchgeführt: Nein, folgt nach Commit.
 - Push-Ergebnis: offen.
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
-  - Build/Typecheck ausführen.
-  - Danach committen und pushen.
+  - Committen und pushen.
+  - Danach Dashboard/Tracking und Rezept-Copy weiter an Design und Guardrails angleichen.
 
 ## Offene Bugs
 - Bug: `npm run lint` bricht wegen `next lint`/ESLint-Options-Inkompatibilitaet ab.

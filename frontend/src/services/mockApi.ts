@@ -84,6 +84,23 @@ export interface PatientProfile {
   completionPercent: number;
 }
 
+export interface RecoveryAnalysis {
+  status: 'demo_ready' | 'review_recommended';
+  progressPercent: number;
+  title: string;
+  summary: string;
+  recommendedKitId: string;
+  recommendedKitName: string;
+  matchScores: {
+    label: string;
+    percent: number;
+    rationale: string;
+  }[];
+  orientationNotes: string[];
+  riskNotes: string[];
+  nextSteps: string[];
+}
+
 // --- Mock Daten ---
 
 const MOCK_MEAL_KITS: MealKit[] = [
@@ -210,6 +227,47 @@ const MOCK_DASHBOARD: DashboardData = {
   ],
 };
 
+const MOCK_RECOVERY_ANALYSIS: RecoveryAnalysis = {
+  status: 'demo_ready',
+  progressPercent: 100,
+  title: 'Orientierende Recovery-Auswertung',
+  summary:
+    'Auf Basis der Demo-Angaben werden Protein, ausreichende Fluessigkeit und leicht planbare Mahlzeiten priorisiert. Die Auswertung ist eine regelbasierte Orientierung und keine medizinische Diagnose.',
+  recommendedKitId: 'mk1',
+  recommendedKitName: 'Wundheilungs-Box',
+  matchScores: [
+    {
+      label: 'Protein-Fokus',
+      percent: 92,
+      rationale: 'Proteinreiche Mahlzeiten koennen die normale Gewebeerneuerung im Rahmen einer ausgewogenen Ernaehrung unterstuetzen.',
+    },
+    {
+      label: 'Alltagstauglichkeit',
+      percent: 88,
+      rationale: 'Vorstrukturierte Mahlzeiten reduzieren Planungsaufwand in belastenden Regenerationsphasen.',
+    },
+    {
+      label: 'Vertraeglichkeit',
+      percent: 81,
+      rationale: 'Milde Komponenten und klare Zutatenlisten erleichtern die Auswahl bei sensibler Verdauung.',
+    },
+  ],
+  orientationNotes: [
+    'Regelmaessige kleine Mahlzeiten koennen helfen, Energie ueber den Tag zu verteilen.',
+    'Eine ausreichende Fluessigkeitsroutine liefert Orientierung fuer das taegliche Tracking.',
+    'Bei Appetitmangel koennen kleine, proteinbetonte Snacks alltagstauglicher sein als grosse Portionen.',
+  ],
+  riskNotes: [
+    'Bei starken Beschwerden, Gewichtsverlust oder Unsicherheit sollte Fachpersonal einbezogen werden.',
+    'Dokumente werden in dieser Demo nicht medizinisch ausgewertet; der Upload zeigt nur den spaeteren Prozess.',
+  ],
+  nextSteps: [
+    'Wochenplan im Dashboard ansehen',
+    'Passende Rezepte pruefen',
+    'Meal-Kit optional in den Warenkorb legen',
+  ],
+};
+
 // --- API Methoden ---
 
 export const nutritionMockApi = {
@@ -263,6 +321,15 @@ export const nutritionMockApi = {
   fetchShopInventory: async (): Promise<MealKit[]> => {
     await new Promise(resolve => setTimeout(resolve, 400));
     return [...MOCK_MEAL_KITS];
+  },
+
+  /**
+   * Regelbasierte Demo-Auswertung fuer die Analyse-Seite.
+   * Später: POST /api/frontend/intake/full-analyze
+   */
+  fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return { ...MOCK_RECOVERY_ANALYSIS };
   },
 
   /**

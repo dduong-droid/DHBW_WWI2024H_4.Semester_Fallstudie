@@ -1,0 +1,382 @@
+.container {
+  min-height: 100vh;
+  padding: 18px 18px 96px;
+  background: var(--background);
+}
+
+.nav {
+  max-width: 980px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand,
+.navAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #006e27;
+  font-size: 0.82rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.brandIcon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.navAction {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(51, 199, 88, 0.1);
+}
+
+.progressCard,
+.header,
+.recommendationGrid,
+.insightGrid,
+.disclaimer,
+.actions {
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+.progressCard {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 22px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(51, 199, 88, 0.1);
+  box-shadow: var(--shadow-sm);
+}
+
+.progressCard p,
+.progressCard span,
+.header p,
+.scoreItem p,
+.disclaimer p {
+  margin: 0;
+}
+
+.progressCard p {
+  color: #09150d;
+  font-weight: 800;
+}
+
+.progressCard span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.progressCard strong {
+  color: var(--color-primary);
+  font-size: 1.4rem;
+}
+
+.progressTrack {
+  grid-column: 1 / -1;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(51, 199, 88, 0.14);
+}
+
+.progressTrack span,
+.scoreTrack span,
+.loadingBar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.header {
+  padding: 34px 0 28px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: #007d33;
+  background: rgba(51, 199, 88, 0.12);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.header h1 {
+  margin: 18px 0 12px;
+  color: #07120b;
+  font-size: clamp(2.1rem, 8vw, 3.8rem);
+  line-height: 1;
+}
+
+.header p {
+  max-width: 650px;
+  margin-inline: auto;
+  color: #4e5f55;
+  line-height: 1.65;
+}
+
+.recommendationGrid {
+  display: grid;
+  gap: 22px;
+}
+
+.kitCard,
+.reasonCard,
+.infoCard,
+.disclaimer,
+.loadingCard {
+  border-radius: 28px;
+  background: #ffffff;
+  border: 1px solid rgba(51, 199, 88, 0.12);
+  box-shadow: var(--shadow-sm);
+}
+
+.kitCard {
+  overflow: hidden;
+}
+
+.kitVisual {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #007d33;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(9, 21, 13, 0.16)),
+    radial-gradient(circle at 50% 42%, rgba(51, 199, 88, 0.22), transparent 12rem),
+    #f4faf4;
+}
+
+.kitVisual span {
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #079336;
+  font-size: 0.74rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.kitFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+}
+
+.kitFooter p {
+  margin: 0 0 4px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.kitFooter h2 {
+  margin: 0;
+}
+
+.smallButton,
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-weight: 850;
+}
+
+.smallButton {
+  min-height: 40px;
+  padding: 0 16px;
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.reasonCard,
+.infoCard {
+  padding: 24px;
+}
+
+.reasonCard h2,
+.infoCard h3 {
+  margin: 0 0 18px;
+}
+
+.scoreList {
+  display: grid;
+  gap: 18px;
+}
+
+.scoreHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #102016;
+  font-weight: 750;
+}
+
+.scoreHeader strong {
+  color: var(--color-primary);
+}
+
+.scoreTrack {
+  height: 7px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(51, 199, 88, 0.12);
+}
+
+.scoreItem p {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.insightGrid {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.infoCard svg {
+  color: var(--color-primary);
+}
+
+.infoCard ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 18px;
+  color: #4d5e54;
+  line-height: 1.5;
+}
+
+.disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 16px;
+  color: #516257;
+}
+
+.disclaimer svg {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+}
+
+.actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 54px;
+}
+
+.primaryAction {
+  gap: 10px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #25c954, #079336);
+  box-shadow: 0 16px 28px rgba(7, 147, 54, 0.22);
+}
+
+.secondaryAction {
+  color: #007d33;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(51, 199, 88, 0.16);
+}
+
+.loadingCard {
+  width: min(100%, 420px);
+  margin: 18vh auto 0;
+  padding: 42px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.scanIcon {
+  width: 86px;
+  height: 86px;
+  display: grid;
+  place-items: center;
+  border-radius: 26px;
+  color: #007d33;
+  background: rgba(51, 199, 88, 0.11);
+}
+
+.loadingCard h1,
+.loadingCard p {
+  margin: 0;
+}
+
+.loadingCard p {
+  color: var(--text-muted);
+}
+
+.loadingBar {
+  width: min(100%, 260px);
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(51, 199, 88, 0.12);
+}
+
+.loadingBar span {
+  width: 72%;
+  animation: loadingPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes loadingPulse {
+  from { width: 42%; }
+  to { width: 92%; }
+}
+
+@media (min-width: 800px) {
+  .container {
+    padding: 28px 32px 110px;
+  }
+
+  .recommendationGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  }
+
+  .insightGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .actions {
+    grid-template-columns: 1fr 1fr;
+    max-width: 520px;
+  }
+}

@@ -147,7 +147,7 @@ export default function OnboardingPage() {
     });
     await new Promise(resolve => setTimeout(resolve, 1500));
     setSubmitting(false);
-    router.push('/dashboard');
+    router.push('/analysis');
   };
 
   // Sanitize-Handler: Nur positive Zahlen zulassen
@@ -278,7 +278,7 @@ export default function OnboardingPage() {
                   {step === 1 && 'Diese Angaben helfen uns, einen auf dich abgestimmten Plan zu erstellen.'}
                   {step === 2 && 'Wähle die Bereiche, in denen du Unterstützung brauchst.'}
                   {step === 3 && 'Allergien und Unverträglichkeiten beeinflussen deinen Ernährungsplan.'}
-                  {step === 4 && 'Optional: Lade ärztliche Dokumente hoch, um präzisere Empfehlungen zu erhalten.'}
+                  {step === 4 && 'Optional: Lade Unterlagen hoch, um den Demo-Prozess sichtbar zu machen. In dieser Version erfolgt keine echte medizinische Dokumentenauswertung.'}
                 </p>
               </div>
 
@@ -561,8 +561,8 @@ export default function OnboardingPage() {
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><HeartPulse size={22} /></div>
-            <span className={styles.securityTitle}>Medizinisch geprüft</span>
-            <span className={styles.securityDesc}>Alle Empfehlungen basieren auf aktuellen Leitlinien.</span>
+            <span className={styles.securityTitle}>Fachlich vorsichtig</span>
+            <span className={styles.securityDesc}>Empfehlungen dienen als Orientierung und ersetzen keine Beratung durch Fachpersonal.</span>
           </div>
         </div>
       )}
