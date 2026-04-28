@@ -6,6 +6,7 @@ from fastapi import HTTPException, status
 
 from app.modules.meal_kit_catalog.service import get_meal_kit_or_404
 from app.modules.patient_profile.service import get_patient_profile_or_404
+from app.modules.professional_review.service import create_review_if_missing
 from app.modules.questionnaire_intake.repository import list_questionnaires_for_patient
 from app.modules.recommendation_engine.schemas import Recipe
 from app.modules.recommendation_engine.service import get_latest_recommendation_for_patient_or_404, get_recommendation_or_404
@@ -113,10 +114,21 @@ def run_safety_check(payload: SafetyCheckRequest) -> SafetyCheckResponse:
         status = "warning"
     if blocked_meal_kits:
         status = "blocked"
+    review_id = None
+    if status == "blocked":
+        review = create_review_if_missing(
+            patient_id=payload.patient_id,
+            plan_id=None,
+            source="safety_check",
+            risk_flag_ids=[f"safety_block_{item.meal_kit_id}" for item in blocked_meal_kits],
+        )
+        review_id = review.review_id
     return SafetyCheckResponse(
         status=status,
         blocked_meal_kits=blocked_meal_kits,
         warnings=warnings,
         checked_meal_kits=checked_meal_kits,
         checked_recipe_ids=checked_recipe_ids,
+        review_required=status == "blocked",
+        review_id=review_id,
     )

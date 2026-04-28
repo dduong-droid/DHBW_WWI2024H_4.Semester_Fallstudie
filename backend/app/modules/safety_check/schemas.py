@@ -35,3 +35,5 @@ class SafetyCheckResponse(BaseModel):
     warnings: list[SafetyWarning] = Field(default_factory=list)
     checked_meal_kits: list[str] = Field(default_factory=list)
     checked_recipe_ids: list[str] = Field(default_factory=list)
+    review_required: bool = False
+    review_id: str | None = None

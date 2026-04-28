@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import subprocess
+import sys
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -9,7 +13,7 @@ from app.modules.nutrition_assessment.repository import clear_assessments
 from app.modules.nutrition_plan.repository import clear_nutrition_plans
 from app.modules.order_handling.repository import clear_orders
 from app.modules.patient_profile.repository import clear_patient_profiles
-from app.modules.professional_review.repository import clear_reviews
+from app.modules.professional_review.repository import clear_reviews, list_reviews_for_patient
 from app.modules.questionnaire_intake.repository import clear_questionnaires
 from app.modules.recommendation_engine.repository import clear_recommendations
 from app.modules.risk_flags.repository import clear_risk_flags
@@ -273,6 +277,68 @@ def test_safety_check_rejects_recommendation_from_other_patient() -> None:
     assert response.status_code == 400
 
 
+def test_blocked_safety_check_creates_and_reuses_professional_review() -> None:
+    patient_id = _create_profile("patient_safety_review", allergies=["nuts"])
+    intake_id = _create_intake(patient_id)
+    recommendation = _create_recommendation(intake_id)
+    payload = {
+        "patient_id": patient_id,
+        "recommendation_id": recommendation["recommendation_id"],
+        "meal_kit_ids": ["produktdetails_immun_boost_box"],
+    }
+
+    first_response = client.post("/api/safety-check", json=payload)
+    second_response = client.post("/api/safety-check", json=payload)
+    reviews = [
+        review
+        for review in list_reviews_for_patient(patient_id)
+        if review.status == "pending" and review.source == "safety_check"
+    ]
+
+    assert first_response.status_code == 200
+    assert second_response.status_code == 200
+    assert first_response.json()["status"] == "blocked"
+    assert first_response.json()["review_required"] is True
+    assert first_response.json()["review_id"] == second_response.json()["review_id"]
+    assert len(reviews) == 1
+
+
+def test_safety_review_reuse_survives_later_tracking_review() -> None:
+    patient_id = _create_profile("patient_safety_tracking_review", allergies=["nuts"])
+    intake_id = _create_intake(patient_id)
+    recommendation = _create_recommendation(intake_id)
+    safety_payload = {
+        "patient_id": patient_id,
+        "recommendation_id": recommendation["recommendation_id"],
+        "meal_kit_ids": ["produktdetails_immun_boost_box"],
+    }
+
+    first_safety_response = client.post("/api/safety-check", json=safety_payload)
+    tracking_response = client.post(
+        f"/api/patients/{patient_id}/tracking",
+        json={
+            "date": "2026-04-29",
+            "weight": 70,
+            "appetite_score": 1,
+            "meals_completed": 1,
+            "fluid_intake_ml": 900,
+            "nausea_score": 4,
+        },
+    )
+    second_safety_response = client.post("/api/safety-check", json=safety_payload)
+    safety_reviews = [
+        review
+        for review in list_reviews_for_patient(patient_id)
+        if review.status == "pending" and review.source == "safety_check"
+    ]
+
+    assert first_safety_response.status_code == 200
+    assert tracking_response.status_code == 200
+    assert second_safety_response.status_code == 200
+    assert first_safety_response.json()["review_id"] == second_safety_response.json()["review_id"]
+    assert len(safety_reviews) == 1
+
+
 def test_assessment_ids_do_not_collide_on_quick_repeated_generation() -> None:
     patient_id = _create_profile("patient_assessment_ids")
     _create_intake(patient_id)
@@ -283,3 +349,60 @@ def test_assessment_ids_do_not_collide_on_quick_repeated_generation() -> None:
     assert first_response.status_code == 200
     assert second_response.status_code == 200
     assert first_response.json()["assessment_id"] != second_response.json()["assessment_id"]
+
+
+def test_seed_demo_data_script_runs_with_reset_repeatedly() -> None:
+    script = Path(__file__).resolve().parents[3] / "scripts" / "seed" / "seed_demo_data.py"
+    try:
+        first_run = subprocess.run(
+            [sys.executable, str(script), "--reset"],
+            cwd=script.parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        second_run = subprocess.run(
+            [sys.executable, str(script), "--reset"],
+            cwd=script.parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    finally:
+        for patient_id in ["demo_maria_post_op", "demo_schluckproblem_review", "demo_allergy_safety"]:
+            client.delete(f"/api/patients/{patient_id}")
+
+    assert "demo_maria_post_op" in first_run.stdout
+    assert "demo_schluckproblem_review" in second_run.stdout
+    assert "shopping_list_id" in second_run.stdout
+    assert "open_review_ids" in second_run.stdout
+
+
+def test_seed_demo_data_script_without_reset_does_not_duplicate_demo_objects() -> None:
+    script = Path(__file__).resolve().parents[3] / "scripts" / "seed" / "seed_demo_data.py"
+    try:
+        subprocess.run(
+            [sys.executable, str(script), "--reset"],
+            cwd=script.parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        subprocess.run(
+            [sys.executable, str(script)],
+            cwd=script.parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        export_response = client.get("/api/patients/demo_allergy_safety/export")
+    finally:
+        for patient_id in ["demo_maria_post_op", "demo_schluckproblem_review", "demo_allergy_safety"]:
+            client.delete(f"/api/patients/{patient_id}")
+
+    payload = export_response.json()
+    assert len(payload["questionnaires"]) == 1
+    assert len(payload["recommendations"]) == 1
+    assert len(payload["nutrition_plans"]) == 1
+    assert len(payload["shopping_lists"]) == 1
+    assert len(payload["professional_reviews"]) == 1

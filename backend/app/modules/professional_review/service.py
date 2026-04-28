@@ -11,9 +11,9 @@ from app.modules.analytics.service import record_event
 from app.modules.nutrition_plan.repository import get_nutrition_plan, save_nutrition_plan
 from app.modules.patient_profile.service import get_patient_profile_or_404
 from app.modules.professional_review.repository import (
-    get_latest_review_for_patient,
     get_review,
     list_reviews,
+    list_reviews_for_patient,
     save_review,
 )
 from app.modules.professional_review.schemas import (
@@ -64,9 +64,9 @@ def create_review_if_missing(
     source: str,
     risk_flag_ids: list[str],
 ) -> ProfessionalReview:
-    latest = get_latest_review_for_patient(patient_id)
-    if latest is not None and latest.status == "pending" and latest.plan_id == plan_id:
-        return latest
+    for review in reversed(list_reviews_for_patient(patient_id)):
+        if review.status == "pending" and review.plan_id == plan_id and review.source == source:
+            return review
     return create_professional_review(
         ProfessionalReviewCreate(
             patient_id=patient_id,
