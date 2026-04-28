@@ -7,8 +7,8 @@ import CartSidebar from "@/components/CartSidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Food 4 Recovery",
-  description: "Medizinische Ernährung für deine Genesung",
+  title: "Food4Recovery",
+  description: "Digitale Orientierung fuer Recovery-Ernaehrung, Rezepte und Tracking",
 };
 
 export default function RootLayout({
