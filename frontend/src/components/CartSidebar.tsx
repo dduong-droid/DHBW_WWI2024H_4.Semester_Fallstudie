@@ -67,7 +67,7 @@ export default function CartSidebar() {
               <span>{totalPrice.toFixed(2)} €</span>
             </div>
             <div className={styles.summaryRow}>
-              <span>Therapie-Versand (Kühltransport)</span>
+              <span>Gekuehlte Lieferung</span>
               <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>Kostenlos</span>
             </div>
             <div className={styles.summaryTotal}>

@@ -3,23 +3,21 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Utensils, HeartPulse } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi } from '../../services/mockApi';
-// @ts-ignore
-import { CuratedMeal } from '@/types/apiContracts';
+import { nutritionMockApi, type CuratedMeal } from '../../services/mockApi';
 import CuratedMealCard from '../../components/CuratedMealCard';
 import CuratedMealModal from '../../components/CuratedMealModal';
 import CartNavIcon from '../../components/CartNavIcon';
 
 export default function CuratedRecipesPage() {
-  const [meals, setMeals] = useState<any[] | null>(null);
-  const [selectedMeal, setSelectedMeal] = useState<any | null>(null);
+  const [meals, setMeals] = useState<CuratedMeal[] | null>(null);
+  const [selectedMeal, setSelectedMeal] = useState<CuratedMeal | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     nutritionMockApi.fetchCuratedMeals().then(data => setMeals(data));
   }, []);
 
-  const handleOpenMeal = (meal: any) => {
+  const handleOpenMeal = (meal: CuratedMeal) => {
     setSelectedMeal(meal);
     setIsModalOpen(true);
   };
@@ -58,11 +56,11 @@ export default function CuratedRecipesPage() {
           <header className={styles.pageHeader}>
             <div className={styles.badge}>
               <HeartPulse size={16} strokeWidth={3} />
-              Personalisierte Kuration
+              Demo-Kuration
             </div>
-            <h1 className={styles.title}>Medizinische Rezept&#8209;Empfehlungen.</h1>
+            <h1 className={styles.title}>Rezeptideen fuer deine Recovery-Routine.</h1>
             <p className={styles.subtitle}>
-              Basierend auf deinem Gesundheitsprofil haben unsere Ernährungsärzte diese Gerichte exklusiv für deine Genesung zusammengestellt. Kein irrelevanter Food-Blog, nur reine Wirkung.
+              Basierend auf dem Demo-Profil zeigen wir alltagstaugliche Gerichte, die Orientierung fuer Protein, Energie und Vertraeglichkeit geben. Sie ersetzen keine individuelle Beratung.
             </p>
           </header>
 

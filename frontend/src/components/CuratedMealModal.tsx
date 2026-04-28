@@ -1,9 +1,10 @@
 import React from 'react';
+import type { CuratedMeal } from '../services/mockApi';
 
 interface CuratedMealModalProps {
   isOpen: boolean;
   onClose: () => void;
-  meal: any;
+  meal: CuratedMeal | null;
 }
 
 const CuratedMealModal: React.FC<CuratedMealModalProps> = ({ isOpen, onClose, meal }) => {

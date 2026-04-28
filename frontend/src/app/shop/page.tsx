@@ -110,12 +110,11 @@ export default function ShopPage() {
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <HeartPulse size={12} />
-              Medizinisch abgestimmt
+              Recovery-orientiert
             </div>
             <h1 className={styles.heroTitle}>Recovery Packages</h1>
             <p className={styles.heroDesc}>
-              Klinisch entwickelte Ernährungspakete, abgestimmt auf deine spezifische Genesungsphase. 
-              Präzise zubereitet, mit Sorgfalt geliefert.
+              Vorgeplante Ernährungspakete fuer unterschiedliche Regenerationssituationen. Als Demo-Option gedacht und bei medizinischen Fragen mit Fachpersonal abzustimmen.
             </p>
           </div>
           <div className={styles.heroImageObj}>

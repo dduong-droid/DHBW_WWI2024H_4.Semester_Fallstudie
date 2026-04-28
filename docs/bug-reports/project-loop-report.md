@@ -127,15 +127,59 @@
   - Suche nach riskanten UI-Claims in App/Mock-Dateien: keine Treffer fuer die geprueften Muster.
 - Ergebnis:
   - Demo-Flow ist jetzt logisch: Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop.
+- Commit erstellt: Ja.
+- Commit-Message: `feat: add recovery analysis demo flow`.
+- Commit-Hash: `af3098d`.
+- Push durchgeführt: Ja.
+- Push-Ergebnis: erfolgreich nach `origin/codex/food4recovery-project-loop`.
+- Aktueller Branch: `codex/food4recovery-project-loop`.
+- Nächste Schritte:
+  - Danach Dashboard/Tracking und Rezept-Copy weiter an Design und Guardrails angleichen.
+
+### Iteration 3
+- Ziel:
+  - Medizinische Guardrails auf Frontend-Copy und Mock-Daten anwenden.
+  - Rezeptseite und Meal-Kit-Texte entschärfen.
+  - Offensichtliche TypeScript-Smells in Rezept-Komponenten beseitigen.
+- Umsetzung:
+  - Rezeptseite von "medizinische Empfehlungen"/"Ernaehrungsaerzte"/"reine Wirkung" auf Demo-Kuration und Orientierung umformuliert.
+  - Shop-Hero von "klinisch entwickelt" und spezifischer Genesungsphase auf recovery-orientierte Demo-Option umformuliert.
+  - Warenkorb-Text "Therapie-Versand" durch "Gekuehlte Lieferung" ersetzt.
+  - Mock-Beschreibungen fuer Meal-Kits, Dashboard-Mahlzeiten und Rezepte vorsichtiger formuliert.
+  - `CuratedMealCard`, `CuratedMealModal` und Rezepte-Seite mit `CuratedMeal` typisiert; `@ts-ignore`, `any` und `as any` entfernt.
+- Dateien:
+  - `frontend/src/app/recipes/page.tsx`
+  - `frontend/src/app/shop/page.tsx`
+  - `frontend/src/components/CartSidebar.tsx`
+  - `frontend/src/components/CuratedMealCard.tsx`
+  - `frontend/src/components/CuratedMealModal.tsx`
+  - `frontend/src/components/MealKitModal.tsx`
+  - `frontend/src/services/mockApi.ts`
+  - `docs/bug-reports/project-loop-report.md`
+- Bugs gefunden:
+  - Riskante Health-Tech-Copy auf Rezepte-/Shop-/Cart-Flows.
+  - `@ts-ignore` und `any` auf Rezeptseite und CuratedMeal-Komponenten.
+  - `MealKitModal` nutzte `as any`, obwohl `MealKit` korrekt typisiert ist.
+- Bugs behoben:
+  - Riskante Formulierungen entfernt oder vorsichtiger gemacht.
+  - Rezept-Komponenten und Modal-Typing verbessert.
+- Checks:
+  - Suche nach riskanten Claim-Mustern: keine Treffer fuer gepruefte Muster.
+  - Suche nach `@ts-ignore`, `: any`, `as any`: keine Treffer in geprueften Frontend-Dateien.
+  - `npm.cmd run build`: gruen, bekannte ESLint-Options-Warnung bleibt.
+  - `npx.cmd tsc --noEmit`: gruen nach abgeschlossenem Build.
+  - Erster paralleler Typecheck waehrend `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
+- Ergebnis:
+  - Frontend-Copy ist deutlich sicherer und die Rezept-Komponenten sind sauberer typisiert.
 - Commit erstellt: Nein, folgt nach Report-Update.
-- Commit-Message: geplant `feat: add recovery analysis demo flow`.
+- Commit-Message: geplant `fix: tighten frontend medical copy and recipe typing`.
 - Commit-Hash: offen.
 - Push durchgeführt: Nein, folgt nach Commit.
 - Push-Ergebnis: offen.
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
   - Committen und pushen.
-  - Danach Dashboard/Tracking und Rezept-Copy weiter an Design und Guardrails angleichen.
+  - Danach optional Dev-Smoke und Backend-Testlauf fuer Gesamtstatus.
 
 ## Offene Bugs
 - Bug: `npm run lint` bricht wegen `next lint`/ESLint-Options-Inkompatibilitaet ab.

@@ -1,8 +1,9 @@
 import React from 'react';
+import type { CuratedMeal } from '../services/mockApi';
 
 interface CuratedMealCardProps {
-  meal: any;
-  onClick: (meal: any) => void;
+  meal: CuratedMeal;
+  onClick: (meal: CuratedMeal) => void;
 }
 
 const CuratedMealCard: React.FC<CuratedMealCardProps> = ({ meal, onClick }) => {

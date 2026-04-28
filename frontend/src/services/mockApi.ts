@@ -107,7 +107,7 @@ const MOCK_MEAL_KITS: MealKit[] = [
   {
     id: 'mk1',
     name: 'Wundheilungs-Box',
-    description: 'Optimiert mit essentiellen Aminosäuren und Mikronährstoffen zur Unterstützung der Geweberegeneration nach Operationen.',
+    description: 'Proteinreiche Demo-Box mit Aminosäuren und Mikronährstoffen, die eine ausgewogene Ernährung in der Regenerationsphase unterstützen kann.',
     price: 89.90,
     currency: '€',
     imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDR-s7oU9ghDmTQZ725k-ULlzfvQwWmMmk5RDaQfTYsitrchtJaWEQDLme01GN4GLnLANXekRz8LRydxeZB5o1iOOcod3Necl_aatJsSUXscxmferMUOIpyi0hxkUyZSOd_Mv1m-NPhZYklr4sr1CF4iqZLyMJMwfIN2cec9KNuZeAANtAvGbhfSoQN6hzMUq0aicbGZRTyEF6jkHJKMj72ozszb_sjeptzEbBT9l3tGsIxw9cHm571LEwzHTUsblQInKFXsl8Jr_4',
@@ -133,7 +133,7 @@ const MOCK_MEAL_KITS: MealKit[] = [
   {
     id: 'mk3',
     name: 'Immun-Boost-Box',
-    description: 'Reich an natürlichen Antioxidantien und lebenswichtigen Phytonährstoffen zur Stärkung der körpereigenen Abwehrkräfte.',
+    description: 'Pflanzenbetonte Demo-Box mit antioxidativen Zutaten als Orientierung für eine abwechslungsreiche Ernährung.',
     price: 79.90,
     currency: '€',
     imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX9r9R1kuNjJZwKtLrRrehTCQAkLYV4rAtyolfBu3yLBI7H35JYbWuhFCCfOsTVjStaSF6VhT2OWuDYk916-otri4qeBao0VnQI54HxAuB4hEH0dM8CIYJ5zKSTOexeg4KJRY7ruGsgxb9IAxIHmzkHozsK-79uhNEbNp_6H2Ba5W7_Zw5yf1O8MFHyxNfM3HnoXgGJTrT6sbjRg91-TxzxQm7vSjtgpQ-eUMF71i9m8XRBUlT_UCzBMrp3GSTkOfO23pmo9Ww21c',
@@ -146,7 +146,7 @@ const MOCK_MEAL_KITS: MealKit[] = [
   {
     id: 'mk4',
     name: 'Darm-Balance-Box',
-    description: 'Sorgfältig zusammengestellt mit Prä- und Probiotika zur Wiederherstellung der Darmgesundheit nach Antibiotika-Therapie.',
+    description: 'Darmfreundlich ausgerichtete Demo-Box mit ballaststoffreichen und fermentierten Komponenten.',
     price: 84.50,
     currency: '€',
     imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB-YvPEIGCdxMoK65M2UqD-XJeBJqSeRMK4I4uzVmCsohPwzJBTJIuGXk65QfflpPMmoIQmX-P8GAPkqQGAwkz3LJSEWr7NOKLSZ3vY2cmFNzYtzTsDOm6paop_HzuByGDFbgDjwPF7UXOOkEA5kX2cOrjjZIuOwdnpGT0NI-t7gcMDXLaLTvlXqIxLC68Yw8fMgYrI5Kcjq1QsxLvE9vui-P41EiV7HZeMt9aqMMUtZkzDteIECdndcMybgdagin-9GMNfzHwoB40',
@@ -174,7 +174,7 @@ const MOCK_MEAL_KITS: MealKit[] = [
 const MOCK_DASHBOARD: DashboardData = {
   patientName: 'Daniel',
   avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY',
-  diagnosis: 'Wundheilungs-Diät',
+    diagnosis: 'Recovery-Fokus',
   phase: 'Phase 1',
   dayNumber: 3,
   weekProgress: 42,
@@ -205,7 +205,7 @@ const MOCK_DASHBOARD: DashboardData = {
       type: 'lunch',
       label: 'Mittagessen',
       name: 'Gegrillter Lachs mit Zink-reichem Quinoa',
-      description: 'Optimiert für die Zellregeneration mit hohem Proteingehalt und essentiellen Mikronährstoffen.',
+      description: 'Proteinreiches Mittagsgericht mit Mikronährstoffen als Orientierung für die Regenerationsphase.',
       calories: 580,
       prepTime: '25 Min',
       time: '13:00',
@@ -217,7 +217,7 @@ const MOCK_DASHBOARD: DashboardData = {
       type: 'dinner',
       label: 'Abendessen',
       name: 'Süßkartoffel-Bowl mit Kurkuma-Dressing',
-      description: 'Entzündungshemmende Inhaltsstoffe fördern eine ruhige Nacht und effektive Wundheilung.',
+      description: 'Milde Bowl mit Kurkuma-Dressing als gut planbare Abendoption.',
       calories: 350,
       prepTime: '20 Min',
       time: '19:00',
@@ -280,7 +280,7 @@ export const nutritionMockApi = {
       {
         id: '1',
         name: 'Lachs mit Quinoa',
-        description: 'Reich an Omega-3 Fettsäuren für die Zellregeneration.',
+        description: 'Proteinreiche Rezeptidee mit Omega-3-Fettsäuren als Orientierung.',
         image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800',
         calories: 450,
         protein: '35g',
@@ -291,7 +291,7 @@ export const nutritionMockApi = {
       {
         id: '2',
         name: 'Grüner Power-Salat',
-        description: 'Vollgepackt mit Antioxidantien zur Stärkung des Immunsystems.',
+        description: 'Pflanzenbetonte Rezeptidee mit vielen farbigen Zutaten.',
         image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800',
         calories: 320,
         protein: '12g',
