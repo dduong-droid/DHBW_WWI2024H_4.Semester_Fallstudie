@@ -102,6 +102,41 @@ type FullAnalyzeResponse = {
   rationale: string[];
 };
 
+type BackendPatientProfile = {
+  patient_id: string;
+  first_name: string;
+  last_name: string;
+  birth_date: string;
+  height_cm: number;
+  weight_kg: number;
+  known_conditions: string[];
+  allergies: string[];
+  notes?: string | null;
+};
+
+type CheckoutOrderItemInput = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+export type CheckoutOrderInput = {
+  items: CheckoutOrderItemInput[];
+  fullName: string;
+  street: string;
+  zip: string;
+  city: string;
+  paymentMethod: string;
+  timeSlot: string;
+};
+
+export type CheckoutOrderResult = {
+  orderId: string;
+  deliveryWindow: string;
+  backendUsed: boolean;
+};
+
 export type OnboardingAnalysisInput = {
   name: string;
   age: number;
@@ -253,6 +288,87 @@ function mapCuratedMeal(meal: FrontendCuratedMeal): CuratedMeal {
 function birthDateFromAge(age: number): string {
   const currentYear = new Date().getFullYear();
   return `${currentYear - age}-01-01`;
+}
+
+function ageFromBirthDate(birthDate: string): number {
+  const birthYear = new Date(birthDate).getFullYear();
+  const currentYear = new Date().getFullYear();
+  return Number.isFinite(birthYear) ? currentYear - birthYear : 0;
+}
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  return {
+    firstName: parts[0] || 'Demo',
+    lastName: parts.slice(1).join(' ') || 'Patient',
+  };
+}
+
+function mapBackendProfile(profile: BackendPatientProfile): PatientProfile {
+  return {
+    id: profile.patient_id,
+    firstName: profile.first_name,
+    lastName: profile.last_name,
+    age: ageFromBirthDate(profile.birth_date),
+    weight: profile.weight_kg,
+    height: profile.height_cm,
+    conditions: profile.known_conditions,
+    allergies: profile.allergies,
+    notes: profile.notes || '',
+    completionPercent: 100,
+  };
+}
+
+function buildPatientProfilePayload(profile: Partial<PatientProfile>) {
+  const patientId = getPatientId();
+  const firstName = profile.firstName || 'Demo';
+  const lastName = profile.lastName || 'Patient';
+  return {
+    patient_id: patientId,
+    first_name: firstName,
+    last_name: lastName,
+    birth_date: birthDateFromAge(profile.age || 60),
+    email: `${patientId}@example.com`,
+    phone: '+490000000',
+    height_cm: profile.height || 170,
+    weight_kg: profile.weight || 70,
+    activity_level: 'low',
+    support_at_home: 'partial_support',
+    known_conditions: profile.conditions || [],
+    allergies: profile.allergies || [],
+    dietary_preferences: [],
+    consent_data_processing: true,
+    notes: profile.notes || 'Lokaler Demo-Modus: Profil aus Frontend-Maske gespeichert.',
+  };
+}
+
+function mapPaymentMethod(paymentMethod: string): 'card' | 'invoice' | 'apple_pay' {
+  if (paymentMethod === 'apple_pay') return 'apple_pay';
+  if (paymentMethod === 'credit_card') return 'card';
+  return 'invoice';
+}
+
+function buildOrderPayload(input: CheckoutOrderInput) {
+  const { firstName, lastName } = splitName(input.fullName);
+  return {
+    patient_id: getPatientId(),
+    items: input.items.map(item => ({
+      meal_kit_id: item.id,
+      quantity: item.quantity,
+    })),
+    shipping_address: {
+      first_name: firstName,
+      last_name: lastName,
+      street: input.street,
+      postal_code: input.zip,
+      city: input.city,
+      country: 'DE',
+    },
+    payment_method: mapPaymentMethod(input.paymentMethod),
+    contact_email: `${getPatientId()}@example.com`,
+    contact_phone: '+490000000',
+    notes: `Demo-Bestellung ohne echte Zahlung. Gewaehltes Zeitfenster: ${input.timeSlot}`,
+  };
 }
 
 function mapAppetite(appetite: string) {
@@ -432,10 +548,46 @@ export const recoveryApi = {
   },
 
   fetchPatientProfile: async (): Promise<PatientProfile> => {
-    return nutritionMockApi.fetchPatientProfile();
+    try {
+      return mapBackendProfile(await fetchJson<BackendPatientProfile>(`/api/patient-profile/${getPatientId()}`));
+    } catch (error) {
+      console.warn('[BFF fallback] Profil nutzt Mock-Daten:', error);
+      return nutritionMockApi.fetchPatientProfile();
+    }
   },
 
   savePatientProfile: async (profile: Partial<PatientProfile>): Promise<{ success: boolean }> => {
-    return nutritionMockApi.savePatientProfile(profile);
+    try {
+      await fetchJson<BackendPatientProfile>('/api/patient-profile', {
+        method: 'POST',
+        body: JSON.stringify(buildPatientProfilePayload(profile)),
+      });
+      return { success: true };
+    } catch (error) {
+      console.warn('[BFF fallback] Profil-Speichern nutzt Mock-Daten:', error);
+      return nutritionMockApi.savePatientProfile(profile);
+    }
+  },
+
+  submitCheckoutOrder: async (input: CheckoutOrderInput): Promise<CheckoutOrderResult> => {
+    try {
+      const order = await fetchJson<{ order_id: string; estimated_delivery_window: string }>('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify(buildOrderPayload(input)),
+      });
+      return {
+        orderId: order.order_id,
+        deliveryWindow: order.estimated_delivery_window,
+        backendUsed: true,
+      };
+    } catch (error) {
+      console.warn('[BFF fallback] Checkout nutzt lokale Demo-Bestellung:', error);
+      const orderId = `F4R-${Math.floor(1000 + Math.random() * 9000)}-MOCK`;
+      return {
+        orderId,
+        deliveryWindow: input.timeSlot,
+        backendUsed: false,
+      };
+    }
   },
 };

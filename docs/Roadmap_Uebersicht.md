@@ -53,7 +53,7 @@ Fuer die Abgabe sollte das Team denselben Flow zeigen:
 ## Gemeinsame Leitplanken
 
 - Keine Diagnoseversprechen.
-- Keine Behauptung, dass KI medizinisch sichere Therapieentscheidungen trifft.
+- Keine Behauptung, dass KI automatisch fachlich freigegebene Therapieentscheidungen trifft.
 - Kritische Angaben loesen Warnung oder Review aus, keine automatische medizinische Freigabe.
 - Meal-Kits sind Umsetzungshilfe und optionaler Revenue Stream, nicht der medizinische Kern.
 - Datenschutz, Einwilligung, Export und Loeschung werden als Produktqualitaet gezeigt.

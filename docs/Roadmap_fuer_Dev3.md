@@ -138,7 +138,7 @@ Gute Aussagen:
 Aussagen vermeiden:
 
 - "Die App beschleunigt Heilung."
-- "Die KI erstellt medizinisch sichere Therapieplaene."
+- "Die KI erstellt automatisch fachlich freigegebene Therapieplaene."
 - "Food 4 Recovery verhindert Wiedereinweisungen."
 - "Das Produkt ist sofort DiGA-faehig."
 - "Die App ersetzt Ernaehrungsberatung."

@@ -59,9 +59,10 @@ npm install
 npm run dev
 npm run build
 npx tsc --noEmit
+npm run lint
 ```
 
-Hinweis: `npm run lint` ist aktuell bekannt rot, weil `next lint` mit der vorhandenen Next-/ESLint-Kombination ungueltige ESLint-Optionen uebergibt. Es gibt aktuell kein `npm run test` und kein `npm run typecheck`.
+Hinweis: Es gibt aktuell kein `npm run test` und kein `npm run typecheck`; der manuelle Typecheck laeuft ueber `npx tsc --noEmit`.
 
 Backend:
 
