@@ -265,7 +265,7 @@ function buildFullAnalyzePayload(input: OnboardingAnalysisInput) {
   const firstName = input.name.trim().split(/\s+/)[0] || 'Demo';
   const lastName = input.name.trim().split(/\s+/).slice(1).join(' ') || 'Patient';
   const patientId = `demo_${firstName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'patient'}`;
-  const treatmentContext = input.goals.includes('chemo_support') ? 'onkologische Demo-Nachsorge' : 'postoperative Demo-Nachsorge';
+  const treatmentContext = input.goals.includes('simply_healthy') ? 'präventive Gesundheitsförderung' : (input.goals.includes('chemo_support') ? 'onkologische Demo-Nachsorge' : 'postoperative Demo-Nachsorge');
   const knownConditions = input.goals.includes('chemo_support') ? ['chemo_support'] : input.goals;
 
   return {
@@ -422,6 +422,15 @@ export const recoveryApi = {
     } catch (error) {
       console.warn('[BFF fallback] Onboarding nutzt Mock-Auswertung:', error);
       const analysis = await nutritionMockApi.fetchRecoveryAnalysis();
+      
+      // Falls 'Einfach Gesund' gewählt wurde, passe die Empfehlung an
+      if (input.goals.includes('simply_healthy')) {
+        analysis.recommendedKitId = 'mk6';
+        analysis.recommendedKitName = 'Einfach Gesund Paket';
+        analysis.title = 'Ernährungsoptimierung';
+        analysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und präventiven Gesundheitsförderung. Diese Auswertung ersetzt keine ärztliche Beratung.';
+      }
+      
       storeAnalysis(analysis);
       return analysis;
     }

@@ -35,6 +35,7 @@ const GOAL_OPTIONS = [
   { id: 'immune_boost', label: 'Immunstärkung', desc: 'Abwehrkräfte aufbauen' },
   { id: 'gut_health', label: 'Darmgesundheit', desc: 'Mikrobiom wiederherstellen' },
   { id: 'general_recovery', label: 'Allgemeine Erholung', desc: 'Vitalität zurückgewinnen' },
+  { id: 'simply_healthy', label: 'Einfach Gesund', desc: 'Gesunde Ernährungsoptimierung ohne Beschwerden' },
 ];
 
 export default function OnboardingPage() {

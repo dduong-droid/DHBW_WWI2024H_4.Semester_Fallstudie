@@ -169,6 +169,19 @@ const MOCK_MEAL_KITS: MealKit[] = [
     meals: ['Energie-Granola mit Nüssen', 'Rote-Bete Power Bowl', 'Spinat-Lachs Pasta'],
     deliveryDays: 'Mo & Do',
   },
+  {
+    id: 'mk6',
+    name: 'Einfach Gesund Paket',
+    description: 'Ausgewogene und nährstoffreiche Mahlzeiten zur allgemeinen Gesundheitsoptimierung und Vorbeugung.',
+    price: 69.90,
+    currency: '€',
+    imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+    tags: ['Ausgewogen', 'Vitaminreich'],
+    category: 'general_health',
+    nutrition: { calories: 1800, protein: '80g', carbs: '220g', fat: '60g' },
+    meals: ['Bircher Müsli', 'Quinoa-Gemüse Pfanne', 'Vollkorn-Wrap mit Hummus'],
+    deliveryDays: 'Di & Fr',
+  },
 ];
 
 const MOCK_DASHBOARD: DashboardData = {
