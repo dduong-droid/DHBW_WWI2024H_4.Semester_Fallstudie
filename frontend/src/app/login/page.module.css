@@ -432,3 +432,27 @@
   60% { transform: translateX(-4px); }
   80% { transform: translateX(4px); }
 }
+
+.demoDirectBtn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  background: transparent;
+  border: 1px solid rgba(51, 199, 88, 0.2);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.demoDirectBtn:hover {
+  background: rgba(51, 199, 88, 0.05);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}

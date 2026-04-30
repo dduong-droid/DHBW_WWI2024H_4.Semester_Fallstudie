@@ -34,7 +34,7 @@ export default function Home() {
         </div>
 
         <div className={styles.ctaGroup}>
-          <Link href="/onboarding" className={styles.primaryBtn}>
+          <Link href="/login" className={styles.primaryBtn}>
             Genesung starten
             <ArrowRight size={18} />
           </Link>

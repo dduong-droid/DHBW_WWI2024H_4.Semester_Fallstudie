@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Utensils, Bell, User, HeartPulse, AlertTriangle,
@@ -37,6 +38,8 @@ export default function ProfilePage() {
   const [conditions, setConditions] = useState<Set<string>>(new Set());
   const [allergies, setAllergies] = useState<Set<string>>(new Set());
   const [notes, setNotes] = useState('');
+  const [consent, setConsent] = useState(false);
+  const router = useRouter();
 
   // Lade bestehende Profildaten
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function ProfilePage() {
     return Math.round((filled / total) * 100);
   })();
 
-  const canSubmit = age && weight && height;
+  const canSubmit = age && weight && height && consent;
 
   const handleSave = async () => {
     if (!canSubmit) return;
@@ -88,7 +91,10 @@ export default function ProfilePage() {
     });
     setSaving(false);
     setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    setTimeout(() => {
+      setSaved(false);
+      router.push('/onboarding');
+    }, 1000);
   };
 
   if (loading) {
@@ -282,6 +288,30 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          {/* Datenschutz-Einwilligung */}
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionIcon} style={{ color: 'var(--color-primary)' }}><Shield size={22} /></span>
+              <h2 className={styles.sectionTitle}>Datenschutz & Einwilligung</h2>
+            </div>
+            <label className={`${styles.checkboxLabel} ${consent ? styles.checkboxChecked : ''}`}>
+              <input
+                type="checkbox"
+                className={styles.checkboxInput}
+                checked={consent}
+                onChange={() => setConsent(!consent)}
+              />
+              <div className={styles.checkboxContent}>
+                <span className={styles.checkboxTitle}>Einwilligung zur Datenverarbeitung</span>
+                <span className={styles.checkboxDesc}>
+                  Ich stimme zu, dass Food4Recovery meine gesundheitsbezogenen Daten verarbeitet, 
+                  um mir personalisierte Empfehlungen zu geben. Diese Einwilligung kann ich jederzeit widerrufen.
+                </span>
+              </div>
+              <CheckCircle2 size={22} className={styles.checkIcon} />
+            </label>
+          </div>
+
           {/* Actions */}
           <div className={styles.formActions}>
             <Link href="/dashboard" className={styles.backBtn}>
@@ -295,6 +325,37 @@ export default function ProfilePage() {
             >
               {saving ? 'Speichere...' : saved ? 'Gespeichert ✓' : 'Speichern & Weiter'}
               {!saving && !saved && <ArrowRight size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Privacy Management (Priority 5) */}
+        <div className={styles.section} style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionIcon} style={{ color: 'var(--text-muted)' }}><Shield size={22} /></span>
+            <h2 className={styles.sectionTitle}>Datenmanagement</h2>
+          </div>
+          <p className={styles.sectionDesc}>Du hast die volle Kontrolle über deine Daten gemäß DSGVO.</p>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <button 
+              className={styles.secondaryBtn} 
+              style={{ justifyContent: 'center', width: '100%', border: '1px solid var(--border)' }}
+              onClick={() => alert('Daten-Export wird vorbereitet (Demo)...')}
+            >
+              Patientendaten exportieren (.json)
+            </button>
+            
+            <button 
+              className={styles.deleteBtn}
+              onClick={() => {
+                if(confirm('Möchtest du dein Profil wirklich unwiderruflich löschen?')) {
+                  alert('Profil wurde gelöscht (Demo).');
+                  router.push('/');
+                }
+              }}
+            >
+              Profil und alle Daten löschen
             </button>
           </div>
         </div>

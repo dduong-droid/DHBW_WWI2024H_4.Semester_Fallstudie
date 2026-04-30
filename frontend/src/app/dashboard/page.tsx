@@ -3,21 +3,33 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Utensils, Droplets, Flame, Clock, ChevronRight,
-  Activity, ShoppingBag, Bell, Check, HeartPulse
+  Activity, ShoppingBag, Bell, Check, HeartPulse, Sparkles, ShieldAlert
 } from 'lucide-react';
 import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
-import type { DashboardData } from '../../services/mockApi';
+import type { DashboardData, PatientProfile } from '../../services/mockApi';
 import CartNavIcon from '../../components/CartNavIcon';
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [profile, setProfile] = useState<PatientProfile | null>(null);
   const [checkedMeals, setCheckedMeals] = useState<Set<string>>(new Set());
+  const [selectedDay, setSelectedDay] = useState('Mi'); // Heute (Demo)
+  const [symptom, setSymptom] = useState<number | null>(null);
+
+  const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+  const FULL_DAYS = {
+    'Mo': 'Montag', 'Di': 'Dienstag', 'Mi': 'Mittwoch', 
+    'Do': 'Donnerstag', 'Fr': 'Freitag', 'Sa': 'Samstag', 'So': 'Sonntag'
+  };
 
   useEffect(() => {
-    recoveryApi.fetchDashboardData().then(d => {
+    Promise.all([
+      recoveryApi.fetchDashboardData(),
+      recoveryApi.fetchPatientProfile()
+    ]).then(([d, p]) => {
       setData(d);
-      // Initialisiere bereits abgehakte Mahlzeiten
+      setProfile(p);
       const checked = new Set(d.dailyMeals.filter(m => m.checked).map(m => m.id));
       setCheckedMeals(checked);
     });
@@ -85,14 +97,83 @@ export default function DashboardPage() {
       <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.hero}>
-          <h1 className={styles.greeting}>Willkommen zurück, {data.patientName}</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <span className={styles.diagnosisBox}>
-              <HeartPulse size={14} />
-              Heute: Tag {data.dayNumber}
-            </span>
-            <span className={styles.date}>{data.diagnosis} • {data.phase}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h1 className={styles.greeting}>Willkommen zurück, {data.patientName}</h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <span className={styles.diagnosisBox}>
+                  <HeartPulse size={14} />
+                  Heute: Tag {data.dayNumber}
+                </span>
+                <span className={styles.date}>{data.diagnosis} • {data.phase}</span>
+              </div>
+            </div>
+            <div className={styles.focusBadge}>
+              <Sparkles size={16} />
+              Fokus: Proteinreich & Magenfreundlich
+            </div>
           </div>
+        </section>
+
+        {/* Safety & Warning Section (Dynamic) */}
+        {profile?.conditions.includes('chemotherapy') ? (
+          <section className={styles.safetyAlert}>
+            <div className={styles.safetyIcon}>
+              <ShieldAlert size={20} />
+            </div>
+            <div className={styles.safetyContent}>
+              <h3>Sicherheitshinweis für Chemo-Begleitung</h3>
+              <p>
+                Achte aktuell auf besonders keimarme Ernährung. Vermeide rohes Fleisch, unpasteurisierte Milchprodukte 
+                und wasche Obst und Gemüse sehr gründlich.
+              </p>
+            </div>
+            <div className={styles.safetyStatus}>
+              <span className={styles.statusWarning}>Warning</span>
+            </div>
+          </section>
+        ) : profile?.conditions.includes('post_op') ? (
+           <section className={styles.safetyAlert}>
+            <div className={styles.safetyIcon}>
+              <ShieldAlert size={20} />
+            </div>
+            <div className={styles.safetyContent}>
+              <h3>Sicherheitshinweis für Post-OP Phase</h3>
+              <p>
+                Deine Verdauung benötigt in dieser Phase besonders milde Kost. 
+                Vermeide schwer verdauliche Fette und stark blähende Gemüsesorten.
+              </p>
+            </div>
+            <div className={styles.safetyStatus}>
+              <span className={styles.statusWarning}>Warning</span>
+            </div>
+          </section>
+        ) : null}
+
+        {/* Day Picker (Priority 2) */}
+        <section className={styles.dayPicker}>
+          <div className={styles.dayPickerHeader}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <h2>Dein Wochenplan</h2>
+              <span className={styles.currentMonth}>April 2026</span>
+            </div>
+            <button className={styles.exportBtn} onClick={() => alert('PDF wird generiert...')}>
+              Plan exportieren
+            </button>
+          </div>
+          <div className={styles.daysRow}>
+            {DAYS.map(day => (
+              <button 
+                key={day} 
+                onClick={() => setSelectedDay(day)}
+                className={`${styles.dayBtn} ${selectedDay === day ? styles.dayBtnActive : ''}`}
+              >
+                <span className={styles.dayName}>{day}</span>
+                <span className={styles.dayDot} />
+              </button>
+            ))}
+          </div>
+          <p className={styles.selectedDayLabel}>Mahlzeiten für {FULL_DAYS[selectedDay as keyof typeof FULL_DAYS]}</p>
         </section>
 
         {/* Stats Cards Row */}
@@ -220,6 +301,59 @@ export default function DashboardPage() {
 
           {/* Right Sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {/* Quick Track (Priority 4) */}
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle} style={{ marginBottom: '1rem' }}>Quick Track</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                    Appetit heute
+                  </label>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    {['Low', 'Mid', 'High'].map(level => (
+                      <button key={level} className={styles.trackBtn} onClick={() => alert(`${level} Appetit getrackt!`)}>
+                        {level}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Symptom Tracker */}
+                <div style={{ paddingTop: '0.5rem', borderTop: '1px solid var(--border)' }}>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                    Symptome / Schmerzen
+                  </label>
+                  <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'space-between' }}>
+                    {[1, 2, 3, 4, 5].map(level => (
+                      <button 
+                        key={level} 
+                        className={styles.trackBtn} 
+                        style={{ 
+                          padding: '0.5rem 0', 
+                          background: symptom === level ? 'var(--color-primary)' : 'var(--surface)',
+                          color: symptom === level ? 'white' : 'var(--text)',
+                          borderColor: symptom === level ? 'var(--color-primary)' : 'var(--border)'
+                        }}
+                        onClick={() => { setSymptom(level); alert(`Schmerzlevel ${level} getrackt!`); }}
+                      >
+                        {level}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                    Gewicht tracken
+                  </label>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <input type="number" placeholder="72.5" className={styles.trackInput} />
+                    <button className={styles.trackBtn} style={{ background: 'var(--color-primary)', color: 'white', border: 'none' }}>
+                      Ok
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Nährstoff-Tracker */}
             <div className={styles.card}>
               <h2 className={styles.cardTitle} style={{ marginBottom: '1.5rem' }}>Nährstoff-Tracker</h2>

@@ -423,3 +423,39 @@
   border-radius: var(--radius-full);
   background-color: var(--border);
 }
+
+.secondaryBtn {
+  background-color: var(--surface);
+  color: var(--text);
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover {
+  background-color: var(--background);
+  border-color: var(--color-primary);
+}
+
+.deleteBtn {
+  background-color: transparent;
+  color: #ba1a1a;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  border: 1px solid #ba1a1a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.deleteBtn:hover {
+  background-color: #ba1a1a;
+  color: white;
+}

@@ -54,13 +54,13 @@ export default function LoginPage() {
     }
 
     setLoading(false);
-    router.push('/dashboard');
+    router.push('/profile');
   };
 
   const handleSocialLogin = (provider: string) => {
     console.log(`[MockAPI] Social Login: ${provider}`);
-    // Mock: Direkt zum Dashboard weiterleiten
-    router.push('/onboarding');
+    // Mock: Direkt zum Profil weiterleiten
+    router.push('/profile');
   };
 
   return (
@@ -130,6 +130,11 @@ export default function LoginPage() {
               <span>Mit Apple anmelden</span>
             </button>
           </div>
+
+          {/* Demo Direct Access (Priority 1 Refinement) */}
+          <Link href="/dashboard" className={styles.demoDirectBtn}>
+            Direkt zum Dashboard (Demo-Modus)
+          </Link>
 
           {/* Divider */}
           <div className={styles.divider}>

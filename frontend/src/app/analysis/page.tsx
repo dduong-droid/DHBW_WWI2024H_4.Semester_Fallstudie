@@ -9,13 +9,45 @@ import {
 import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
 import type { RecoveryAnalysis } from '../../services/mockApi';
+import { useCart } from '../../context/CartContext';
 
 export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
+  const [loadingTextIdx, setLoadingTextIdx] = useState(0);
+  const { addToCart } = useCart();
+
+  const loadingMessages = [
+    "Prüfe Gesundheitsziele...",
+    "Abgleich mit Recovery-Phase...",
+    "Erstelle initialen Ernährungsplan...",
+    "Ordne passende Meal-Kits zu..."
+  ];
 
   useEffect(() => {
+    // Start fetch
     recoveryApi.fetchRecoveryAnalysis().then(setAnalysis);
+
+    // Rotate text
+    const interval = setInterval(() => {
+      setLoadingTextIdx(prev => (prev + 1) % loadingMessages.length);
+    }, 1200);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const handleAddKit = async () => {
+    if (!analysis) return;
+    const kit = await recoveryApi.fetchMealKit(analysis.recommendedKitId);
+    if (kit) {
+      addToCart({
+        id: kit.id,
+        name: kit.name,
+        price: kit.price,
+        quantity: 1,
+        imageUrl: kit.imageUrl
+      });
+    }
+  };
 
   if (!analysis) {
     return (
@@ -24,8 +56,10 @@ export default function AnalysisPage() {
           <div className={styles.scanIcon}>
             <ClipboardList size={34} />
           </div>
-          <h1>Unterlagen werden eingeordnet</h1>
-          <p>Demo-Auswertung wird vorbereitet...</p>
+          <h1>Auswertung läuft</h1>
+          <p style={{ minHeight: '1.5rem', transition: 'opacity 0.3s' }}>
+            {loadingMessages[loadingTextIdx]}
+          </p>
           <div className={styles.loadingBar}>
             <span />
           </div>
@@ -75,7 +109,9 @@ export default function AnalysisPage() {
               <p>Empfohlenes Meal-Kit</p>
               <h2>{analysis.recommendedKitName}</h2>
             </div>
-            <Link href="/shop" className={styles.smallButton}>Shop</Link>
+            <button onClick={handleAddKit} className={styles.smallButton} style={{ border: 'none', cursor: 'pointer' }}>
+              In den Warenkorb
+            </button>
           </div>
         </article>
 

@@ -479,3 +479,196 @@
   opacity: 1;
   transform: translateX(0);
 }
+
+/* --- New Dashboard Styles --- */
+
+.focusBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(51, 199, 88, 0.1);
+  color: var(--color-primary);
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 0.875rem;
+  border: 1px solid rgba(51, 199, 88, 0.2);
+}
+
+.safetyAlert {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+}
+
+.safetyIcon {
+  width: 3rem;
+  height: 3rem;
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.safetyContent {
+  flex: 1;
+}
+
+.safetyContent h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 0.25rem;
+}
+
+.safetyContent p {
+  font-size: 0.875rem;
+  color: #b45309;
+  line-height: 1.5;
+}
+
+.statusWarning {
+  background: #f59e0b;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dayPicker {
+  margin-bottom: 2rem;
+}
+
+.dayPickerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dayPickerHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.currentMonth {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.daysRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dayBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dayBtn:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.dayBtnActive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(51, 199, 88, 0.2);
+}
+
+.dayName {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.dayDot {
+  width: 0.25rem;
+  height: 0.25rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  margin-top: 0.5rem;
+}
+
+.dayBtnActive .dayDot {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.selectedDayLabel {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+.trackBtn {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trackBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.trackInput {
+  flex: 1;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  outline: none;
+}
+
+.trackInput:focus {
+  border-color: var(--color-primary);
+}
+
+.exportBtn {
+  background: var(--surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exportBtn:hover {
+  background: var(--color-primary);
+  color: white;
+}
