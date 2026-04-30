@@ -6,7 +6,8 @@ import {
   Activity, ShoppingBag, Bell, Check, HeartPulse
 } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi, type DashboardData } from '../../services/mockApi';
+import { recoveryApi } from '../../services/apiClient';
+import type { DashboardData } from '../../services/mockApi';
 import CartNavIcon from '../../components/CartNavIcon';
 
 export default function DashboardPage() {
@@ -14,7 +15,7 @@ export default function DashboardPage() {
   const [checkedMeals, setCheckedMeals] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    nutritionMockApi.fetchDashboardData().then(d => {
+    recoveryApi.fetchDashboardData().then(d => {
       setData(d);
       // Initialisiere bereits abgehakte Mahlzeiten
       const checked = new Set(d.dailyMeals.filter(m => m.checked).map(m => m.id));

@@ -6,7 +6,7 @@ import {
   CheckCircle2, Lock, Shield, ArrowRight, ArrowLeft
 } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi, type PatientProfile } from '../../services/mockApi';
+import { recoveryApi } from '../../services/apiClient';
 import CartNavIcon from '../../components/CartNavIcon';
 
 // --- Konfiguration: Beschwerden und Allergien ---
@@ -40,7 +40,7 @@ export default function ProfilePage() {
 
   // Lade bestehende Profildaten
   useEffect(() => {
-    nutritionMockApi.fetchPatientProfile().then(profile => {
+    recoveryApi.fetchPatientProfile().then(profile => {
       setAge(profile.age ? String(profile.age) : '');
       setWeight(profile.weight ? String(profile.weight) : '');
       setHeight(profile.height ? String(profile.height) : '');
@@ -78,7 +78,7 @@ export default function ProfilePage() {
     if (!canSubmit) return;
     setSaving(true);
     setSaved(false);
-    await nutritionMockApi.savePatientProfile({
+    await recoveryApi.savePatientProfile({
       age: Number(age),
       weight: Number(weight),
       height: Number(height),
@@ -303,12 +303,12 @@ export default function ProfilePage() {
         <div className={styles.trustBadge}>
           <div className={styles.trustItem}>
             <Lock size={14} />
-            DSGVO Konform
+            Demo-Datenschutzkonzept
           </div>
           <div className={styles.trustDot} />
           <div className={styles.trustItem}>
             <Shield size={14} />
-            Ende-zu-Ende verschlüsselt
+            lokaler Demo-Modus
           </div>
         </div>
       </main>

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { X, Utensils, CheckCircle, Loader2, Wallet, ShoppingBag } from 'lucide-react';
+import { X, Utensils, CheckCircle, ShoppingBag } from 'lucide-react';
 import type { MealKit } from '../services/mockApi';
 import styles from './MealKitModal.module.css';
 import { useCart } from '../context/CartContext';

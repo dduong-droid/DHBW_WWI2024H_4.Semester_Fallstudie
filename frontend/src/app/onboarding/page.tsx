@@ -7,6 +7,7 @@ import {
   Upload, FileText, User, X, AlertCircle
 } from 'lucide-react';
 import styles from './page.module.css';
+import { recoveryApi } from '../../services/apiClient';
 
 // --- Schritt-Konfiguration ---
 
@@ -26,6 +27,8 @@ const APPETITE_OPTIONS = [
 
 const ALLERGY_CHIPS = ['Nüsse', 'Soja', 'Fisch', 'Eier', 'Schalentiere', 'Weizen'];
 const INTOLERANCE_CHIPS = ['Laktose', 'Gluten', 'Fruktose', 'Histamin', 'Sorbit'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 
 const GOAL_OPTIONS = [
   { id: 'wound_healing', label: 'Wundheilung', desc: 'Nach Operation oder Eingriff' },
@@ -54,9 +57,6 @@ export default function OnboardingPage() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-  const ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 
   const addFiles = useCallback((files: FileList | File[]) => {
     const validFiles = Array.from(files).filter(f => {
@@ -97,11 +97,13 @@ export default function OnboardingPage() {
 
   const toggleChip = (set: Set<string>, value: string, setter: React.Dispatch<React.SetStateAction<Set<string>>>) => {
     const next = new Set(set);
-    next.has(value) ? next.delete(value) : next.add(value);
+    if (next.has(value)) {
+      next.delete(value);
+    } else {
+      next.add(value);
+    }
     setter(next);
   };
-
-  const progressPercent = Math.round(((step) / (STEPS.length - 1)) * 100);
 
   // Validierung: Numerische Felder müssen in sinnvollen Bereichen liegen
   const ageNum = Number(age);
@@ -137,15 +139,13 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    // Mock: Simuliere das Senden an POST /api/questionnaire-intake
-    console.log('[MockAPI] Fragebogen abgesendet:', {
+    await recoveryApi.submitOnboardingAnalysis({
       name, age: ageNum, weight: weightNum || null, height: heightNum || null, appetite,
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
       goals: Array.from(goals),
       uploadedFiles: uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
     });
-    await new Promise(resolve => setTimeout(resolve, 1500));
     setSubmitting(false);
     router.push('/analysis');
   };
@@ -551,13 +551,13 @@ export default function OnboardingPage() {
         <div className={styles.securitySection} style={{ maxWidth: '48rem', margin: '0 auto', padding: '0 1rem' }}>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><Lock size={22} /></div>
-            <span className={styles.securityTitle}>DSGVO konform</span>
-            <span className={styles.securityDesc}>Deine Daten gehören dir und werden nach EU-Standards geschützt.</span>
+            <span className={styles.securityTitle}>Demo-Datenschutzkonzept</span>
+            <span className={styles.securityDesc}>Lokaler Demo-Modus mit bewusst begrenzter Verarbeitung.</span>
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><Shield size={22} /></div>
             <span className={styles.securityTitle}>Verschlüsselt</span>
-            <span className={styles.securityDesc}>Ende-zu-Ende-Verschlüsselung für alle medizinischen Daten.</span>
+            <span className={styles.securityDesc}>Transport und Zugriff sind fuer die Demo technisch abgegrenzt.</span>
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><HeartPulse size={22} /></div>

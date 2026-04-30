@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Utensils, HeartPulse } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi, type CuratedMeal } from '../../services/mockApi';
+import { recoveryApi } from '../../services/apiClient';
+import type { CuratedMeal } from '../../services/mockApi';
 import CuratedMealCard from '../../components/CuratedMealCard';
 import CuratedMealModal from '../../components/CuratedMealModal';
 import CartNavIcon from '../../components/CartNavIcon';
@@ -14,7 +15,7 @@ export default function CuratedRecipesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    nutritionMockApi.fetchCuratedMeals().then(data => setMeals(data));
+    recoveryApi.fetchCuratedMeals().then(data => setMeals(data));
   }, []);
 
   const handleOpenMeal = (meal: CuratedMeal) => {

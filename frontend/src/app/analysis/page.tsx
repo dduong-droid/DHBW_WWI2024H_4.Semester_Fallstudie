@@ -7,13 +7,14 @@ import {
   PackageCheck, ShieldAlert, Sparkles, Utensils
 } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi, type RecoveryAnalysis } from '../../services/mockApi';
+import { recoveryApi } from '../../services/apiClient';
+import type { RecoveryAnalysis } from '../../services/mockApi';
 
 export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
 
   useEffect(() => {
-    nutritionMockApi.fetchRecoveryAnalysis().then(setAnalysis);
+    recoveryApi.fetchRecoveryAnalysis().then(setAnalysis);
   }, []);
 
   if (!analysis) {

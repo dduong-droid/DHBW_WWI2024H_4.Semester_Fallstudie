@@ -12,6 +12,10 @@ dependencies = [
   "uvicorn",
 ]
 
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["latest_logs*"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

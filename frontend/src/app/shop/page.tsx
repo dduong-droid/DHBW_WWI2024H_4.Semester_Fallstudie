@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
-  Utensils, Search, ShoppingBag, Plus, Flame, Bell,
-  HeartPulse, SlidersHorizontal, Package
+  Utensils, Search, ShoppingBag, Plus, Bell,
+  HeartPulse, Package
 } from 'lucide-react';
 import styles from './page.module.css';
-import { nutritionMockApi, type MealKit } from '../../services/mockApi';
+import { recoveryApi } from '../../services/apiClient';
+import type { MealKit } from '../../services/mockApi';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
 
@@ -26,7 +27,7 @@ export default function ShopPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    nutritionMockApi.fetchShopInventory().then(data => setKits(data));
+    recoveryApi.fetchShopInventory().then(data => setKits(data));
   }, []);
 
   const filteredKits = useMemo(() => {

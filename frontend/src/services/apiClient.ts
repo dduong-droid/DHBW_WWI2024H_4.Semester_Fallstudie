@@ -1,0 +1,441 @@
+import {
+  nutritionMockApi,
+  type CuratedMeal,
+  type DashboardData,
+  type DailyMeal,
+  type MealKit,
+  type NutrientProgress,
+  type PatientProfile,
+  type RecoveryAnalysis,
+} from './mockApi';
+
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const DEFAULT_PATIENT_ID = 'demo_maria_post_op';
+const PATIENT_ID_STORAGE_KEY = 'food4recovery.patientId';
+const LAST_ANALYSIS_STORAGE_KEY = 'food4recovery.lastAnalysis';
+
+type FrontendRecipe = {
+  id: string;
+  name: string;
+  description: string;
+  prepTimeMinutes: number;
+  calories: number;
+  macros: {
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+};
+
+type FrontendNutritionPlan = {
+  id: string;
+  userId: string;
+  diagnosis: {
+    condition: string;
+    recommendations: string[];
+    restrictions: string[];
+  };
+  weeklyPlan: {
+    day: number;
+    meals: {
+      breakfast: FrontendRecipe;
+      lunch: FrontendRecipe;
+      dinner: FrontendRecipe;
+      snacks: FrontendRecipe[];
+    };
+    totalMetrics: Record<string, number>;
+  }[];
+};
+
+type FrontendMealKit = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  currency: string;
+  imageUrl?: string | null;
+  nutritionalValues: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    fiber: number;
+  };
+  dietaryTags: string[];
+  meals?: string[] | null;
+  servings: number;
+};
+
+type FrontendShopInventory = {
+  availableMealKits: FrontendMealKit[];
+};
+
+type FrontendCuratedMeal = {
+  id: string;
+  title: string;
+  medicalBenefit: string;
+  description: string;
+  tags: string[];
+  imageUrl: string;
+  ingredients: string[];
+};
+
+type FrontendDailyProgress = {
+  proteinPercent: number;
+  energyPercent: number;
+  isMealBoxEaten: boolean;
+};
+
+type FrontendHydrationProgress = {
+  currentMl: number;
+  targetMl: number;
+};
+
+type FullAnalyzeResponse = {
+  patientId: string;
+  intakeId: string;
+  recommendationId: string;
+  nutritionPlan: FrontendNutritionPlan;
+  recommendedMealKits: FrontendMealKit[];
+  summary: string;
+  rationale: string[];
+};
+
+export type OnboardingAnalysisInput = {
+  name: string;
+  age: number;
+  weight?: number | null;
+  height?: number | null;
+  appetite: string;
+  allergies: string[];
+  intolerances: string[];
+  goals: string[];
+  uploadedFiles: { name: string; size: number; type: string }[];
+};
+
+function getPatientId(): string {
+  if (typeof window === 'undefined') return DEFAULT_PATIENT_ID;
+  return localStorage.getItem(PATIENT_ID_STORAGE_KEY) || DEFAULT_PATIENT_ID;
+}
+
+function storePatientId(patientId: string) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(PATIENT_ID_STORAGE_KEY, patientId);
+  }
+}
+
+function storeAnalysis(analysis: RecoveryAnalysis) {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(LAST_ANALYSIS_STORAGE_KEY, JSON.stringify(analysis));
+  }
+}
+
+function readStoredAnalysis(): RecoveryAnalysis | null {
+  if (typeof window === 'undefined') return null;
+  const raw = localStorage.getItem(LAST_ANALYSIS_STORAGE_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as RecoveryAnalysis;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const headers = new Headers(init?.headers);
+  headers.set('Accept', 'application/json');
+  if (init?.body) headers.set('Content-Type', 'application/json');
+  if (API_KEY) headers.set('X-API-Key', API_KEY);
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers,
+    cache: 'no-store',
+  });
+  if (!response.ok) {
+    throw new Error(`BFF request failed: ${response.status} ${response.statusText}`);
+  }
+  return response.json() as Promise<T>;
+}
+
+function mapRecipe(recipe: FrontendRecipe, type: DailyMeal['type'], label: string, time: string, checked = false): DailyMeal {
+  return {
+    id: recipe.id,
+    type,
+    label,
+    name: recipe.name,
+    description: recipe.description,
+    calories: recipe.calories,
+    prepTime: `${recipe.prepTimeMinutes} Min`,
+    time,
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+    checked,
+  };
+}
+
+function mapDashboardData(
+  plan: FrontendNutritionPlan,
+  daily: FrontendDailyProgress | null,
+  hydration: FrontendHydrationProgress | null,
+): DashboardData {
+  const today = plan.weeklyPlan[0];
+  const total = today?.totalMetrics || {};
+  const proteinCurrent = total.protein || daily?.proteinPercent || 0;
+  const calorieCurrent = total.calories || daily?.energyPercent || 0;
+  const nutrients: NutrientProgress[] = [
+    { name: 'Protein', current: proteinCurrent, target: 120, unit: 'g', color: '#33c758' },
+    { name: 'Kohlenhydrate', current: total.carbs || 0, target: 220, unit: 'g', color: '#3b82f6' },
+    { name: 'Fette', current: total.fat || 0, target: 70, unit: 'g', color: '#f97316' },
+  ];
+
+  return {
+    patientName: plan.userId.replace(/^demo_/, '').replace(/[_-]/g, ' ') || 'Demo',
+    avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY',
+    diagnosis: plan.diagnosis.condition,
+    phase: 'lokaler Demo-Modus',
+    dayNumber: today?.day || 1,
+    weekProgress: Math.min(100, Math.round((plan.weeklyPlan.length / 7) * 100)),
+    dailyMeals: today ? [
+      mapRecipe(today.meals.breakfast, 'breakfast', 'Frühstück', '08:30', daily?.isMealBoxEaten),
+      mapRecipe(today.meals.lunch, 'lunch', 'Mittagessen', '13:00'),
+      mapRecipe(today.meals.dinner, 'dinner', 'Abendessen', '19:00'),
+    ] : [],
+    nutrients,
+    hydration: {
+      current: hydration ? Number((hydration.currentMl / 1000).toFixed(1)) : 0,
+      target: hydration ? Number((hydration.targetMl / 1000).toFixed(1)) : 2.5,
+    },
+    calories: { current: calorieCurrent, target: 2100 },
+    macros: {
+      carbs: Math.round(((total.carbs || 0) / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
+      protein: Math.round((proteinCurrent / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
+      fat: Math.round(((total.fat || 0) / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
+    },
+  };
+}
+
+function mapMealKit(kit: FrontendMealKit): MealKit {
+  return {
+    id: kit.id,
+    name: kit.name,
+    description: kit.description,
+    price: kit.price,
+    currency: kit.currency,
+    imageUrl: kit.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+    tags: kit.dietaryTags,
+    category: 'wound_healing',
+    nutrition: {
+      calories: kit.nutritionalValues.calories,
+      protein: `${kit.nutritionalValues.protein}g`,
+      carbs: `${kit.nutritionalValues.carbs}g`,
+      fat: `${kit.nutritionalValues.fat}g`,
+    },
+    meals: kit.meals || [],
+    deliveryDays: 'lokaler Demo-Modus',
+  };
+}
+
+function mapCuratedMeal(meal: FrontendCuratedMeal): CuratedMeal {
+  return {
+    id: meal.id,
+    name: meal.title,
+    description: meal.description,
+    image: meal.imageUrl,
+    calories: 450,
+    protein: '30g',
+    carbs: '45g',
+    fat: '15g',
+    tags: meal.tags,
+  };
+}
+
+function birthDateFromAge(age: number): string {
+  const currentYear = new Date().getFullYear();
+  return `${currentYear - age}-01-01`;
+}
+
+function mapAppetite(appetite: string) {
+  if (appetite === 'low') return 'reduced';
+  if (appetite === 'high') return 'good';
+  return 'variable';
+}
+
+function buildFullAnalyzePayload(input: OnboardingAnalysisInput) {
+  const firstName = input.name.trim().split(/\s+/)[0] || 'Demo';
+  const lastName = input.name.trim().split(/\s+/).slice(1).join(' ') || 'Patient';
+  const patientId = `demo_${firstName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'patient'}`;
+  const treatmentContext = input.goals.includes('chemo_support') ? 'onkologische Demo-Nachsorge' : 'postoperative Demo-Nachsorge';
+  const knownConditions = input.goals.includes('chemo_support') ? ['chemo_support'] : input.goals;
+
+  return {
+    patientProfile: {
+      patient_id: patientId,
+      first_name: firstName,
+      last_name: lastName,
+      birth_date: birthDateFromAge(input.age),
+      email: `${patientId}@example.com`,
+      phone: '+490000000',
+      height_cm: input.height || 170,
+      weight_kg: input.weight || 70,
+      activity_level: 'low',
+      support_at_home: 'partial_support',
+      known_conditions: knownConditions,
+      medical_context: treatmentContext,
+      allergies: input.allergies,
+      dietary_preferences: input.intolerances,
+      consent_data_processing: true,
+      notes: `Demo-Onboarding. Uploads: ${input.uploadedFiles.map(file => file.name).join(', ') || 'keine'}`,
+    },
+    questionnaire: {
+      personal_and_body_data: {
+        first_name: firstName,
+        last_name: lastName,
+        birth_date: birthDateFromAge(input.age),
+        phone: '+490000000',
+        email: `${patientId}@example.com`,
+        profession: 'Demo',
+        height_cm: input.height || 170,
+        weight_kg: input.weight || 70,
+        measurements: {},
+      },
+      activity_and_movement: {
+        daily_steps: 2500,
+        sports_per_week: 0,
+        sports_description: 'lokaler Demo-Modus',
+      },
+      medication_and_supplements: {
+        medications: [],
+        supplements: [],
+      },
+      gut_health: {
+        food_intolerances: input.intolerances,
+      },
+      nutrition_status: {
+        appetite_level: mapAppetite(input.appetite),
+        intake_change_vs_past: input.appetite === 'low' ? 'slightly_less' : 'same',
+        meals_per_day: 3,
+        eating_difficulties: [],
+        digestive_symptoms: input.intolerances.length > 0 ? ['sensitive_digestion'] : [],
+      },
+      eating_habits: {
+        typical_day_summary: 'Demo-Angaben aus dem Onboarding.',
+        preferred_foods: [],
+        disliked_foods: [],
+        diet_style: 'mixed',
+        can_cook: true,
+        receives_support_for_cooking: true,
+        fluid_intake_ml_per_day: 1600,
+        smoking_status: 'no',
+      },
+      recovery_indicators: {
+        infections_last_year: 0,
+        wound_healing_issues: input.goals.includes('wound_healing'),
+        fatigue_level: input.goals.includes('general_recovery') ? 'moderate' : 'light',
+        sleep_quality: 'variable',
+      },
+      goals_and_expectations: {
+        goals: input.goals,
+        expectation_notes: 'orientierende Empfehlung fuer die Fallstudien-Demo',
+      },
+      additional_notes: 'Dokumente werden in dieser Demo nicht medizinisch ausgewertet.',
+    },
+  };
+}
+
+function mapAnalysis(response: FullAnalyzeResponse): RecoveryAnalysis {
+  return {
+    status: response.rationale.length > 0 ? 'demo_ready' : 'review_recommended',
+    progressPercent: 100,
+    title: 'Orientierende Recovery-Auswertung',
+    summary: `${response.summary} Diese Auswertung ersetzt keine ärztliche Diagnose oder Behandlung.`,
+    recommendedKitId: response.recommendedMealKits[0]?.id || '',
+    recommendedKitName: response.recommendedMealKits[0]?.name || 'Meal-Kit nach Fachpruefung',
+    matchScores: response.rationale.slice(0, 3).map((line, index) => ({
+      label: ['Profil-Fit', 'Alltagstauglichkeit', 'Sicherheitscheck'][index] || 'BFF-Rationale',
+      percent: Math.max(72, 92 - index * 7),
+      rationale: line,
+    })),
+    orientationNotes: response.nutritionPlan.diagnosis.recommendations.slice(0, 3),
+    riskNotes: response.nutritionPlan.diagnosis.restrictions.length > 0
+      ? response.nutritionPlan.diagnosis.restrictions
+      : ['Bei starken Beschwerden, Gewichtsverlust oder Unsicherheit sollte Fachpersonal einbezogen werden.'],
+    nextSteps: ['Wochenplan im Dashboard ansehen', 'Passende Rezepte pruefen', 'Meal-Kit optional in den Warenkorb legen'],
+  };
+}
+
+export const recoveryApi = {
+  fetchDashboardData: async (): Promise<DashboardData> => {
+    try {
+      const patientId = getPatientId();
+      const [plan, daily, hydration] = await Promise.all([
+        fetchJson<FrontendNutritionPlan>(`/api/frontend/nutrition-plan/${patientId}`),
+        fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(() => null),
+        fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${patientId}`).catch(() => null),
+      ]);
+      return mapDashboardData(plan, daily, hydration);
+    } catch (error) {
+      console.warn('[BFF fallback] Dashboard nutzt Mock-Daten:', error);
+      return nutritionMockApi.fetchDashboardData();
+    }
+  },
+
+  fetchShopInventory: async (): Promise<MealKit[]> => {
+    try {
+      const inventory = await fetchJson<FrontendShopInventory>('/api/frontend/shop/inventory');
+      return inventory.availableMealKits.map(mapMealKit);
+    } catch (error) {
+      console.warn('[BFF fallback] Shop nutzt Mock-Daten:', error);
+      return nutritionMockApi.fetchShopInventory();
+    }
+  },
+
+  fetchMealKit: async (id: string): Promise<MealKit | null> => {
+    try {
+      return mapMealKit(await fetchJson<FrontendMealKit>(`/api/frontend/shop/meal-kits/${id}`));
+    } catch (error) {
+      console.warn('[BFF fallback] Meal-Kit nutzt Mock-Daten:', error);
+      return nutritionMockApi.fetchMealKit(id);
+    }
+  },
+
+  fetchCuratedMeals: async (): Promise<CuratedMeal[]> => {
+    try {
+      const meals = await fetchJson<FrontendCuratedMeal[]>(`/api/frontend/recipes/curated/${getPatientId()}`);
+      return meals.map(mapCuratedMeal);
+    } catch (error) {
+      console.warn('[BFF fallback] Rezepte nutzen Mock-Daten:', error);
+      return nutritionMockApi.fetchCuratedMeals();
+    }
+  },
+
+  submitOnboardingAnalysis: async (input: OnboardingAnalysisInput): Promise<RecoveryAnalysis> => {
+    try {
+      const response = await fetchJson<FullAnalyzeResponse>('/api/frontend/intake/full-analyze', {
+        method: 'POST',
+        body: JSON.stringify(buildFullAnalyzePayload(input)),
+      });
+      storePatientId(response.patientId);
+      const analysis = mapAnalysis(response);
+      storeAnalysis(analysis);
+      return analysis;
+    } catch (error) {
+      console.warn('[BFF fallback] Onboarding nutzt Mock-Auswertung:', error);
+      const analysis = await nutritionMockApi.fetchRecoveryAnalysis();
+      storeAnalysis(analysis);
+      return analysis;
+    }
+  },
+
+  fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {
+    return readStoredAnalysis() || nutritionMockApi.fetchRecoveryAnalysis();
+  },
+
+  fetchPatientProfile: async (): Promise<PatientProfile> => {
+    return nutritionMockApi.fetchPatientProfile();
+  },
+
+  savePatientProfile: async (profile: Partial<PatientProfile>): Promise<{ success: boolean }> => {
+    return nutritionMockApi.savePatientProfile(profile);
+  },
+};

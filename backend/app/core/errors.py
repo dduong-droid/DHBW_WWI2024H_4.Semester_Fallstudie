@@ -13,7 +13,7 @@ def _code_for_status(status_code: int) -> str:
         return "unauthorized"
     if status_code == status.HTTP_404_NOT_FOUND:
         return "not_found"
-    if status_code == status.HTTP_422_UNPROCESSABLE_CONTENT:
+    if status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
         return "validation_error"
     return "http_error"
 
@@ -46,7 +46,7 @@ def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(_: Request, exc: RequestValidationError) -> JSONResponse:
         return JSONResponse(
-            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             content=_error_payload(
                 code="validation_error",
                 message="Request validation failed.",

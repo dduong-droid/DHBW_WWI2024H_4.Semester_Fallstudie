@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Utensils, Bell, Lock, Truck, MapPin, CreditCard, Wallet,
-  CheckCircle2, ShieldCheck, ChevronRight, Minus, Plus,
+  CheckCircle2, ShieldCheck, Minus, Plus,
   Package, ShoppingBag, ArrowRight, Trash2
 } from 'lucide-react';
 import styles from './page.module.css';

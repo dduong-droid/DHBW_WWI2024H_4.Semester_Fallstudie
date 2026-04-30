@@ -25,7 +25,7 @@ from app.modules.symptom_tracking.repository import delete_tracking_for_patient,
 def create_patient_profile(payload: PatientProfileCreate) -> PatientProfile:
     if not payload.consent_data_processing:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Data processing consent is required.",
         )
     patient_id = payload.patient_id or f"patient_{uuid4().hex[:10]}"

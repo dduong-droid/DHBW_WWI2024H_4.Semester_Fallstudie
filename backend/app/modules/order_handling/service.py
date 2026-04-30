@@ -58,7 +58,7 @@ def create_order(payload: OrderCreate) -> Order:
     for item in merged_items:
         if item.quantity > _MAX_QUANTITY_PER_MEAL_KIT:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=f"Meal kit '{item.meal_kit_id}' exceeds the quantity limit of {_MAX_QUANTITY_PER_MEAL_KIT}.",
             )
         meal_kit = get_meal_kit(item.meal_kit_id)
@@ -121,7 +121,7 @@ def update_order_status(order_id: str, next_status: OrderStatus) -> Order:
 
     if next_status not in _ALLOWED_STATUS_TRANSITIONS[order.status]:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=f"Invalid status transition from '{order.status}' to '{next_status}'.",
         )
 
