@@ -30,19 +30,18 @@ Die Anwendung gliedert sich klassisch in **drei Architekturschichten**:
 #### 1. Das Fundament: Verträge & Typen (`frontend/src/types/apiContracts.ts`)
 `apiContracts.ts` enthaelt aktuell schlanke frontend-nahe Typen. Weitere View-Models liegen in `frontend/src/services/mockApi.ts`, solange die UI noch ueber Mock-Daten laeuft. Fuer backendnahe Absprachen ist `shared/api_contracts.md` die operative Uebersicht.
 
-#### 2. Die Bruecke: Die API-Simulation (`frontend/src/services/mockApi.ts`)
-Hier sitzt der Adapter, der die fehlende Infrastruktur emuliert.
-- Er greift die Interface-Verträge auf und füllt sie mit Mocking-Daten.
-- Durch `setTimeout()` simulieren wir realistische Netzwerk-Traegheit.
-- Wichtige Methoden sind `fetchDashboardData()`, `fetchShopInventory()`, `fetchMealKit(id)`, `fetchCuratedMeals()`, `fetchPatientProfile()` und `savePatientProfile(profile)`.
-- Sobald das echte Backend online geht, kann der Adapter schrittweise auf `/api/frontend/...` und `/api/patient-profile/...` umgestellt werden.
+#### 2. Die Bruecke: BFF-Adapter mit Mock-Fallback (`frontend/src/services/apiClient.ts`)
+Der zentrale Demo-Flow nutzt das FastAPI-Backend ueber `/api/frontend/...`, `/api/patient-profile/...` und `/api/orders`.
+- `NEXT_PUBLIC_API_BASE_URL` zeigt lokal standardmaessig auf `http://127.0.0.1:8000`.
+- `NEXT_PUBLIC_API_KEY` kann fuer den lokalen Demo-API-Key genutzt werden, ist im Browser sichtbar und kein echtes Secret.
+- `frontend/src/services/mockApi.ts` bleibt als klarer Demo-/Fallback-Pfad aktiv, falls das Backend nicht erreichbar ist.
 
 #### 3. Das UI: Routen & Views (`frontend/src/app/`)
 Wir setzen auf den modernen Next.js App Router (Dateisystembasiertes Routing):
 
 - **`/login`**: Arbeitet völlig unabhängig. Ein bewusster Demo-Gatekeeper ohne API-Anbindung, der den Nutzer in den Flow leitet.
-- **`/onboarding`**: Behandelt den Drag-and-Drop Part. Eine kleine React Zustand-Ablaufsteuerung simuliert 2 Sekunden lang einen KI-Analyse-Prozess des Arztbriefs (PDF) und schleust den Nutzer danach weiter.
-- **`/dashboard` & `/shop`**: Das sind die Vorzeige-Komponenten der Architektur. Das Dashboard nutzt `await nutritionMockApi.fetchDashboardData()`, der Shop nutzt `await nutritionMockApi.fetchShopInventory()`.
+- **`/onboarding`**: Fuehrt die Demo-Analyse ueber `POST /api/frontend/intake/full-analyze` aus und faellt bei Backend-Ausfall auf Mock-Daten zurueck.
+- **`/analysis`, `/dashboard`, `/recipes`, `/shop`, `/profile`, `/checkout`**: Nutzen Backend-BFF beziehungsweise Backend-APIs mit Mock-/Demo-Fallback. `/login` bleibt ein bewusster lokaler Demo-Gatekeeper.
 
 ### 🎨 Styling-Philosophie (CSS Modules statt Tailwind)
 Ein Großteil der Migration bestand darin, unzusammenhängende Tailwind-Klassen in logische DOM-Elemente zu refactoren:
@@ -69,8 +68,11 @@ Backend:
 ```bash
 cd backend
 .venv\Scripts\python.exe -m pip install -e .
+.venv\Scripts\python.exe scripts\seed\seed_demo_data.py --reset
 .venv\Scripts\python.exe -m pytest app/tests
 ```
+
+Der vollstaendige reproduzierbare Demo-Start inklusive Smoke-Checks ist in `docs/reports/dev2-dev3-final-readiness.md` dokumentiert.
 
 ## Design-Referenzen
 
