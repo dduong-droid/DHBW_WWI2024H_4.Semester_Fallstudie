@@ -52,6 +52,7 @@ export default function OnboardingPage() {
   const [intolerances, setIntolerances] = useState<Set<string>>(new Set());
   const [goals, setGoals] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   // File Upload State
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -139,12 +140,24 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    setUploadStatus(uploadedFiles.length > 0 ? 'Dokument-Metadaten werden im Demo-Backend geprüft...' : '');
+    const uploadedDocuments = uploadedFiles.length > 0 ? await recoveryApi.uploadDocuments(uploadedFiles) : [];
+    if (uploadedDocuments.length > 0) {
+      const backendUploads = uploadedDocuments.filter(doc => !doc.document_id.startsWith('doc_local_')).length;
+      setUploadStatus(
+        backendUploads === uploadedDocuments.length
+          ? 'Dokument-Metadaten wurden im Backend angenommen. Es erfolgt keine medizinische Auswertung.'
+          : 'Dokument-Metadaten wurden lokal als Demo-Fallback erfasst. Es erfolgt keine medizinische Auswertung.',
+      );
+    }
     await recoveryApi.submitOnboardingAnalysis({
       name, age: ageNum, weight: weightNum || null, height: heightNum || null, appetite,
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
       goals: Array.from(goals),
-      uploadedFiles: uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
+      uploadedFiles: uploadedDocuments.length > 0
+        ? uploadedDocuments.map(doc => ({ name: doc.filename, size: doc.size, type: doc.content_type }))
+        : uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
     });
     setSubmitting(false);
     router.push('/analysis');
@@ -514,6 +527,11 @@ export default function OnboardingPage() {
                         ))}
                       </div>
                     )}
+                    {uploadStatus && (
+                      <p style={{ marginTop: '1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                        {uploadStatus}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -556,8 +574,8 @@ export default function OnboardingPage() {
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><Shield size={22} /></div>
-            <span className={styles.securityTitle}>Verschlüsselt</span>
-            <span className={styles.securityDesc}>Transport und Zugriff sind fuer die Demo technisch abgegrenzt.</span>
+            <span className={styles.securityTitle}>Demo-Schutz</span>
+            <span className={styles.securityDesc}>Lokaler API-Key-Schutz fuer die Demo, keine produktive Authentifizierung.</span>
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><HeartPulse size={22} /></div>

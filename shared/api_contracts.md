@@ -13,6 +13,8 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - RiskFlag severity: `low`, `medium`, `high`
 - Recommendation readiness: `ready`, `reviewRequired`, `insufficientData`
 - NutritionPlan status: `draft`, `review_required`, `approved_mock`, `blocked`
+- Order status: `draft`, `pending`, `confirmed`, `processing`, `completed`, `cancelled`, `demo_failed`
+- Document upload status: `uploaded_demo`
 - SafetyCheck status: `clear`, `warning`, `blocked`
 - ProfessionalReview status: `pending`, `approved`, `rejected`, `changes_requested`
 
@@ -24,6 +26,7 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - Meal-Kits sind optionale Umsetzungshilfe und keine medizinische Therapie.
 - BFF-Endpunkte liefern frontend-nahe camelCase-Responses.
 - Fehlerformat: `{"error": {"code": "...", "message": "...", "details": ...}}`.
+- Dokumenten-Uploads im MVP speichern nur Metadaten, pruefen Dateityp/Groesse und fuehren keine medizinische Auswertung oder OCR durch.
 
 ## Wichtige Domain-Endpunkte
 
@@ -62,6 +65,7 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - `PATCH /api/professional-reviews/{review_id}`
 - `POST /api/analytics/events`
 - `GET /api/analytics/summary`
+- `POST /api/documents/upload`
 - `POST /api/orders`
 - `GET /api/orders/{order_id}`
 - `PATCH /api/orders/{order_id}/status`
@@ -77,6 +81,31 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - `POST /api/frontend/tracking/daily/{patient_id}/meal-box`
 - `GET /api/frontend/tracking/hydration/{patient_id}`
 - `POST /api/frontend/tracking/hydration/{patient_id}/water`
+
+## Dokumenten-Upload MVP
+
+`POST /api/documents/upload` akzeptiert genau eine Datei als Multipart-Feld `file`.
+
+Erlaubt:
+
+- `application/pdf`
+- `image/jpeg`
+- `image/png`
+- maximal 10 MB
+
+Response:
+
+```json
+{
+  "document_id": "doc_...",
+  "filename": "arztbrief-demo.pdf",
+  "content_type": "application/pdf",
+  "size": 12345,
+  "status": "uploaded_demo",
+  "analysis_available": false,
+  "note": "Dokumente werden im MVP nicht medizinisch ausgewertet."
+}
+```
 
 ## Frontend-Mock-Adapter
 

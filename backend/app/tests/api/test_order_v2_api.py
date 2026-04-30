@@ -88,6 +88,38 @@ def test_order_api_rejects_quantity_above_limit() -> None:
     assert response.status_code == 422
 
 
+def test_order_api_rejects_missing_patient() -> None:
+    payload = _base_order_payload("unknown_patient")
+    payload["items"] = [{"meal_kit_id": "produktdetails_wundheilungs_box", "quantity": 1}]
+
+    response = client.post("/api/orders", json=payload)
+
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "not_found"
+
+
+def test_order_api_rejects_empty_items() -> None:
+    patient_id = _create_patient()
+    payload = _base_order_payload(patient_id)
+    payload["items"] = []
+
+    response = client.post("/api/orders", json=payload)
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "validation_error"
+
+
+def test_order_api_rejects_non_positive_quantity() -> None:
+    patient_id = _create_patient()
+    payload = _base_order_payload(patient_id)
+    payload["items"] = [{"meal_kit_id": "produktdetails_wundheilungs_box", "quantity": 0}]
+
+    response = client.post("/api/orders", json=payload)
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "validation_error"
+
+
 def test_order_status_patch_allows_valid_and_blocks_invalid_transitions() -> None:
     patient_id = _create_patient()
     payload = _base_order_payload(patient_id)

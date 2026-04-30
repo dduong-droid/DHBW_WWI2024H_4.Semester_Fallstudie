@@ -13,6 +13,7 @@ import CartNavIcon from '../../components/CartNavIcon';
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [checkedMeals, setCheckedMeals] = useState<Set<string>>(new Set());
+  const [trackingNote, setTrackingNote] = useState('');
 
   useEffect(() => {
     recoveryApi.fetchDashboardData().then(d => {
@@ -23,16 +24,42 @@ export default function DashboardPage() {
     });
   }, []);
 
-  const toggleMealChecked = (mealId: string) => {
+  const toggleMealChecked = async (mealId: string) => {
+    const wasChecked = checkedMeals.has(mealId);
     setCheckedMeals(prev => {
       const next = new Set(prev);
-      if (next.has(mealId)) {
+      if (wasChecked) {
         next.delete(mealId);
       } else {
         next.add(mealId);
       }
       return next;
     });
+    if (!wasChecked) {
+      const result = await recoveryApi.markMealBoxEaten();
+      setTrackingNote(result.backendUsed ? 'Meal-Tracking im Backend gespeichert.' : 'Meal-Tracking lokal als Demo-Fallback gespeichert.');
+    }
+  };
+
+  const addWater = async (amountMl: number) => {
+    if (!data) return;
+    const previousCurrent = data.hydration.current;
+    setData({
+      ...data,
+      hydration: {
+        ...data.hydration,
+        current: Math.min(data.hydration.target, Number((data.hydration.current + amountMl / 1000).toFixed(1))),
+      },
+    });
+    const result = await recoveryApi.addHydrationWater(amountMl);
+    setData(current => current ? {
+      ...current,
+      hydration: {
+        current: result.backendUsed ? result.currentLiters : Math.min(current.hydration.target, Number((previousCurrent + amountMl / 1000).toFixed(1))),
+        target: result.backendUsed ? result.targetLiters : current.hydration.target,
+      },
+    } : current);
+    setTrackingNote(result.backendUsed ? 'Hydration im Backend gespeichert.' : 'Hydration lokal als Demo-Fallback gespeichert.');
   };
 
   // Loading State
@@ -136,6 +163,22 @@ export default function DashboardPage() {
             <div className={styles.progressBarBg}>
               <div className={styles.progressBarFill} style={{ width: `${hydrationPercent}%` }} />
             </div>
+            <button
+              type="button"
+              onClick={() => addWater(250)}
+              style={{
+                marginTop: '1rem',
+                border: '1px solid var(--border)',
+                background: 'var(--background)',
+                borderRadius: '9999px',
+                padding: '0.5rem 0.875rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                color: 'var(--text)',
+              }}
+            >
+              +250 ml
+            </button>
           </div>
 
           {/* Makros Card */}
@@ -270,6 +313,11 @@ export default function DashboardPage() {
               <div style={{ width: '100%', height: '0.625rem', background: 'rgba(51,199,88,0.1)', borderRadius: '9999px', overflow: 'hidden' }}>
                 <div style={{ width: `${data.weekProgress}%`, height: '100%', background: 'var(--color-primary)', borderRadius: '9999px', transition: 'width 1s ease' }} />
               </div>
+              {trackingNote && (
+                <p style={{ marginTop: '0.875rem', color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5 }}>
+                  {trackingNote}
+                </p>
+              )}
             </div>
           </div>
         </div>

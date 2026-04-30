@@ -8,6 +8,7 @@ from sqlalchemy import delete
 
 from app.db.base import TrackingRecord
 from app.db.session import db_session
+from app.modules.analytics.service import record_event
 from app.modules.frontend_bff.schemas import FrontendDailyProgress, FrontendHydrationProgress
 
 
@@ -64,6 +65,7 @@ def mark_meal_box_eaten(patient_id: str) -> FrontendDailyProgress:
         isMealBoxEaten=True,
     )
     _save_record(patient_id, daily=progress)
+    record_event("meal_box_tracked", patient_id=patient_id)
     return progress
 
 
@@ -81,6 +83,7 @@ def add_water(patient_id: str, amount_ml: int) -> FrontendHydrationProgress:
         targetMl=current.targetMl,
     )
     _save_record(patient_id, hydration=updated)
+    record_event("hydration_added", patient_id=patient_id, metadata={"amount_ml": amount_ml, "current_ml": updated.currentMl})
     return updated
 
 

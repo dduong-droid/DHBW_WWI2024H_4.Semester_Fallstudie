@@ -92,6 +92,16 @@ type FrontendHydrationProgress = {
   targetMl: number;
 };
 
+type DocumentUploadResult = {
+  document_id: string;
+  filename: string;
+  content_type: string;
+  size: number;
+  status: 'uploaded_demo';
+  analysis_available: boolean;
+  note: string;
+};
+
 type FullAnalyzeResponse = {
   patientId: string;
   intakeId: string;
@@ -134,6 +144,16 @@ export type CheckoutOrderInput = {
 export type CheckoutOrderResult = {
   orderId: string;
   deliveryWindow: string;
+  backendUsed: boolean;
+};
+
+export type TrackingActionResult = {
+  backendUsed: boolean;
+};
+
+export type HydrationActionResult = {
+  currentLiters: number;
+  targetLiters: number;
   backendUsed: boolean;
 };
 
@@ -180,7 +200,8 @@ function readStoredAnalysis(): RecoveryAnalysis | null {
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   headers.set('Accept', 'application/json');
-  if (init?.body) headers.set('Content-Type', 'application/json');
+  const isFormData = typeof FormData !== 'undefined' && init?.body instanceof FormData;
+  if (init?.body && !isFormData) headers.set('Content-Type', 'application/json');
   if (API_KEY) headers.set('X-API-Key', API_KEY);
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -543,6 +564,32 @@ export const recoveryApi = {
     }
   },
 
+  uploadDocuments: async (files: File[]): Promise<DocumentUploadResult[]> => {
+    const results: DocumentUploadResult[] = [];
+    for (const file of files) {
+      try {
+        const form = new FormData();
+        form.append('file', file);
+        results.push(await fetchJson<DocumentUploadResult>('/api/documents/upload', {
+          method: 'POST',
+          body: form,
+        }));
+      } catch (error) {
+        console.warn('[BFF fallback] Dokument-Upload nutzt nur lokale Metadaten:', error);
+        results.push({
+          document_id: `doc_local_${Math.random().toString(16).slice(2, 10)}`,
+          filename: file.name,
+          content_type: file.type || 'application/octet-stream',
+          size: file.size,
+          status: 'uploaded_demo',
+          analysis_available: false,
+          note: 'Dokumente werden im MVP nicht medizinisch ausgewertet.',
+        });
+      }
+    }
+    return results;
+  },
+
   fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {
     return readStoredAnalysis() || nutritionMockApi.fetchRecoveryAnalysis();
   },
@@ -586,6 +633,39 @@ export const recoveryApi = {
       return {
         orderId,
         deliveryWindow: input.timeSlot,
+        backendUsed: false,
+      };
+    }
+  },
+
+  markMealBoxEaten: async (): Promise<TrackingActionResult> => {
+    try {
+      await fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${getPatientId()}/meal-box`, {
+        method: 'POST',
+      });
+      return { backendUsed: true };
+    } catch (error) {
+      console.warn('[BFF fallback] Meal-Tracking bleibt lokal:', error);
+      return { backendUsed: false };
+    }
+  },
+
+  addHydrationWater: async (amountMl: number): Promise<HydrationActionResult> => {
+    try {
+      const progress = await fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${getPatientId()}/water`, {
+        method: 'POST',
+        body: JSON.stringify({ amountMl }),
+      });
+      return {
+        currentLiters: Number((progress.currentMl / 1000).toFixed(1)),
+        targetLiters: Number((progress.targetMl / 1000).toFixed(1)),
+        backendUsed: true,
+      };
+    } catch (error) {
+      console.warn('[BFF fallback] Hydration-Tracking bleibt lokal:', error);
+      return {
+        currentLiters: Number((amountMl / 1000).toFixed(1)),
+        targetLiters: 2.5,
         backendUsed: false,
       };
     }
