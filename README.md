@@ -35,6 +35,8 @@ Der zentrale Demo-Flow nutzt das FastAPI-Backend ueber `/api/frontend/...`, `/ap
 - `NEXT_PUBLIC_API_BASE_URL` zeigt lokal standardmaessig auf `http://127.0.0.1:8000`.
 - `NEXT_PUBLIC_API_KEY` kann fuer den lokalen Demo-API-Key genutzt werden, ist im Browser sichtbar und kein echtes Secret.
 - `frontend/src/services/mockApi.ts` bleibt als klarer Demo-/Fallback-Pfad aktiv, falls das Backend nicht erreichbar ist.
+- `NEXT_PUBLIC_DISABLE_MOCK_FALLBACK=true` schaltet den harten Integrationsmodus ein: API-Fehler werden nicht still durch Mockdaten ersetzt.
+- Das Backend erlaubt lokale Browser-Requests standardmaessig von `http://127.0.0.1:3000` und `http://localhost:3000`; bei Bedarf kann `FRONTEND_ORIGINS` als kommaseparierte Liste gesetzt werden.
 
 #### 3. Das UI: Routen & Views (`frontend/src/app/`)
 Wir setzen auf den modernen Next.js App Router (Dateisystembasiertes Routing):

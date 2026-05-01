@@ -11,6 +11,7 @@ import {
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const DISABLE_MOCK_FALLBACK = process.env.NEXT_PUBLIC_DISABLE_MOCK_FALLBACK === 'true';
 const DEFAULT_PATIENT_ID = 'demo_maria_post_op';
 const PATIENT_ID_STORAGE_KEY = 'food4recovery.patientId';
 const LAST_ANALYSIS_STORAGE_KEY = 'food4recovery.lastAnalysis';
@@ -197,6 +198,15 @@ function readStoredAnalysis(): RecoveryAnalysis | null {
   }
 }
 
+function fallbackOrThrow<T>(message: string, error: unknown, fallback: () => T | Promise<T>): T | Promise<T> {
+  const prefix = DISABLE_MOCK_FALLBACK ? '[BFF error]' : '[BFF fallback]';
+  console.warn(`${prefix} ${message}:`, error);
+  if (DISABLE_MOCK_FALLBACK) {
+    throw error;
+  }
+  return fallback();
+}
+
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   headers.set('Accept', 'application/json');
@@ -213,6 +223,25 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(`BFF request failed: ${response.status} ${response.statusText}`);
   }
   return response.json() as Promise<T>;
+}
+
+function normalizeConditionCode(code: string): string {
+  const normalized = code.trim().toLowerCase();
+  const aliases: Record<string, string> = {
+    post_op_recovery: 'post_op',
+    wound_healing: 'post_op',
+    chemotherapy_support: 'chemotherapy',
+    chemo_support: 'chemotherapy',
+    swallowing_issues: 'swallowing',
+    dysphagia: 'swallowing',
+    low_hydration: 'hydration',
+    dehydration_risk: 'hydration',
+  };
+  return aliases[normalized] || normalized;
+}
+
+function normalizeConditionCodes(codes: string[]): string[] {
+  return Array.from(new Set(codes.map(normalizeConditionCode)));
 }
 
 function mapRecipe(recipe: FrontendRecipe, type: DailyMeal['type'], label: string, time: string, checked = false): DailyMeal {
@@ -333,7 +362,7 @@ function mapBackendProfile(profile: BackendPatientProfile): PatientProfile {
     age: ageFromBirthDate(profile.birth_date),
     weight: profile.weight_kg,
     height: profile.height_cm,
-    conditions: profile.known_conditions,
+    conditions: normalizeConditionCodes(profile.known_conditions),
     allergies: profile.allergies,
     notes: profile.notes || '',
     completionPercent: 100,
@@ -507,13 +536,18 @@ export const recoveryApi = {
       const patientId = getPatientId();
       const [plan, daily, hydration] = await Promise.all([
         fetchJson<FrontendNutritionPlan>(`/api/frontend/nutrition-plan/${patientId}`),
-        fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(() => null),
-        fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${patientId}`).catch(() => null),
+        fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(error => {
+          if (DISABLE_MOCK_FALLBACK) throw error;
+          return null;
+        }),
+        fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${patientId}`).catch(error => {
+          if (DISABLE_MOCK_FALLBACK) throw error;
+          return null;
+        }),
       ]);
       return mapDashboardData(plan, daily, hydration);
     } catch (error) {
-      console.warn('[BFF fallback] Dashboard nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchDashboardData();
+      return fallbackOrThrow('Dashboard nutzt Mock-Daten', error, () => nutritionMockApi.fetchDashboardData());
     }
   },
 
@@ -522,8 +556,7 @@ export const recoveryApi = {
       const inventory = await fetchJson<FrontendShopInventory>('/api/frontend/shop/inventory');
       return inventory.availableMealKits.map(mapMealKit);
     } catch (error) {
-      console.warn('[BFF fallback] Shop nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchShopInventory();
+      return fallbackOrThrow('Shop nutzt Mock-Daten', error, () => nutritionMockApi.fetchShopInventory());
     }
   },
 
@@ -531,8 +564,7 @@ export const recoveryApi = {
     try {
       return mapMealKit(await fetchJson<FrontendMealKit>(`/api/frontend/shop/meal-kits/${id}`));
     } catch (error) {
-      console.warn('[BFF fallback] Meal-Kit nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchMealKit(id);
+      return fallbackOrThrow('Meal-Kit nutzt Mock-Daten', error, () => nutritionMockApi.fetchMealKit(id));
     }
   },
 
@@ -541,8 +573,7 @@ export const recoveryApi = {
       const meals = await fetchJson<FrontendCuratedMeal[]>(`/api/frontend/recipes/curated/${getPatientId()}`);
       return meals.map(mapCuratedMeal);
     } catch (error) {
-      console.warn('[BFF fallback] Rezepte nutzen Mock-Daten:', error);
-      return nutritionMockApi.fetchCuratedMeals();
+      return fallbackOrThrow('Rezepte nutzen Mock-Daten', error, () => nutritionMockApi.fetchCuratedMeals());
     }
   },
 
@@ -557,8 +588,7 @@ export const recoveryApi = {
       storeAnalysis(analysis);
       return analysis;
     } catch (error) {
-      console.warn('[BFF fallback] Onboarding nutzt Mock-Auswertung:', error);
-      const analysis = await nutritionMockApi.fetchRecoveryAnalysis();
+      const analysis = await fallbackOrThrow('Onboarding nutzt Mock-Auswertung', error, () => nutritionMockApi.fetchRecoveryAnalysis());
       storeAnalysis(analysis);
       return analysis;
     }
@@ -575,8 +605,7 @@ export const recoveryApi = {
           body: form,
         }));
       } catch (error) {
-        console.warn('[BFF fallback] Dokument-Upload nutzt nur lokale Metadaten:', error);
-        results.push({
+        results.push(await fallbackOrThrow('Dokument-Upload nutzt nur lokale Metadaten', error, () => ({
           document_id: `doc_local_${Math.random().toString(16).slice(2, 10)}`,
           filename: file.name,
           content_type: file.type || 'application/octet-stream',
@@ -584,22 +613,23 @@ export const recoveryApi = {
           status: 'uploaded_demo',
           analysis_available: false,
           note: 'Dokumente werden im MVP nicht medizinisch ausgewertet.',
-        });
+        })));
       }
     }
     return results;
   },
 
   fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {
-    return readStoredAnalysis() || nutritionMockApi.fetchRecoveryAnalysis();
+    const stored = readStoredAnalysis();
+    if (stored) return stored;
+    return fallbackOrThrow('Analysis nutzt Mock-Auswertung ohne gespeicherte BFF-Analyse', new Error('No stored BFF analysis found.'), () => nutritionMockApi.fetchRecoveryAnalysis());
   },
 
   fetchPatientProfile: async (): Promise<PatientProfile> => {
     try {
       return mapBackendProfile(await fetchJson<BackendPatientProfile>(`/api/patient-profile/${getPatientId()}`));
     } catch (error) {
-      console.warn('[BFF fallback] Profil nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchPatientProfile();
+      return fallbackOrThrow('Profil nutzt Mock-Daten', error, () => nutritionMockApi.fetchPatientProfile());
     }
   },
 
@@ -611,8 +641,7 @@ export const recoveryApi = {
       });
       return { success: true };
     } catch (error) {
-      console.warn('[BFF fallback] Profil-Speichern nutzt Mock-Daten:', error);
-      return nutritionMockApi.savePatientProfile(profile);
+      return fallbackOrThrow('Profil-Speichern nutzt Mock-Daten', error, () => nutritionMockApi.savePatientProfile(profile));
     }
   },
 
@@ -628,13 +657,11 @@ export const recoveryApi = {
         backendUsed: true,
       };
     } catch (error) {
-      console.warn('[BFF fallback] Checkout nutzt lokale Demo-Bestellung:', error);
-      const orderId = `F4R-${Math.floor(1000 + Math.random() * 9000)}-MOCK`;
-      return {
-        orderId,
+      return fallbackOrThrow('Checkout nutzt lokale Demo-Bestellung', error, () => ({
+        orderId: `F4R-${Math.floor(1000 + Math.random() * 9000)}-MOCK`,
         deliveryWindow: input.timeSlot,
         backendUsed: false,
-      };
+      }));
     }
   },
 
@@ -645,8 +672,7 @@ export const recoveryApi = {
       });
       return { backendUsed: true };
     } catch (error) {
-      console.warn('[BFF fallback] Meal-Tracking bleibt lokal:', error);
-      return { backendUsed: false };
+      return fallbackOrThrow('Meal-Tracking bleibt lokal', error, () => ({ backendUsed: false }));
     }
   },
 
@@ -662,12 +688,11 @@ export const recoveryApi = {
         backendUsed: true,
       };
     } catch (error) {
-      console.warn('[BFF fallback] Hydration-Tracking bleibt lokal:', error);
-      return {
+      return fallbackOrThrow('Hydration-Tracking bleibt lokal', error, () => ({
         currentLiters: Number((amountMl / 1000).toFixed(1)),
         targetLiters: 2.5,
         backendUsed: false,
-      };
+      }));
     }
   },
 };
