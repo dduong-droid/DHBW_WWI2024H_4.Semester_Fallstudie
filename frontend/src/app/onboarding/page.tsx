@@ -13,7 +13,6 @@ import { recoveryApi } from '../../services/apiClient';
 
 const STEPS = [
   { id: 'welcome', label: 'Willkommen' },
-  { id: 'personal', label: 'Persönliche Daten' },
   { id: 'health', label: 'Gesundheit' },
   { id: 'preferences', label: 'Ernährung' },
   { id: 'upload', label: 'Dokumente' },
@@ -44,9 +43,7 @@ export default function OnboardingPage() {
 
   // Form State
   const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
+  // Age, Weight, Height are collected in Profile
   const [appetite, setAppetite] = useState('normal');
   const [allergies, setAllergies] = useState<Set<string>>(new Set());
   const [intolerances, setIntolerances] = useState<Set<string>>(new Set());
@@ -106,22 +103,16 @@ export default function OnboardingPage() {
     setter(next);
   };
 
-  // Validierung: Numerische Felder müssen in sinnvollen Bereichen liegen
-  const ageNum = Number(age);
-  const weightNum = Number(weight);
-  const heightNum = Number(height);
+  const progressPercent = Math.round(((step) / (STEPS.length - 1)) * 100);
 
-  const ageValid = age.trim().length > 0 && ageNum >= 1 && ageNum <= 120 && Number.isInteger(ageNum);
-  const weightValid = !weight || (weightNum >= 10 && weightNum <= 400);
-  const heightValid = !height || (heightNum >= 50 && heightNum <= 280);
+  // Keine numerische Validierung für Age/Weight/Height mehr nötig
 
   const canGoNext = (): boolean => {
     switch (step) {
       case 0: return true; // Welcome
-      case 1: return name.trim().length > 0 && ageValid && weightValid && heightValid; // Personal
-      case 2: return goals.size > 0; // Health goals
-      case 3: return true; // Preferences (optional)
-      case 4: return true; // Upload (optional)
+      case 1: return goals.size > 0; // Health goals
+      case 2: return true; // Preferences (optional)
+      case 3: return true; // Upload (optional)
       default: return false;
     }
   };
@@ -151,7 +142,11 @@ export default function OnboardingPage() {
       );
     }
     await recoveryApi.submitOnboardingAnalysis({
-      name, age: ageNum, weight: weightNum || null, height: heightNum || null, appetite,
+      name, 
+      age: 0, // In dieser Demo-Version im Profil erfasst
+      weight: null, 
+      height: null, 
+      appetite,
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
       goals: Array.from(goals),
@@ -282,16 +277,14 @@ export default function OnboardingPage() {
 
               <div style={{ marginBottom: '1.5rem' }}>
                 <h1 className={styles.title} style={{ fontSize: '2rem', textAlign: 'left' }}>
-                  {step === 1 && 'Erzähl uns von dir'}
-                  {step === 2 && 'Deine Gesundheitsziele'}
-                  {step === 3 && 'Ernährungspräferenzen'}
-                  {step === 4 && 'Dokumente hochladen'}
+                  {step === 1 && 'Deine Gesundheitsziele'}
+                  {step === 2 && 'Ernährungspräferenzen'}
+                  {step === 3 && 'Dokumente hochladen'}
                 </h1>
                 <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', lineHeight: 1.6 }}>
-                  {step === 1 && 'Diese Angaben helfen uns, einen auf dich abgestimmten Plan zu erstellen.'}
-                  {step === 2 && 'Wähle die Bereiche, in denen du Unterstützung brauchst.'}
-                  {step === 3 && 'Allergien und Unverträglichkeiten beeinflussen deinen Ernährungsplan.'}
-                  {step === 4 && 'Optional: Lade Unterlagen hoch, um den Demo-Prozess sichtbar zu machen. In dieser Version erfolgt keine echte medizinische Dokumentenauswertung.'}
+                  {step === 1 && 'Wähle die Bereiche, in denen du Unterstützung brauchst.'}
+                  {step === 2 && 'Allergien und Unverträglichkeiten beeinflussen deinen Ernährungsplan.'}
+                  {step === 3 && 'Optional: Lade Unterlagen hoch, um den Demo-Prozess sichtbar zu machen. In dieser Version erfolgt keine echte medizinische Dokumentenauswertung.'}
                 </p>
               </div>
 
@@ -304,33 +297,8 @@ export default function OnboardingPage() {
                 border: '1px solid var(--border)',
               }}>
 
-                {/* Step 1: Personal Data */}
+                {/* Step 1: Health Goals */}
                 {step === 1 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <InputField id="ob-name" label="Name" value={name} onChange={setName} placeholder="z.B. Maria" type="text" />
-                    <InputField id="ob-age" label="Alter *" value={age}
-                      onChange={v => setAge(sanitizeNumberInput(v))}
-                      placeholder="z.B. 28" type="number" suffix="Jahre"
-                      min={1} max={120}
-                      error={age && !ageValid ? 'Bitte gib ein Alter zwischen 1 und 120 ein.' : undefined}
-                    />
-                    <InputField id="ob-weight" label="Gewicht" value={weight}
-                      onChange={v => setWeight(sanitizeNumberInput(v))}
-                      placeholder="z.B. 65" type="number" suffix="kg"
-                      min={10} max={400}
-                      error={weight && !weightValid ? 'Bitte gib ein Gewicht zwischen 10 und 400 kg ein.' : undefined}
-                    />
-                    <InputField id="ob-height" label="Größe" value={height}
-                      onChange={v => setHeight(sanitizeNumberInput(v))}
-                      placeholder="z.B. 170" type="number" suffix="cm"
-                      min={50} max={280}
-                      error={height && !heightValid ? 'Bitte gib eine Größe zwischen 50 und 280 cm ein.' : undefined}
-                    />
-                  </div>
-                )}
-
-                {/* Step 2: Health Goals */}
-                {step === 2 && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {GOAL_OPTIONS.map(g => (
                       <label key={g.id} style={{
@@ -359,8 +327,8 @@ export default function OnboardingPage() {
                   </div>
                 )}
 
-                {/* Step 3: Preferences */}
-                {step === 3 && (
+                {/* Step 2: Preferences */}
+                {step === 2 && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     {/* Appetite */}
                     <div>
@@ -432,8 +400,8 @@ export default function OnboardingPage() {
                   </div>
                 )}
 
-                {/* Step 4: Document Upload */}
-                {step === 4 && (
+                {/* Step 3: Document Upload */}
+                {step === 3 && (
                   <div>
                     {/* Hidden file input */}
                     <input
