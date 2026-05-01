@@ -1,6 +1,6 @@
 # Shared API Contracts
 
-Leichte teamuebergreifende Contract-Uebersicht fuer das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts` und `frontend/src/services/mockApi.ts`.
+Leichte teamuebergreifende Contract-Uebersicht fuer das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts`. Die zentrale Frontend-API-Schicht liegt in `frontend/src/services/apiClient.ts`; `frontend/src/services/mockApi.ts` bleibt Demo-/Fallback-Schicht.
 
 ## MVP Flow
 
@@ -107,9 +107,9 @@ Response:
 }
 ```
 
-## Frontend-Mock-Adapter
+## Frontend-API-Adapter und Mock-Fallback
 
-Das Frontend nutzt aktuell `nutritionMockApi` als Mock-Schicht. Relevante Methoden:
+Das Frontend nutzt `recoveryApi` aus `frontend/src/services/apiClient.ts` als zentrale API-Schicht. Backend/BFF wird bevorzugt; `nutritionMockApi` aus `mockApi.ts` bleibt Demo-/Fallback-Schicht. Relevante Methoden:
 
 - `fetchDashboardData()`
 - `fetchShopInventory()`
@@ -118,4 +118,4 @@ Das Frontend nutzt aktuell `nutritionMockApi` als Mock-Schicht. Relevante Method
 - `fetchPatientProfile()`
 - `savePatientProfile(profile)`
 
-Diese Methoden duerfen im UI nicht als produktive Backend-Integration verkauft werden, solange sie noch Mock-Daten liefern.
+Diese Methoden duerfen im UI nicht als produktive Backend-Integration verkauft werden, wenn `mockApi` als Fallback greift. Fuer Integrationspruefungen kann `NEXT_PUBLIC_DISABLE_MOCK_FALLBACK=true` gesetzt werden, damit API-Fehler sichtbar bleiben.

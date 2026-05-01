@@ -256,7 +256,7 @@ Positiv:
 
 Noch zu entschaerfen:
 
-- `frontend/src/app/profile/page.tsx` enthaelt: "Du hast die volle Kontrolle über deine Daten gemäß DSGVO." Das ist fuer eine Demo zu stark. Besser: "Demo-Datenmanagement im lokalen Modus".
+- Zum Analysezeitpunkt enthielt `frontend/src/app/profile/page.tsx`: "Du hast die volle Kontrolle über deine Daten gemäß DSGVO." Das war fuer eine Demo zu stark und wurde im finalen Readiness-Durchlauf auf eine Demo-Datenschutzformulierung entschaerft.
 - Einige UI-Texte wie "optimale Abstimmung" oder "stärken" sind nicht kritisch, aber sollten in Health-Tech-Kontext vorsichtig bleiben.
 - `Therapie` taucht in Code/Docs teils als Fachkontext auf; nicht automatisch falsch, aber nicht als Leistungsversprechen verwenden.
 

@@ -19,7 +19,7 @@ Das Repository enthaelt ein Next.js-Frontend, das im **Frontend-Driven Developme
 
 ### Die Architektur-Ziele
 1. **Frontend-Driven:** Frontend-nahe View-Models und Mock-Daten liegen in `frontend/src/services/mockApi.ts` und `frontend/src/types/apiContracts.ts`. Das echte Backend kann schrittweise an die BFF-Contracts angeschlossen werden.
-2. **Next.js App Router (Server Components):** Einsatz eines modernen Datenflusses. Im Dashboard rufen wir die Daten asynchron direkt in der `page.tsx` ab (Server Component), um den Code schlanker zu machen und das Laden im Client zu optimieren.
+2. **Next.js App Router mit Client-Screens:** Einsatz des dateibasierten App Routers. Interaktive Screens wie Dashboard, Onboarding, Profil und Checkout laufen als Client Components und laden Daten zentral ueber `recoveryApi`/`apiClient`; das Backend-BFF wird bevorzugt, `mockApi` bleibt Demo-Fallback.
 3. **Apple Human Interface Guidelines (HIG):** Wir haben alle TailwindCSS-Fragmente aus den Design-Skizzen verbannt und auf stark gekapselte **Vanilla CSS Module** (`page.module.css`) umgestellt. Damit gewährleisten wir ein sauberes, wartbares Glassmorphism-UI, konsistente Abstände und perfekte Render-Performance ohne CSS-Framework-Überhang.
 4. **Health-Tech-Safety:** UI-Texte sollen Orientierung geben, aber keine Diagnose, Heilversprechen oder medizinische Freigabe formulieren.
 
