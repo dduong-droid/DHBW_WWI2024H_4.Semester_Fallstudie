@@ -534,7 +534,7 @@ export default function OnboardingPage() {
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><Shield size={22} /></div>
             <span className={styles.securityTitle}>Demo-Schutz</span>
-            <span className={styles.securityDesc}>Lokaler API-Key-Schutz fuer die Demo, keine produktive Authentifizierung.</span>
+            <span className={styles.securityDesc}>Lokaler API-Key-Schutz für die Demo, keine produktive Authentifizierung.</span>
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><HeartPulse size={22} /></div>

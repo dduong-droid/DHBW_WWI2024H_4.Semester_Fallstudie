@@ -12,7 +12,7 @@
   - Komponenten: Warenkorb, Meal-Kit-Modal, kuratierte Meal-Cards.
   - Mock-Daten: `frontend/src/services/mockApi.ts`.
 - Backend-/API-Struktur:
-  - Module fuer Patient Profile, Intake, Assessment, Risk Flags, Recommendations, Nutrition Plans, Recipes, Meal Kits, Shopping Lists, Tracking, Reviews, Analytics, Orders und Frontend-BFF.
+  - Module für Patient Profile, Intake, Assessment, Risk Flags, Recommendations, Nutrition Plans, Recipes, Meal Kits, Shopping Lists, Tracking, Reviews, Analytics, Orders und Frontend-BFF.
   - Frontend-BFF unter `/api/frontend/...`.
 - Relevante Startprobleme:
   - `npm run lint` ist bekannt rot durch `next lint`/ESLint-Options-Inkompatibilitaet.
@@ -22,16 +22,16 @@
 
 ## Designanalyse aus docs/designs
 - Wichtigste visuelle Merkmale:
-  - Sehr heller mintgruener Hintergrund, viel Weissraum, ruhige Health-Tech-Stimmung.
-  - Kraeftiges Gruen als Primaerfarbe fuer CTAs, aktive States und Fortschritt.
-  - Weisse, weiche Cards mit grossen Radien, leichten Schatten und klarer visueller Hierarchie.
+  - Sehr heller mintgrüner Hintergrund, viel Weissraum, ruhige Health-Tech-Stimmung.
+  - Kraeftiges Grün als Primaerfarbe für CTAs, aktive States und Fortschritt.
+  - Weisse, weiche Cards mit großen Radien, leichten Schatten und klarer visueller Hierarchie.
   - Mobile-first Screens mit schmaler App-Breite, Bottom-Navigation in App-Screens und kompakter Top-Navigation.
-  - Grosse, klare Headlines; kleine Uppercase-Metatexte; kurze erklaerende Copy.
-  - Icons in runden, hellgruennen Containern.
+  - Große, klare Headlines; kleine Uppercase-Metatexte; kurze erklärende Copy.
+  - Icons in runden, hellgrünnen Containern.
 - Abgeleitete UI-Regeln:
-  - Primaere Aktionen als breite gruene Buttons.
+  - Primaere Aktionen als breite grüne Buttons.
   - Medizinische Inhalte als Orientierung formulieren, nicht als Diagnose.
-  - Cards fuer Analyse, Tracking, Mahlzeiten und Dokumente konsistent nutzen.
+  - Cards für Analyse, Tracking, Mahlzeiten und Dokumente konsistent nutzen.
   - Empty States und Upload States sichtbar und ruhig halten.
 - Offene Designluecken:
   - Desktop-Ansichten sind nur teilweise in den Designs abgedeckt.
@@ -84,9 +84,9 @@
   - Startseite hat jetzt definierte Styles und sicheren CTA-Flow.
   - Startseiten-Copy ist als Orientierung formuliert.
 - Checks:
-  - `npm.cmd run build`: gruen, Build erfolgreich; bekannte ESLint-Options-Warnung erscheint weiterhin.
-  - `npx.cmd tsc --noEmit`: gruen nach abgeschlossenem Build.
-  - Erster paralleler Typecheck waehrend `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
+  - `npm.cmd run build`: grün, Build erfolgreich; bekannte ESLint-Options-Warnung erscheint weiterhin.
+  - `npx.cmd tsc --noEmit`: grün nach abgeschlossenem Build.
+  - Erster paralleler Typecheck während `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
 - Ergebnis:
   - Startseite ist jetzt sichtbar gestylt, designnah und sicher formuliert.
 - Commit erstellt: Ja.
@@ -96,35 +96,35 @@
 - Push-Ergebnis: erfolgreich nach `origin/codex/food4recovery-project-loop`.
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
-  - Analyse-/Empfehlungsuebersicht in den Demo-Flow integrieren.
+  - Analyse-/Empfehlungsübersicht in den Demo-Flow integrieren.
 
 ### Iteration 2
 - Ziel:
-  - Fehlende Analyse-/Empfehlungsseite fuer den Demo-Flow ergaenzen.
+  - Fehlende Analyse-/Empfehlungsseite für den Demo-Flow ergänzen.
   - Onboarding nach Upload/Submit nicht direkt ins Dashboard, sondern in eine sichere Auswertung fuehren.
   - Demo-Analyse klar als regelbasierte Orientierung kennzeichnen.
 - Umsetzung:
   - Neue Route `/analysis` mit Progress-Card, empfohlener Meal-Kit-Orientierung, Scores, Sicherheitsnotizen und naechsten Schritten.
-  - `nutritionMockApi.fetchRecoveryAnalysis()` als gekapselte Mock-/Rule-Based-Datenquelle ergaenzt.
+  - `nutritionMockApi.fetchRecoveryAnalysis()` als gekapselte Mock-/Rule-Based-Datenquelle ergänzt.
   - Onboarding-Submit leitet nach `/analysis`.
-  - Zu starke Onboarding-Texte zu Dokumentenauswertung und fachlicher Sicherheit entschaerft.
+  - Zu starke Onboarding-Texte zu Dokumentenauswertung und fachlicher Sicherheit entschärft.
 - Dateien:
   - `frontend/src/app/analysis/page.tsx`
   - `frontend/src/app/analysis/page.module.css`
   - `frontend/src/app/onboarding/page.tsx`
   - `frontend/src/services/mockApi.ts`
 - Bugs gefunden:
-  - Demo-Flow hatte keine eigenstaendige Analyse-/Empfehlungsuebersicht.
+  - Demo-Flow hatte keine eigenstaendige Analyse-/Empfehlungsübersicht.
   - Onboarding versprach "praezisere Empfehlungen" durch Upload, obwohl keine echte Dokumentenauswertung existiert.
-  - Trust-Copy "Medizinisch geprüft" war fuer die Demo zu stark.
+  - Trust-Copy "Medizinisch geprüft" war für die Demo zu stark.
 - Bugs behoben:
   - Analyse-Seite eingefuegt.
   - Dokumenten-Upload als Demo-Prozess ohne echte medizinische Auswertung gekennzeichnet.
   - Safety-Copy vorsichtiger formuliert.
 - Checks:
-  - `npm.cmd run build`: gruen, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Options-Warnung bleibt.
-  - `npx.cmd tsc --noEmit`: gruen.
-  - Suche nach riskanten UI-Claims in App/Mock-Dateien: keine Treffer fuer die geprueften Muster.
+  - `npm.cmd run build`: grün, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Options-Warnung bleibt.
+  - `npx.cmd tsc --noEmit`: grün.
+  - Suche nach riskanten UI-Claims in App/Mock-Dateien: keine Treffer für die geprüften Muster.
 - Ergebnis:
   - Demo-Flow ist jetzt logisch: Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop.
 - Commit erstellt: Ja.
@@ -142,10 +142,10 @@
   - Rezeptseite und Meal-Kit-Texte entschärfen.
   - Offensichtliche TypeScript-Smells in Rezept-Komponenten beseitigen.
 - Umsetzung:
-  - Rezeptseite von "medizinische Empfehlungen"/"Ernaehrungsaerzte"/"reine Wirkung" auf Demo-Kuration und Orientierung umformuliert.
+  - Rezeptseite von "medizinische Empfehlungen"/"Ernährungsärzte"/"reine Wirkung" auf Demo-Kuration und Orientierung umformuliert.
   - Shop-Hero von "klinisch entwickelt" und spezifischer Genesungsphase auf recovery-orientierte Demo-Option umformuliert.
   - Warenkorb-Text "Therapie-Versand" durch "Gekuehlte Lieferung" ersetzt.
-  - Mock-Beschreibungen fuer Meal-Kits, Dashboard-Mahlzeiten und Rezepte vorsichtiger formuliert.
+  - Mock-Beschreibungen für Meal-Kits, Dashboard-Mahlzeiten und Rezepte vorsichtiger formuliert.
   - `CuratedMealCard`, `CuratedMealModal` und Rezepte-Seite mit `CuratedMeal` typisiert; `@ts-ignore`, `any` und `as any` entfernt.
 - Dateien:
   - `frontend/src/app/recipes/page.tsx`
@@ -164,11 +164,11 @@
   - Riskante Formulierungen entfernt oder vorsichtiger gemacht.
   - Rezept-Komponenten und Modal-Typing verbessert.
 - Checks:
-  - Suche nach riskanten Claim-Mustern: keine Treffer fuer gepruefte Muster.
-  - Suche nach `@ts-ignore`, `: any`, `as any`: keine Treffer in geprueften Frontend-Dateien.
-  - `npm.cmd run build`: gruen, bekannte ESLint-Options-Warnung bleibt.
-  - `npx.cmd tsc --noEmit`: gruen nach abgeschlossenem Build.
-  - Erster paralleler Typecheck waehrend `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
+  - Suche nach riskanten Claim-Mustern: keine Treffer für geprüfte Muster.
+  - Suche nach `@ts-ignore`, `: any`, `as any`: keine Treffer in geprüften Frontend-Dateien.
+  - `npm.cmd run build`: grün, bekannte ESLint-Options-Warnung bleibt.
+  - `npx.cmd tsc --noEmit`: grün nach abgeschlossenem Build.
+  - Erster paralleler Typecheck während `next build`: rot wegen transient fehlender `.next/types`, danach erfolgreich wiederholt.
 - Ergebnis:
   - Frontend-Copy ist deutlich sicherer und die Rezept-Komponenten sind sauberer typisiert.
 - Commit erstellt: Ja.
@@ -178,14 +178,14 @@
 - Push-Ergebnis: erfolgreich nach `origin/codex/food4recovery-project-loop`.
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
-  - Danach optional Dev-Smoke und Backend-Testlauf fuer Gesamtstatus.
+  - Danach optional Dev-Smoke und Backend-Testlauf für Gesamtstatus.
 
 ### Iteration 4
 - Ziel:
-  - Abschliessende Projektverifikation fuer den erreichten Demo-Stand.
+  - Abschließende Projektverifikation für den erreichten Demo-Stand.
   - Build, Typecheck, Lint, Backend-Tests und Dev-Smoke dokumentieren.
 - Umsetzung:
-  - Keine Produkt-Code-Aenderungen.
+  - Keine Produkt-Code-Änderungen.
   - Finalen Check-Status in diesem Report festgehalten.
 - Dateien:
   - `docs/bug-reports/project-loop-report.md`
@@ -195,13 +195,13 @@
   - Keine weiteren Code-Bugs in dieser Iteration.
 - Checks:
   - `npm.cmd run lint`: rot, Invalid Options (`useEslintrc`, `extensions`, `resolvePluginsRelativeTo`, `rulePaths`, `ignorePath`, `reportUnusedDisableDirectives`).
-  - `npm.cmd run build`: gruen, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Warnung wird im Build ausgegeben, Build endet erfolgreich.
-  - `npx.cmd tsc --noEmit`: gruen.
-  - `.venv\Scripts\python.exe -m pytest app/tests`: gruen, 48 passed.
-  - Dev-Smoke mit `npm.cmd run dev -- --hostname 127.0.0.1 --port 3000`: gruen.
+  - `npm.cmd run build`: grün, 12 statische Seiten inklusive `/analysis`; bekannte ESLint-Warnung wird im Build ausgegeben, Build endet erfolgreich.
+  - `npx.cmd tsc --noEmit`: grün.
+  - `.venv\Scripts\python.exe -m pytest app/tests`: grün, 48 passed.
+  - Dev-Smoke mit `npm.cmd run dev -- --hostname 127.0.0.1 --port 3000`: grün.
   - Smoke-Routen: `/`, `/onboarding`, `/analysis`, `/dashboard` jeweils HTTP 200.
 - Ergebnis:
-  - Projekt ist fuer eine DHBW-Demo teilweise bis gut praesentierbar; die groessten Demo-Flow-Luecken sind geschlossen.
+  - Projekt ist für eine DHBW-Demo teilweise bis gut präsentierbar; die größten Demo-Flow-Luecken sind geschlossen.
 - Commit erstellt: Nein, folgt nach Report-Update.
 - Commit-Message: geplant `docs: record project loop verification`.
 - Commit-Hash: offen.
@@ -210,7 +210,7 @@
 - Aktueller Branch: `codex/food4recovery-project-loop`.
 - Nächste Schritte:
   - Lint-Tooling separat reparieren.
-  - Browser-Screenshots visuell gegen Design-PNGs pruefen.
+  - Browser-Screenshots visuell gegen Design-PNGs prüfen.
   - API-Adapter mit Mock-Fallback als naechste technische Integration.
 
 ## Offene Bugs
@@ -227,27 +227,27 @@
   - Bereich: Datenfluss
   - Empfohlener Fix: API-Adapter mit Fallback-Mocks einfuehren.
 - Bug: Dokumenten-Upload hat keine echte Analyse.
-  - Schweregrad: Niedrig fuer Demo, Mittel fuer Produkt
+  - Schweregrad: Niedrig für Demo, Mittel für Produkt
   - Bereich: Onboarding
   - Empfohlener Fix: Demo-Analyse-State klar kennzeichnen.
 
 ## Präsentationsstatus
 - Teilweise bis gut.
-- Begründung: App startet lokal, Build und Typecheck laufen, Backend-Tests sind gruen, zentrale Demo-Routen sind per Dev-Smoke erreichbar. Der Flow Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop ist nachvollziehbar. Offen bleiben Lint-Tooling, Security-Update fuer Next, visuelle Feinpruefung im Browser und tiefere echte API-Anbindung.
+- Begründung: App startet lokal, Build und Typecheck laufen, Backend-Tests sind grün, zentrale Demo-Routen sind per Dev-Smoke erreichbar. Der Flow Start -> Onboarding/Upload -> Analyse -> Dashboard/Rezepte/Shop ist nachvollziehbar. Offen bleiben Lint-Tooling, Security-Update für Next, visuelle Feinprüfung im Browser und tiefere echte API-Anbindung.
 
 ## Restaufwand
 - Bis 100 Prozent fehlt:
-  - Mehr Designangleichung fuer Onboarding, Analyse/Dashboard, Rezepte und Tracking.
+  - Mehr Designangleichung für Onboarding, Analyse/Dashboard, Rezepte und Tracking.
   - API-Adapter/Fallback-Konzept im Frontend.
   - Lint-Tooling-Fix.
-  - Medizinische Copy-Pruefung in allen Seiten.
-  - Browser-Smoke-Screenshots fuer Desktop/Mobile.
-- Kritisch fuer die Fallstudie:
+  - Medizinische Copy-Prüfung in allen Seiten.
+  - Browser-Smoke-Screenshots für Desktop/Mobile.
+- Kritisch für die Fallstudie:
   - Durchgehender Demo-Flow und serioese Health-Tech-Kommunikation.
   - Keine riskanten medizinischen Aussagen.
   - Build/Typecheck/Backend-Tests nachvollziehbar.
   - Lint-Tooling als bekannter offener Punkt transparent dokumentieren.
 - Nice-to-have:
   - Echte Upload-Verarbeitung/OCR.
-  - Vollstaendige API-Anbindung statt Mock-Fallback.
+  - Vollständige API-Anbindung statt Mock-Fallback.
   - Feinpolierte Desktop-Visuals.

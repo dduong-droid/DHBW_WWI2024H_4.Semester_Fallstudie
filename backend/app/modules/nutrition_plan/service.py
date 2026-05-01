@@ -34,7 +34,7 @@ def _daily_meals(plan: NutritionPlan) -> list[dict[str, object]]:
                 "dinner": day.meals.dinner.name,
                 "snacks": [snack.name for snack in day.meals.snacks],
                 "hydration_hint": plan.hydration_hint,
-                "daily_note": "Alltagstauglich umsetzen; bei Beschwerden oder Unsicherheit fachlich rueckfragen.",
+                "daily_note": "Alltagstauglich umsetzen; bei Beschwerden oder Unsicherheit fachlich rückfragen.",
             }
         )
     return meals
@@ -74,7 +74,7 @@ def create_nutrition_plan_from_recommendation(payload: NutritionPlanCreateFromRe
         focus=weekly_plan.focus,
         status=plan_status,
         weekly_plan=weekly_plan,
-        hydration_hint="Ziel: regelmaessig trinken; bei Durchfall, Erbrechen oder Schluckproblemen fachlich rueckfragen.",
+        hydration_hint="Ziel: regelmäßig trinken; bei Durchfall, Erbrechen oder Schluckproblemen fachlich rückfragen.",
         preparation_complexity="low" if "Einfach vorzubereitende Mahlzeiten wurden bevorzugt." in weekly_plan.adjustments else "medium",
         rationale=recommendation.rationale,
         safety_notes=safety_notes,

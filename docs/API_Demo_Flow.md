@@ -2,7 +2,7 @@
 
 ## Ziel
 
-Dieser Flow zeigt den kompletten Dev2-Backend-Kern fuer die Abgabe: Aus einem strukturierten Intake entsteht ein abgegrenzter Planentwurf mit Risk Flags, Shopping List, Safety Check, Tracking, Professional Review und Privacy Export. Die Automatik ersetzt keine aerztliche Behandlung und keine professionelle Ernaehrungsberatung.
+Dieser Flow zeigt den kompletten Dev2-Backend-Kern für die Abgabe: Aus einem strukturierten Intake entsteht ein abgegrenzter Planentwurf mit Risk Flags, Shopping List, Safety Check, Tracking, Professional Review und Privacy Export. Die Automatik ersetzt keine ärztliche Behandlung und keine professionelle Ernährungsberatung.
 
 ## Vorbereitung
 
@@ -65,7 +65,7 @@ Erwartet: `patient_id`, Stammdaten, Consent.
 POST /api/patients/demo_maria_post_op/intake
 ```
 
-Request ist das bestehende `QuestionnaireContent`-Schema. Wichtige Felder fuer die Demo sind Appetit, Essmenge, Mahlzeiten, Trinkmenge, Beschwerden, Allergien/Unvertraeglichkeiten, Kochmoeglichkeit und Unterstuetzung.
+Request ist das bestehende `QuestionnaireContent`-Schema. Wichtige Felder für die Demo sind Appetit, Essmenge, Mahlzeiten, Trinkmenge, Beschwerden, Allergien/Unverträglichkeiten, Kochmöglichkeit und Unterstützung.
 
 Erwartet: `intake_id`, `derived_flags`, `status`.
 
@@ -82,7 +82,7 @@ Erwartet:
 - `risk_flags`
 - `main_problems`
 
-Bei High-Risk-Faellen wird `reviewRequired` oder `insufficientData` sichtbar.
+Bei High-Risk-Fällen wird `reviewRequired` oder `insufficientData` sichtbar.
 
 ## 4. Recommendation analysieren
 
@@ -125,7 +125,7 @@ Erwartet:
 - `linked_risk_flags`
 - `safety_notes`
 
-Wichtig: Kritische Plaene sind Entwuerfe und keine automatische medizinische Freigabe.
+Wichtig: Kritische Pläne sind Entwuerfe und keine automatische medizinische Freigabe.
 
 ## 6. Shopping List erzeugen
 
@@ -226,8 +226,8 @@ PATCH /api/professional-reviews/{review_id}
 {
   "status": "approved",
   "reviewer_role": "nutritionist",
-  "reviewer_name": "Demo Ernaehrungsberatung",
-  "comments": "Mock-Freigabe fuer die Abgabe."
+  "reviewer_name": "Demo Ernährungsberatung",
+  "comments": "Mock-Freigabe für die Abgabe."
 }
 ```
 
@@ -247,7 +247,7 @@ Erwartet:
 - Risk-Flag-Haeufigkeiten
 - Review- und Funnel-Kennzahlen
 
-Analytics dient der Produkt- und Prozessverbesserung, nicht medizinischer Ueberwachung.
+Analytics dient der Produkt- und Prozessverbesserung, nicht medizinischer Überwachung.
 
 ## 12. Privacy Export/Delete zeigen
 
@@ -256,6 +256,6 @@ GET /api/patients/{patient_id}/export
 DELETE /api/patients/{patient_id}
 ```
 
-Export trennt Profil, Frageboegen, Assessments, Risk Flags, Recommendations, Plaene, Shopping Lists, Reviews, Orders, Tracking und Analytics Events.
+Export trennt Profil, Fragebögen, Assessments, Risk Flags, Recommendations, Pläne, Shopping Lists, Reviews, Orders, Tracking und Analytics Events.
 
-Delete entfernt die patientenbezogenen Daten fuer diese Demo-ID.
+Delete entfernt die patientenbezogenen Daten für diese Demo-ID.

@@ -52,7 +52,7 @@ def _detect_tracking_risk_flags(patient_id: str, tracking_id: str, payload: Symp
                 title="Tracking zeigt sehr geringe Aufnahme",
                 description="Appetit oder Mahlzeiten liegen im kritischen Bereich.",
                 triggered_by=["tracking.appetite_score", "tracking.meals_completed"],
-                action="Fall zur professionellen Pruefung markieren.",
+                action="Fall zur professionellen Prüfung markieren.",
                 blocks_plan=True,
             )
         )
@@ -63,10 +63,10 @@ def _detect_tracking_risk_flags(patient_id: str, tracking_id: str, payload: Symp
                 tracking_id=tracking_id,
                 flag_type="tracking_high_nausea",
                 severity="medium",
-                title="Starke Uebelkeit im Tracking",
-                description="Die neue Eingabe deutet auf eine Verschlechterung der Vertraeglichkeit hin.",
+                title="Starke Übelkeit im Tracking",
+                description="Die neue Eingabe deutet auf eine Verschlechterung der Verträglichkeit hin.",
                 triggered_by=["tracking.nausea_score"],
-                action="Planhinweise ueberpruefen und Verlauf beobachten.",
+                action="Planhinweise überprüfen und Verlauf beobachten.",
             )
         )
     previous_weights = [record.weight for record in list_tracking_for_patient(patient_id) if record.weight is not None]
@@ -79,10 +79,10 @@ def _detect_tracking_risk_flags(patient_id: str, tracking_id: str, payload: Symp
                     tracking_id=tracking_id,
                     flag_type="tracking_weight_drop",
                     severity="high",
-                    title="Gewicht faellt im Tracking",
+                    title="Gewicht fällt im Tracking",
                     description="Das dokumentierte Gewicht ist im Verlauf deutlich gesunken.",
                     triggered_by=["tracking.weight"],
-                    action="Professionelle Ruecksprache empfehlen.",
+                    action="Professionelle Rücksprache empfehlen.",
                     blocks_plan=True,
                 )
             )

@@ -5,12 +5,12 @@ Stand: finaler Hardening-Durchlauf auf Branch `codex/demo-final-hardening`.
 ## Ausgangszustand
 
 - Ausgangspunkt war `main` bei Commit `e9516dd` mit sauberem Working Tree.
-- Frontend Build, Typecheck und Lint waren bereits gruen.
+- Frontend Build, Typecheck und Lint waren bereits grün.
 - Backend-Tests liefen mit `48 passed`.
 - Zentrale Demo-Screens nutzten bereits den Backend-BFF mit Mock-Fallback.
-- Noch offen waren Demo-Startablauf, Profil-/Checkout-Bewertung, npm-Audit-Warnungen, `<img>`-Lint-Warnungen und letzte Claim-Pruefung.
+- Noch offen waren Demo-Startablauf, Profil-/Checkout-Bewertung, npm-Audit-Warnungen, `<img>`-Lint-Warnungen und letzte Claim-Prüfung.
 
-## Geaenderte Dateien
+## Geänderte Dateien
 
 - `README.md`
 - `frontend/package.json`
@@ -25,8 +25,8 @@ Stand: finaler Hardening-Durchlauf auf Branch `codex/demo-final-hardening`.
 - `docs/reports/demo-hardening-report.md`
 - `docs/designs/dokument_upload/code.html`
 - `docs/designs/gesundheitsprofil/code.html`
-- `docs/Roadmap_fuer_Dev3.md`
-- `docs/Roadmap_Uebersicht.md`
+- `docs/Roadmap_für_Dev3.md`
+- `docs/Roadmap_Übersicht.md`
 
 ## BFF-Screens
 
@@ -41,8 +41,8 @@ Stand: finaler Hardening-Durchlauf auf Branch `codex/demo-final-hardening`.
 ## Mock-Fallback-Screens
 
 - `/login`: bleibt bewusst Demo-Gatekeeper ohne echte Auth.
-- `/profile`: Backend-Anbindung ist klein vorhanden, faellt aber bei fehlendem Patient/Seed/API-Key auf Mock zurueck.
-- `/checkout`: Backend-Order-Call ist klein vorhanden, faellt aber bei ungueltigen Mock-Meal-Kit-IDs oder fehlendem Patient/Seed/API-Key auf lokale Demo-Bestellung zurueck.
+- `/profile`: Backend-Anbindung ist klein vorhanden, fällt aber bei fehlendem Patient/Seed/API-Key auf Mock zurück.
+- `/checkout`: Backend-Order-Call ist klein vorhanden, fällt aber bei ungueltigen Mock-Meal-Kit-IDs oder fehlendem Patient/Seed/API-Key auf lokale Demo-Bestellung zurück.
 
 ## Demo-Startanleitung
 
@@ -69,7 +69,7 @@ Dann muss das Frontend denselben Wert als Public Demo-Key kennen:
 $env:NEXT_PUBLIC_API_KEY="demo-local-key"
 ```
 
-Keine echten Secrets ins Repository schreiben. `NEXT_PUBLIC_API_KEY` ist im Browser sichtbar und nur fuer lokale Demo-Zwecke geeignet.
+Keine echten Secrets ins Repository schreiben. `NEXT_PUBLIC_API_KEY` ist im Browser sichtbar und nur für lokale Demo-Zwecke geeignet.
 
 ### 3. Demo-Daten seeden
 
@@ -110,7 +110,7 @@ Frontend: `http://127.0.0.1:3000`
 
 ### 6. Demo-Flow
 
-1. `/login` oder direkt `/onboarding` oeffnen.
+1. `/login` oder direkt `/onboarding` öffnen.
 2. Onboarding-Fragen ausfuellen und Analyse starten.
 3. `/analysis` zeigt die orientierende Auswertung.
 4. `/dashboard` zeigt Plan, Tracking und Hydration.
@@ -121,19 +121,19 @@ Frontend: `http://127.0.0.1:3000`
 ## npm Audit
 
 - Vor Hardening: Next `15.1.0` hatte mehrere Next-Advisories inklusive kritischer Eintraege.
-- Geaendert auf Next `15.5.15` und `eslint-config-next` `15.5.15`, also kein Major-Upgrade und kein Downgrade.
-- `npm audit` meldet danach nur noch 2 moderate Eintraege ueber `postcss` in der Next-Dependency. `npm audit` bietet dafuer keinen sauberen 15.x-Patch-Pfad an; deshalb kein `npm audit fix --force`.
+- Geändert auf Next `15.5.15` und `eslint-config-next` `15.5.15`, also kein Major-Upgrade und kein Downgrade.
+- `npm audit` meldet danach nur noch 2 moderate Eintraege über `postcss` in der Next-Dependency. `npm audit` bietet dafür keinen sauberen 15.x-Patch-Pfad an; deshalb kein `npm audit fix --force`.
 
 ## Medizinische Und Security-Texte
 
-- Sichtbare und dokumentierte Claims fuer `DSGVO konform`, `Ende-zu-Ende`, `diagnostiziert`, `heilt`, `garantiert`, `medizinisch sicher` wurden gesucht.
-- Ueberzogene Security-Claims in Design-/UI-Kontexten wurden zu `Demo-Datenschutzkonzept`, `lokaler Demo-Modus` oder vorsichtigen Demo-Formulierungen entschaerft.
-- Bestehende Hinweise wie `ersetzt keine aerztliche Diagnose oder Behandlung` bleiben erhalten.
-- Keine zusaetzlichen Disclaimer-Spam-Bloecke wurden eingefuegt.
+- Sichtbare und dokumentierte Claims für `DSGVO konform`, `Ende-zu-Ende`, `diagnostiziert`, `heilt`, `garantiert`, `medizinisch sicher` wurden gesucht.
+- Überzogene Security-Claims in Design-/UI-Kontexten wurden zu `Demo-Datenschutzkonzept`, `lokaler Demo-Modus` oder vorsichtigen Demo-Formulierungen entschärft.
+- Bestehende Hinweise wie `ersetzt keine ärztliche Diagnose oder Behandlung` bleiben erhalten.
+- Keine zusätzlichen Disclaimer-Spam-Bloecke wurden eingefuegt.
 
 ## Checks
 
-Gruen:
+Grün:
 
 - `cd frontend && npm install`
 - `cd frontend && npm run build` mit Next `15.5.15`
@@ -156,11 +156,11 @@ Rot:
 - `NEXT_PUBLIC_API_KEY` ist nur eine Demo-Hilfe und kein Geheimnis.
 - `/checkout` ist eine Demo-Order ohne echtes Payment und ohne Zahlungsdatenverarbeitung.
 - `/profile` nutzt nur eine kleine Schema-Abbildung; komplexere Profilfelder bleiben Backend-seitig vorhanden, aber nicht voll in der UI editierbar.
-- Wenn Shop-Daten aus Mock-Fallback stammen, koennen Order-IDs nicht zum Backend-Katalog passen; dann greift der lokale Checkout-Fallback.
-- `npm audit` bleibt mit 2 moderaten PostCSS/Next-Transitivwarnungen offen, weil der angebotene Fix nicht als sicherer 15.x-Patch verfuegbar ist.
+- Wenn Shop-Daten aus Mock-Fallback stammen, können Order-IDs nicht zum Backend-Katalog passen; dann greift der lokale Checkout-Fallback.
+- `npm audit` bleibt mit 2 moderaten PostCSS/Next-Transitivwarnungen offen, weil der angebotene Fix nicht als sicherer 15.x-Patch verfügbar ist.
 
-## Finale Praesentationsbewertung
+## Finale Präsentationsbewertung
 
-Praesentierbar: ja.
+Präsentierbar: ja.
 
 Der zentrale Flow ist backendgestuetzt, bleibt durch Mock-Fallbacks demo-robust, verarbeitet keine echten Zahlungsdaten, verkauft keine medizinische Diagnose und dokumentiert den lokalen Demo-Modus klar.

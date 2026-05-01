@@ -1,12 +1,12 @@
 # Shared
 
-Dieser Ordner ist fuer teamuebergreifende Artefakte gedacht.
+Dieser Ordner ist für teamübergreifende Artefakte gedacht.
 
-Moegliche Inhalte fuer spaetere Ausbaustufen:
+Mögliche Inhalte für spätere Ausbaustufen:
 
 - gemeinsame API-Contracts
 - normalisierte Enum- oder Statusdefinitionen
 - Architektur- oder Integrationskonventionen
 - teamweit genutzte Seeds, Fixtures oder Beispieldaten
 
-Aktuell enthaelt der Ordner mit `api_contracts.md` eine leichte Contract-Uebersicht fuer den MVP-Flow zwischen Frontend, Backend und Praesentation.
+Aktuell enthält der Ordner mit `api_contracts.md` eine leichte Contract-Übersicht für den MVP-Flow zwischen Frontend, Backend und Präsentation.

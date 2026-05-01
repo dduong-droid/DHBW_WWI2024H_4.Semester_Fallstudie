@@ -180,7 +180,7 @@ def test_shopping_list_tracking_mealkit_and_review_flow() -> None:
             "status": "approved",
             "reviewer_role": "nutritionist",
             "reviewer_name": "Demo Ernaehrungsberatung",
-            "comments": "Mock-Freigabe fuer die Abgabe.",
+            "comments": "Mock-Freigabe für die Abgabe.",
         },
     )
 

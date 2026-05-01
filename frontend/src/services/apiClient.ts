@@ -502,7 +502,7 @@ function buildFullAnalyzePayload(input: OnboardingAnalysisInput) {
       },
       goals_and_expectations: {
         goals: input.goals,
-        expectation_notes: 'orientierende Empfehlung fuer die Fallstudien-Demo',
+        expectation_notes: 'orientierende Empfehlung für die Fallstudien-Demo',
       },
       additional_notes: 'Dokumente werden in dieser Demo nicht medizinisch ausgewertet.',
     },
@@ -516,7 +516,7 @@ function mapAnalysis(response: FullAnalyzeResponse): RecoveryAnalysis {
     title: 'Orientierende Recovery-Auswertung',
     summary: `${response.summary} Diese Auswertung ersetzt keine ärztliche Diagnose oder Behandlung.`,
     recommendedKitId: response.recommendedMealKits[0]?.id || '',
-    recommendedKitName: response.recommendedMealKits[0]?.name || 'Meal-Kit nach Fachpruefung',
+    recommendedKitName: response.recommendedMealKits[0]?.name || 'Meal-Kit nach Fachprüfung',
     matchScores: response.rationale.slice(0, 3).map((line, index) => ({
       label: ['Profil-Fit', 'Alltagstauglichkeit', 'Sicherheitscheck'][index] || 'BFF-Rationale',
       percent: Math.max(72, 92 - index * 7),
@@ -526,7 +526,7 @@ function mapAnalysis(response: FullAnalyzeResponse): RecoveryAnalysis {
     riskNotes: response.nutritionPlan.diagnosis.restrictions.length > 0
       ? response.nutritionPlan.diagnosis.restrictions
       : ['Bei starken Beschwerden, Gewichtsverlust oder Unsicherheit sollte Fachpersonal einbezogen werden.'],
-    nextSteps: ['Wochenplan im Dashboard ansehen', 'Passende Rezepte pruefen', 'Meal-Kit optional in den Warenkorb legen'],
+    nextSteps: ['Wochenplan im Dashboard ansehen', 'Passende Rezepte prüfen', 'Meal-Kit optional in den Warenkorb legen'],
   };
 }
 

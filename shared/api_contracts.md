@@ -1,6 +1,6 @@
 # Shared API Contracts
 
-Leichte teamuebergreifende Contract-Uebersicht fuer das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts`. Die zentrale Frontend-API-Schicht liegt in `frontend/src/services/apiClient.ts`; `frontend/src/services/mockApi.ts` bleibt Demo-/Fallback-Schicht.
+Leichte teamübergreifende Contract-Übersicht für das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts`. Die zentrale Frontend-API-Schicht liegt in `frontend/src/services/apiClient.ts`; `frontend/src/services/mockApi.ts` bleibt Demo-/Fallback-Schicht.
 
 ## MVP Flow
 
@@ -22,11 +22,11 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 
 - Alle sensiblen Reads und alle Write-Endpunkte sind per `X-API-Key` geschuetzt, sobald `API_KEY` gesetzt ist.
 - Ohne `consent_data_processing=true` darf kein PatientProfile verarbeitet werden.
-- High-Risk-Flags duerfen keinen final freigegebenen automatischen Plan erzeugen.
+- High-Risk-Flags dürfen keinen final freigegebenen automatischen Plan erzeugen.
 - Meal-Kits sind optionale Umsetzungshilfe und keine medizinische Therapie.
 - BFF-Endpunkte liefern frontend-nahe camelCase-Responses.
 - Fehlerformat: `{"error": {"code": "...", "message": "...", "details": ...}}`.
-- Dokumenten-Uploads im MVP speichern nur Metadaten, pruefen Dateityp/Groesse und fuehren keine medizinische Auswertung oder OCR durch.
+- Dokumenten-Uploads im MVP speichern nur Metadaten, prüfen Dateityp/Größe und fuehren keine medizinische Auswertung oder OCR durch.
 
 ## Wichtige Domain-Endpunkte
 
@@ -118,4 +118,4 @@ Das Frontend nutzt `recoveryApi` aus `frontend/src/services/apiClient.ts` als ze
 - `fetchPatientProfile()`
 - `savePatientProfile(profile)`
 
-Diese Methoden duerfen im UI nicht als produktive Backend-Integration verkauft werden, wenn `mockApi` als Fallback greift. Fuer Integrationspruefungen kann `NEXT_PUBLIC_DISABLE_MOCK_FALLBACK=true` gesetzt werden, damit API-Fehler sichtbar bleiben.
+Diese Methoden dürfen im UI nicht als produktive Backend-Integration verkauft werden, wenn `mockApi` als Fallback greift. Für Integrationsprüfungen kann `NEXT_PUBLIC_DISABLE_MOCK_FALLBACK=true` gesetzt werden, damit API-Fehler sichtbar bleiben.

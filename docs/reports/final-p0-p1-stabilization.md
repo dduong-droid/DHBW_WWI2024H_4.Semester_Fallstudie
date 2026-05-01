@@ -10,9 +10,9 @@
 P0/P1-Risiken aus der Analyse:
 
 - Lokaler Browserpfad `http://127.0.0.1:3000` -> `http://127.0.0.1:8000` war wegen fehlender CORS-Konfiguration blockiert.
-- Frontend-Lint war gruen, aber mit 5 Warnungen.
-- Frontend-/Backend-Condition-Codes waren nicht einheitlich genug fuer Dashboard-Safety-Hinweise.
-- Mock-Fallbacks waren demo-stabil, aber fuer Integrationschecks zu still.
+- Frontend-Lint war grün, aber mit 5 Warnungen.
+- Frontend-/Backend-Condition-Codes waren nicht einheitlich genug für Dashboard-Safety-Hinweise.
+- Mock-Fallbacks waren demo-stabil, aber für Integrationschecks zu still.
 - Ein echter Browser-/Preflight-Smoke war noch nicht dokumentiert.
 
 ## 2. Umgesetzte Fixes
@@ -36,7 +36,7 @@ P0/P1-Risiken aus der Analyse:
   - `Authorization`
 - `allow_credentials=False`, weil aktuell keine Cookies/Sessions genutzt werden.
 - `.env.example`, `backend/.env.example` und `README.md` dokumentieren `FRONTEND_ORIGINS`.
-- Backend-Test ergaenzt: lokaler Frontend-Origin-Preflight auf `POST /api/frontend/intake/full-analyze`.
+- Backend-Test ergänzt: lokaler Frontend-Origin-Preflight auf `POST /api/frontend/intake/full-analyze`.
 
 ### Lint-Warnungen
 
@@ -49,11 +49,11 @@ P0/P1-Risiken aus der Analyse:
   - ungenutzte `InputField`-Komponente entfernt.
   - ungenutztes `AlertCircle`-Icon entfernt.
 
-Ergebnis: `npm run lint` laeuft ohne Warnungen.
+Ergebnis: `npm run lint` läuft ohne Warnungen.
 
 ### Condition-Mapping
 
-- `frontend/src/services/apiClient.ts` normalisiert Backend-/Frontend-Codes fuer Profil-Conditions.
+- `frontend/src/services/apiClient.ts` normalisiert Backend-/Frontend-Codes für Profil-Conditions.
 - Aktive Aliase:
   - `post_op_recovery` -> `post_op`
   - `wound_healing` -> `post_op`
@@ -120,47 +120,47 @@ Technischer Smoke:
 
 Browser-/Flow-Test:
 
-- Browserautomation war in dieser Codex-Session nicht als Tool verfuegbar.
-- Stattdessen wurde der kritische Browser-Blocker technisch ueber echten CORS-Preflight und laufende lokale Frontend-/Backend-Server geprueft.
-- Manueller finaler Klickpfad fuer die Praesentation:
+- Browserautomation war in dieser Codex-Session nicht als Tool verfügbar.
+- Stattdessen wurde der kritische Browser-Blocker technisch über echten CORS-Preflight und laufende lokale Frontend-/Backend-Server geprüft.
+- Manueller finaler Klickpfad für die Präsentation:
   1. `/onboarding`
   2. Gesundheitsziel auswaehlen
   3. optional PDF/JPG/PNG hochladen
   4. Analyse starten
-  5. `/analysis` Ergebnis pruefen
+  5. `/analysis` Ergebnis prüfen
   6. `/dashboard` Hydration `+250 ml` und Meal-Box markieren
   7. `/shop` Meal-Kit in Warenkorb
   8. `/checkout` Demo-Bestellung absenden
 
 ## 4. Checks
 
-| Befehl | Ergebnis | Gruen/Rot | Hinweise |
+| Befehl | Ergebnis | Grün/Rot | Hinweise |
 | --- | --- | --- | --- |
-| `git status --short` | ausgefuehrt | gruen | vorher nur Analyse-Report untracked |
-| `cd frontend && npm install` | up to date | gruen | 2 moderate Audit-Hinweise bleiben |
-| `cd frontend && npm run build` | erfolgreich | gruen | keine Build-/Lint-Warnungen |
-| `cd frontend && npx tsc --noEmit` | erfolgreich | gruen | |
-| `cd frontend && npm run lint` | erfolgreich | gruen | keine Warnungen |
+| `git status --short` | ausgefuehrt | grün | vorher nur Analyse-Report untracked |
+| `cd frontend && npm install` | up to date | grün | 2 moderate Audit-Hinweise bleiben |
+| `cd frontend && npm run build` | erfolgreich | grün | keine Build-/Lint-Warnungen |
+| `cd frontend && npx tsc --noEmit` | erfolgreich | grün | |
+| `cd frontend && npm run lint` | erfolgreich | grün | keine Warnungen |
 | `cd frontend && npm audit --audit-level=moderate` | 2 moderate Vulnerabilities | rot | bekannter PostCSS/Next-Transitiver Befund; kein Force-Fix |
-| `cd backend && python -m pip install -e .` | erfolgreich | gruen | |
-| `cd backend && python -m pytest app/tests` | 58 passed | gruen | neuer CORS-Test enthalten |
-| `python scripts/seed/seed_demo_data.py --reset` | erfolgreich | gruen | alle 3 Demo-Personas erzeugt |
-| CORS-Preflight | 200 mit CORS-Headers | gruen | `content-type,x-api-key` erlaubt |
-| Backend/Frontend Smoke | erfolgreich | gruen | HTTP-/API-Smoke komplett |
+| `cd backend && python -m pip install -e .` | erfolgreich | grün | |
+| `cd backend && python -m pytest app/tests` | 58 passed | grün | neuer CORS-Test enthalten |
+| `python scripts/seed/seed_demo_data.py --reset` | erfolgreich | grün | alle 3 Demo-Personas erzeugt |
+| CORS-Preflight | 200 mit CORS-Headers | grün | `content-type,x-api-key` erlaubt |
+| Backend/Frontend Smoke | erfolgreich | grün | HTTP-/API-Smoke komplett |
 
 ## 5. Offene Risiken
 
 - `npm audit --audit-level=moderate` bleibt rot wegen 2 moderaten Next/PostCSS-Transitivwarnungen. Der vorgeschlagene Fix ist `npm audit fix --force` und bleibt bewusst tabu.
 - Mock-Fallbacks bleiben im normalen Demo-Modus aktiv. Der neue Hard-Mode macht API-Probleme testbar, ersetzt aber keine UI-weite Error-State-Strategie.
-- Dashboard bleibt technisch gross und sollte nach der Abgabe in kleinere Komponenten aufgeteilt werden.
+- Dashboard bleibt technisch groß und sollte nach der Abgabe in kleinere Komponenten aufgeteilt werden.
 - Es fehlen weiterhin echte Frontend-/Browser-E2E-Tests.
 - Login/Auth/RBAC, produktiver Datenschutz, echte Dokumentenanalyse, echtes Payment und medizinische Fachvalidierung sind weiterhin nicht enthalten.
 
 ## 6. Finale Einschaetzung
 
-- Praesentierbar: Ja.
+- Präsentierbar: Ja.
 - Fallstudien-Fertigstellungsgrad: ca. 92 % nach P0/P1-Fix.
 - Echtes MVP-Fertigstellungsgrad: ca. 57 %.
 - Technisches Live-Demo-Risiko: niedrig bis mittel.
 
-Der wichtigste Live-Demo-Blocker aus der Analyse, der CORS-Preflight, ist behoben. Lint ist warnungsfrei. Der Backend-Teststand ist auf 58 Tests gestiegen. Fuer eine echte Produktreife bleiben Auth, Datenschutz, E2E-Tests und produktive Infrastruktur die groessten offenen Themen.
+Der wichtigste Live-Demo-Blocker aus der Analyse, der CORS-Preflight, ist behoben. Lint ist warnungsfrei. Der Backend-Teststand ist auf 58 Tests gestiegen. Für eine echte Produktreife bleiben Auth, Datenschutz, E2E-Tests und produktive Infrastruktur die größten offenen Themen.

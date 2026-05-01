@@ -161,7 +161,7 @@ export default function AnalysisPage() {
       <section className={styles.disclaimer}>
         <CheckCircle2 size={18} />
         <p>
-          Food4Recovery ersetzt keine aerztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
+          Food4Recovery ersetzt keine ärztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
         </p>
       </section>
 
@@ -170,7 +170,7 @@ export default function AnalysisPage() {
           Wochenplan ansehen
           <ArrowRight size={18} />
         </Link>
-        <Link href="/recipes" className={styles.secondaryAction}>Rezepte pruefen</Link>
+        <Link href="/recipes" className={styles.secondaryAction}>Rezepte prüfen</Link>
       </div>
     </main>
   );

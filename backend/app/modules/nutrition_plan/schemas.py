@@ -29,7 +29,7 @@ class NutritionPlan(BaseModel):
     weekly_plan: WeeklyPlanRecommendation
     days: int = 7
     daily_meals: list[dict[str, object]] = Field(default_factory=list)
-    hydration_hint: str = "Regelmaessig trinken und individuelle Vorgaben beachten."
+    hydration_hint: str = "Regelmäßig trinken und individuelle Vorgaben beachten."
     preparation_complexity: PreparationComplexity = "medium"
     rationale: list[str] = Field(default_factory=list)
     safety_notes: list[str] = Field(default_factory=list)
