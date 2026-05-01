@@ -119,6 +119,7 @@
 /* Mobile Hero */
 .mobileHero {
   display: block;
+  position: relative;
   margin-bottom: 2rem;
   overflow: hidden;
   border-radius: 1rem;

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from app.api.health import router as health_router
 from app.core.security import require_api_key
 from app.modules.analytics.router import router as analytics_router
+from app.modules.document_upload.router import router as document_upload_router
 from app.modules.frontend_bff.router import router as frontend_bff_router
 from app.modules.meal_kit_catalog.router import router as meal_kit_router
 from app.modules.nutrition_assessment.router import router as nutrition_assessment_router
@@ -35,6 +36,7 @@ api_router.include_router(shopping_list_router, prefix="/api", tags=["shopping-l
 api_router.include_router(symptom_tracking_router, prefix="/api", tags=["symptom-tracking"], dependencies=protected)
 api_router.include_router(professional_review_router, prefix="/api", tags=["professional-reviews"], dependencies=protected)
 api_router.include_router(analytics_router, prefix="/api", tags=["analytics"], dependencies=protected)
+api_router.include_router(document_upload_router, prefix="/api", tags=["documents"], dependencies=protected)
 api_router.include_router(order_router, prefix="/api", tags=["orders"], dependencies=protected)
 api_router.include_router(frontend_bff_router, prefix="/api", tags=["frontend-bff"], dependencies=protected)
 api_router.include_router(safety_check_router, prefix="/api", tags=["safety-check"], dependencies=protected)

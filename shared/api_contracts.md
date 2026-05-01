@@ -1,6 +1,6 @@
 # Shared API Contracts
 
-Leichte teamuebergreifende Contract-Uebersicht fuer das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts` und `frontend/src/services/mockApi.ts`.
+Leichte teamuebergreifende Contract-Uebersicht fuer das Food4Recovery MVP. Die verbindlichen Python-Schemas liegen im Backend; die Frontend-View-Models liegen in `frontend/src/types/apiContracts.ts`. Die zentrale Frontend-API-Schicht liegt in `frontend/src/services/apiClient.ts`; `frontend/src/services/mockApi.ts` bleibt Demo-/Fallback-Schicht.
 
 ## MVP Flow
 
@@ -13,6 +13,8 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - RiskFlag severity: `low`, `medium`, `high`
 - Recommendation readiness: `ready`, `reviewRequired`, `insufficientData`
 - NutritionPlan status: `draft`, `review_required`, `approved_mock`, `blocked`
+- Order status: `draft`, `pending`, `confirmed`, `processing`, `completed`, `cancelled`, `demo_failed`
+- Document upload status: `uploaded_demo`
 - SafetyCheck status: `clear`, `warning`, `blocked`
 - ProfessionalReview status: `pending`, `approved`, `rejected`, `changes_requested`
 
@@ -24,6 +26,7 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - Meal-Kits sind optionale Umsetzungshilfe und keine medizinische Therapie.
 - BFF-Endpunkte liefern frontend-nahe camelCase-Responses.
 - Fehlerformat: `{"error": {"code": "...", "message": "...", "details": ...}}`.
+- Dokumenten-Uploads im MVP speichern nur Metadaten, pruefen Dateityp/Groesse und fuehren keine medizinische Auswertung oder OCR durch.
 
 ## Wichtige Domain-Endpunkte
 
@@ -62,6 +65,7 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - `PATCH /api/professional-reviews/{review_id}`
 - `POST /api/analytics/events`
 - `GET /api/analytics/summary`
+- `POST /api/documents/upload`
 - `POST /api/orders`
 - `GET /api/orders/{order_id}`
 - `PATCH /api/orders/{order_id}/status`
@@ -78,9 +82,34 @@ PatientProfile -> QuestionnaireIntake -> NutritionAssessment -> RiskFlags -> Rec
 - `GET /api/frontend/tracking/hydration/{patient_id}`
 - `POST /api/frontend/tracking/hydration/{patient_id}/water`
 
-## Frontend-Mock-Adapter
+## Dokumenten-Upload MVP
 
-Das Frontend nutzt aktuell `nutritionMockApi` als Mock-Schicht. Relevante Methoden:
+`POST /api/documents/upload` akzeptiert genau eine Datei als Multipart-Feld `file`.
+
+Erlaubt:
+
+- `application/pdf`
+- `image/jpeg`
+- `image/png`
+- maximal 10 MB
+
+Response:
+
+```json
+{
+  "document_id": "doc_...",
+  "filename": "arztbrief-demo.pdf",
+  "content_type": "application/pdf",
+  "size": 12345,
+  "status": "uploaded_demo",
+  "analysis_available": false,
+  "note": "Dokumente werden im MVP nicht medizinisch ausgewertet."
+}
+```
+
+## Frontend-API-Adapter und Mock-Fallback
+
+Das Frontend nutzt `recoveryApi` aus `frontend/src/services/apiClient.ts` als zentrale API-Schicht. Backend/BFF wird bevorzugt; `nutritionMockApi` aus `mockApi.ts` bleibt Demo-/Fallback-Schicht. Relevante Methoden:
 
 - `fetchDashboardData()`
 - `fetchShopInventory()`
@@ -89,4 +118,4 @@ Das Frontend nutzt aktuell `nutritionMockApi` als Mock-Schicht. Relevante Method
 - `fetchPatientProfile()`
 - `savePatientProfile(profile)`
 
-Diese Methoden duerfen im UI nicht als produktive Backend-Integration verkauft werden, solange sie noch Mock-Daten liefern.
+Diese Methoden duerfen im UI nicht als produktive Backend-Integration verkauft werden, wenn `mockApi` als Fallback greift. Fuer Integrationspruefungen kann `NEXT_PUBLIC_DISABLE_MOCK_FALLBACK=true` gesetzt werden, damit API-Fehler sichtbar bleiben.

@@ -335,7 +335,7 @@ export default function ProfilePage() {
             <span className={styles.sectionIcon} style={{ color: 'var(--text-muted)' }}><Shield size={22} /></span>
             <h2 className={styles.sectionTitle}>Datenmanagement</h2>
           </div>
-          <p className={styles.sectionDesc}>Du hast die volle Kontrolle über deine Daten gemäß DSGVO.</p>
+          <p className={styles.sectionDesc}>Demo-Datenmanagement im lokalen Modus: Export und Löschung zeigen den vorgesehenen Prozess, ersetzen aber keine produktive Datenschutzprüfung.</p>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <button 

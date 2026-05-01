@@ -53,3 +53,14 @@ def install_error_handlers(app: FastAPI) -> None:
                 details=exc.errors(),
             ),
         )
+
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(_: Request, __: Exception) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content=_error_payload(
+                code="internal_error",
+                message="Internal server error.",
+                details=None,
+            ),
+        )

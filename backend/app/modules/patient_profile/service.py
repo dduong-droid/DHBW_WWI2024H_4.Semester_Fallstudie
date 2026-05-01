@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 
+from app.modules.analytics.service import record_event
 from app.modules.analytics.repository import delete_events_for_patient, list_events_for_patient
 from app.modules.frontend_bff.tracking_repository import delete_tracking_state, export_tracking_state
 from app.modules.nutrition_assessment.repository import delete_assessments_for_patient, list_assessments_for_patient
@@ -34,7 +35,9 @@ def create_patient_profile(payload: PatientProfileCreate) -> PatientProfile:
         created_at=datetime.now(timezone.utc),
         **payload.model_dump(exclude={"patient_id"}),
     )
-    return save_patient_profile(profile)
+    saved = save_patient_profile(profile)
+    record_event("patient_profile_created", patient_id=saved.patient_id)
+    return saved
 
 
 def get_patient_profile_or_404(patient_id: str) -> PatientProfile:
@@ -49,6 +52,7 @@ def get_patient_profile_or_404(patient_id: str) -> PatientProfile:
 
 def export_patient_data(patient_id: str) -> dict[str, object]:
     profile = get_patient_profile_or_404(patient_id)
+    record_event("export_requested", patient_id=patient_id)
     questionnaires = list_questionnaires_for_patient(patient_id)
     recommendations = list_recommendations_for_patient(patient_id)
     nutrition_plans = list_nutrition_plans_for_patient(patient_id)
@@ -85,6 +89,7 @@ def delete_patient_data(patient_id: str) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Patient profile '{patient_id}' was not found.",
         )
+    record_event("delete_requested", patient_id=patient_id)
     delete_orders_for_patient(patient_id)
     delete_reviews_for_patient(patient_id)
     delete_shopping_lists_for_patient(patient_id)

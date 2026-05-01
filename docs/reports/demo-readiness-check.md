@@ -12,7 +12,7 @@ Stand: 2026-04-30, Branch `main`, Commit `8fd191d`.
 
 - `docs/reports/github-project-analysis.md` war gegen den alten lokalen `master` geschrieben und widersprach `main`.
 - Die Behauptung, `AGENTS.md`, `shared/api_contracts.md`, `docs/API_Demo_Flow.md` und `backend/app/modules/frontend_bff/*` fehlten, war nur auf dem alten Checkout wahr. Auf `main` existieren diese Dateien.
-- Die fruehere Empfehlung, Next pauschal auf 14 zu setzen, ist veraltet. Aktuell ist Next `15.1.0` in `package.json`, `package-lock.json` und nach `npm install` installiert.
+- Die fruehere Empfehlung, Next pauschal auf 14 zu setzen, ist veraltet. Aktuell ist Next `15.5.15` in `package.json`, `package-lock.json` und nach `npm install` installiert.
 
 ## Aktuelle Backend-BFF-Endpunkte
 
@@ -55,8 +55,7 @@ Neu ist `frontend/src/services/apiClient.ts` als kleine API-Schicht:
 
 Geaendert:
 
-- `DSGVO konform` wurde in sichtbaren Profil-/Onboarding-Trust-Elementen zu `Demo-Datenschutzkonzept`.
-- `Ende-zu-Ende-Verschluesselung` wurde zu `lokaler Demo-Modus` bzw. vorsichtiger Demo-Transport-Formulierung.
+- Ueberzogene Datenschutz- und Verschluesselungsclaims wurden in sichtbaren Profil-/Onboarding-Trust-Elementen zu `Demo-Datenschutzkonzept` und `lokaler Demo-Modus` entschaerft.
 
 Bereits vorhanden und beibehalten:
 
@@ -89,7 +88,7 @@ Hinweise:
 
 ## Rest-Risiken
 
-- Next `15.1.0` ist installierbar und buildet, wird aber von npm als verwundbar markiert. Ein gezieltes Patch-Upgrade sollte separat getestet werden.
+- Next wurde gezielt innerhalb 15.x auf `15.5.15` angehoben. `npm audit` meldet weiterhin 2 moderate transitive PostCSS/Next-Warnungen; der angebotene Fix-Pfad ist kein sicherer 15.x-Patch.
 - Das Frontend hat bewusst Mock-Fallbacks. Ohne laufendes Backend und Demo-Daten ist der Flow praesentierbar, aber nicht voll backendgetrieben.
 - `/profile` und `/checkout` sind noch nicht produktiv an Backend-APIs angeschlossen.
 - `NEXT_PUBLIC_API_KEY` ist nur fuer Demo-Zwecke geeignet, weil Public Env Vars im Browser sichtbar sind.
@@ -100,8 +99,8 @@ Praesentierbar fuer die Fallstudien-Demo: ja, mit klarem Hinweis auf lokalen Dem
 
 ## Naechste 5 To-dos
 
-1. Next `15.1.0` gezielt auf eine gepatchte kompatible 15.x-Version heben und Build/Lint erneut ausfuehren.
-2. Backend-Demo-Seed vor der Vorfuehrung dokumentiert ausfuehren und API-Key-Setup klaeren.
-3. Profilseite auf das echte PatientProfile-Schema mappen oder bewusst als lokales Demo-Profil kennzeichnen.
-4. Checkout auf `POST /api/orders` anbinden, inklusive Fehler- und Safety-Hinweisen.
-5. Drei `<img>`-Lint-Warnungen durch `next/image` oder eine bewusst konfigurierte Ausnahme bereinigen.
+1. Backend-Demo-Seed vor der Vorfuehrung ausfuehren und API-Key-Setup klaeren.
+2. Profilseite fachlich erweitern, falls alle Backend-Profilfelder editierbar sein sollen.
+3. Checkout bewusst als Demo-Order ohne Payment erklaeren.
+4. Moderate transitive npm-Audit-Warnungen beobachten und bei sicherem 15.x-Fix erneut pruefen.
+5. Optional: Browser-E2E-Smoke fuer Onboarding -> Analysis -> Shop -> Checkout automatisieren.

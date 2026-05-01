@@ -11,17 +11,17 @@ import { recoveryApi } from '../../services/apiClient';
 import type { RecoveryAnalysis } from '../../services/mockApi';
 import { useCart } from '../../context/CartContext';
 
+const LOADING_MESSAGES = [
+  "Prüfe Gesundheitsziele...",
+  "Abgleich mit Recovery-Phase...",
+  "Erstelle initialen Ernährungsplan...",
+  "Ordne passende Meal-Kits zu..."
+];
+
 export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
   const [loadingTextIdx, setLoadingTextIdx] = useState(0);
   const { addToCart } = useCart();
-
-  const loadingMessages = [
-    "Prüfe Gesundheitsziele...",
-    "Abgleich mit Recovery-Phase...",
-    "Erstelle initialen Ernährungsplan...",
-    "Ordne passende Meal-Kits zu..."
-  ];
 
   useEffect(() => {
     // Start fetch
@@ -29,7 +29,7 @@ export default function AnalysisPage() {
 
     // Rotate text
     const interval = setInterval(() => {
-      setLoadingTextIdx(prev => (prev + 1) % loadingMessages.length);
+      setLoadingTextIdx(prev => (prev + 1) % LOADING_MESSAGES.length);
     }, 1200);
 
     return () => clearInterval(interval);
@@ -58,7 +58,7 @@ export default function AnalysisPage() {
           </div>
           <h1>Auswertung läuft</h1>
           <p style={{ minHeight: '1.5rem', transition: 'opacity 0.3s' }}>
-            {loadingMessages[loadingTextIdx]}
+            {LOADING_MESSAGES[loadingTextIdx]}
           </p>
           <div className={styles.loadingBar}>
             <span />

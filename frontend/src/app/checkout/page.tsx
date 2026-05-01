@@ -8,6 +8,7 @@ import {
   Package, ShoppingBag, ArrowRight, Trash2
 } from 'lucide-react';
 import styles from './page.module.css';
+import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
 
@@ -32,6 +33,8 @@ export default function CheckoutPage() {
   const [processing, setProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [deliveryWindow, setDeliveryWindow] = useState('');
+  const [backendOrderUsed, setBackendOrderUsed] = useState(false);
 
   const shippingCost = 0;
   const taxRate = 0.07;
@@ -45,18 +48,18 @@ export default function CheckoutPage() {
     if (!canOrder) return;
     setProcessing(true);
 
-    // Mock: Simuliere POST /api/frontend/orders
-    console.log('[MockAPI] Bestellung aufgegeben:', {
-      items: items.map(i => ({ id: i.id, name: i.name, qty: i.quantity })),
-      address: { fullName, street, zip, city },
-      timeSlot,
+    const order = await recoveryApi.submitCheckoutOrder({
+      items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
+      fullName,
+      street,
+      zip,
+      city,
       paymentMethod,
-      total,
+      timeSlot,
     });
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const id = `F4R-${Math.floor(1000 + Math.random() * 9000)}-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
-    setOrderId(id);
+    setOrderId(order.orderId);
+    setDeliveryWindow(order.deliveryWindow);
+    setBackendOrderUsed(order.backendUsed);
     setProcessing(false);
     setOrderComplete(true);
     clearCart();
@@ -83,7 +86,7 @@ export default function CheckoutPage() {
               Vielen Dank für<br />deine Bestellung!
             </h1>
             <p className={styles.successDesc}>
-              Dein Recovery-Paket wird gerade vorbereitet und ist bald auf dem Weg zu dir.
+              Deine Demo-Bestellung wurde erfasst. Es wurde keine echte Zahlung ausgelöst.
             </p>
 
             {/* Order Details */}
@@ -94,11 +97,15 @@ export default function CheckoutPage() {
               </div>
               <div className={styles.successDetailRow}>
                 <span className={styles.successDetailLabel}>Lieferfenster</span>
-                <span className={styles.successDetailValue} style={{ color: 'var(--color-primary)' }}>{timeSlot}</span>
+                <span className={styles.successDetailValue} style={{ color: 'var(--color-primary)' }}>{deliveryWindow || timeSlot}</span>
               </div>
               <div className={styles.successDetailRow}>
                 <span className={styles.successDetailLabel}>Adresse</span>
                 <span className={styles.successDetailValue}>{street}, {zip} {city}</span>
+              </div>
+              <div className={styles.successDetailRow}>
+                <span className={styles.successDetailLabel}>Modus</span>
+                <span className={styles.successDetailValue}>{backendOrderUsed ? 'Backend-Order-API' : 'lokaler Demo-Fallback'}</span>
               </div>
             </div>
 
@@ -338,16 +345,16 @@ export default function CheckoutPage() {
                 disabled={!canOrder || processing}
               >
                 <Lock size={18} />
-                {processing ? 'Wird verarbeitet...' : 'Jetzt zahlungspflichtig bestellen'}
+                {processing ? 'Wird verarbeitet...' : 'Demo-Bestellung absenden'}
               </button>
 
               <p className={styles.legalText}>
-                Durch Klicken akzeptierst du unsere AGB und Datenschutzbestimmungen.
+                Demo-Checkout ohne echte Zahlung. Zahlungsdaten werden nicht verarbeitet.
               </p>
 
               <div className={styles.trustRow}>
-                <span className={styles.trustItem}><ShieldCheck size={14} /> SSL Gesichert</span>
-                <span className={styles.trustItem}><Truck size={14} /> CO₂ Neutral</span>
+                <span className={styles.trustItem}><ShieldCheck size={14} /> lokaler Demo-Modus</span>
+                <span className={styles.trustItem}><Truck size={14} /> keine echte Zahlung</span>
               </div>
             </div>
           </div>
