@@ -21,7 +21,7 @@ export default function DashboardPage() {
   const [checkedMealsByDay, setCheckedMealsByDay] = useState<Record<string, string[]>>({});
   const [hydrationByDay, setHydrationByDay] = useState<Record<string, number>>({});
   const [selectedDay, setSelectedDay] = useState('');
-  const [symptom, setSymptom] = useState<number | null>(null);
+  const [quickTrackByDay, setQuickTrackByDay] = useState<Record<string, { appetite?: string, symptom?: number }>>({});
   const [chartMetric, setChartMetric] = useState<'weight' | 'hydration'>('weight');
   const [inputWeight, setInputWeight] = useState('');
   const [inputHydration, setInputHydration] = useState('');
@@ -90,6 +90,9 @@ export default function DashboardPage() {
         const dayKey = weekdayMap[new Date().getDay()];
         setHydrationByDay({ [dayKey]: d.hydration.current });
       }
+
+      const savedQuickTrack = sessionStorage.getItem('f4r_quick_track');
+      if (savedQuickTrack) setQuickTrackByDay(JSON.parse(savedQuickTrack));
     });
   }, []);
 
@@ -101,6 +104,10 @@ export default function DashboardPage() {
   useEffect(() => {
     sessionStorage.setItem('f4r_hydration_by_day', JSON.stringify(hydrationByDay));
   }, [hydrationByDay]);
+
+  useEffect(() => {
+    sessionStorage.setItem('f4r_quick_track', JSON.stringify(quickTrackByDay));
+  }, [quickTrackByDay]);
 
   useEffect(() => {
     if (!data) return;
@@ -255,13 +262,16 @@ export default function DashboardPage() {
         content += `## ${FULL_DAYS[day]}\n`;
         const checked = checkedMealsByDay[day] || [];
         const hydration = hydrationByDay[day] || 0;
+        const quick = quickTrackByDay[day] || {};
         
         const dayMeals = plannedMealsByDay[day] || [];
         dayMeals.forEach(meal => {
           const isDone = checked.includes(String(meal.planIdx)) ? '[x]' : '[ ]';
           content += `${isDone} ${meal.time} Uhr: ${meal.name} (${meal.calories} kcal) [${meal.boxName}]\n`;
         });
-        content += `**Wasser:** ${hydration} / ${data.hydration.target} L\n\n`;
+        content += `**Wasser:** ${hydration} / ${data.hydration.target} L\n`;
+        content += `**Appetit:** ${quick.appetite || '-'}\n`;
+        content += `**Schmerzlevel:** ${quick.symptom || '-'}\n\n`;
       });
       filename += '.md';
     } else {
@@ -274,6 +284,7 @@ export default function DashboardPage() {
         tracking: {
           checkedMealsByDay,
           hydrationByDay,
+          quickTrackByDay,
           streak: data.streakDays
         },
         plan: plannedMealsByDay
@@ -679,10 +690,23 @@ export default function DashboardPage() {
                         key={item.l} 
                         className={styles.trackBtn} 
                         onClick={() => {
+                          setQuickTrackByDay(prev => ({
+                            ...prev,
+                            [selectedDay]: { ...prev[selectedDay], appetite: item.l }
+                          }));
                           setTrackingNote(`Appetit "${item.l}" getrackt!`);
                           setTimeout(() => setTrackingNote(''), 3000);
                         }}
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 0.5rem' }}
+                        style={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          alignItems: 'center', 
+                          gap: '0.25rem', 
+                          padding: '0.75rem 0.5rem',
+                          background: quickTrackByDay[selectedDay]?.appetite === item.l ? 'rgba(51, 199, 88, 0.1)' : 'var(--surface)',
+                          borderColor: quickTrackByDay[selectedDay]?.appetite === item.l ? 'var(--color-primary)' : 'var(--border)',
+                          borderWidth: quickTrackByDay[selectedDay]?.appetite === item.l ? '2px' : '1px'
+                        }}
                       >
                         <span style={{ fontSize: '1.25rem' }}>{item.e}</span>
                         <span style={{ fontSize: '0.7rem' }}>{item.l}</span>
@@ -709,12 +733,15 @@ export default function DashboardPage() {
                         style={{ 
                           padding: '0.5rem 0', 
                           flex: 1,
-                          background: symptom === item.v ? 'var(--color-primary)' : 'var(--surface)',
-                          color: symptom === item.v ? 'white' : 'var(--text)',
-                          borderColor: symptom === item.v ? 'var(--color-primary)' : 'var(--border)'
+                          background: quickTrackByDay[selectedDay]?.symptom === item.v ? 'var(--color-primary)' : 'var(--surface)',
+                          color: quickTrackByDay[selectedDay]?.symptom === item.v ? 'white' : 'var(--text)',
+                          borderColor: quickTrackByDay[selectedDay]?.symptom === item.v ? 'var(--color-primary)' : 'var(--border)'
                         }}
                         onClick={() => { 
-                          setSymptom(item.v); 
+                          setQuickTrackByDay(prev => ({
+                            ...prev,
+                            [selectedDay]: { ...prev[selectedDay], symptom: item.v }
+                          }));
                           setTrackingNote(`Schmerzlevel ${item.v} getrackt. Wir empfehlen heute Schonkost.`);
                           setTimeout(() => setTrackingNote(''), 4000);
                         }}
