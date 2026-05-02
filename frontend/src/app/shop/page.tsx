@@ -115,7 +115,7 @@ export default function ShopPage() {
             </div>
             <h1 className={styles.heroTitle}>Recovery Packages</h1>
             <p className={styles.heroDesc}>
-              Vorgeplante Ernährungspakete fuer unterschiedliche Regenerationssituationen. Als Demo-Option gedacht und bei medizinischen Fragen mit Fachpersonal abzustimmen.
+              Vorgeplante Ernährungspakete für unterschiedliche Regenerationssituationen. Als Demo-Option gedacht und bei medizinischen Fragen mit Fachpersonal abzustimmen.
             </p>
           </div>
           <div className={styles.heroImageObj}>

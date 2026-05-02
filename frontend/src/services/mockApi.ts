@@ -245,14 +245,14 @@ const MOCK_RECOVERY_ANALYSIS: RecoveryAnalysis = {
   progressPercent: 100,
   title: 'Orientierende Recovery-Auswertung',
   summary:
-    'Auf Basis der Demo-Angaben werden Protein, ausreichende Fluessigkeit und leicht planbare Mahlzeiten priorisiert. Die Auswertung ist eine regelbasierte Orientierung und keine medizinische Diagnose.',
+    'Auf Basis der Demo-Angaben werden Protein, ausreichende Flüssigkeit und leicht planbare Mahlzeiten priorisiert. Die Auswertung ist eine regelbasierte Orientierung und keine medizinische Diagnose.',
   recommendedKitId: 'mk1',
   recommendedKitName: 'Wundheilungs-Box',
   matchScores: [
     {
       label: 'Protein-Fokus',
       percent: 92,
-      rationale: 'Proteinreiche Mahlzeiten koennen die normale Gewebeerneuerung im Rahmen einer ausgewogenen Ernaehrung unterstuetzen.',
+      rationale: 'Proteinreiche Mahlzeiten können die normale Gewebeerneuerung im Rahmen einer ausgewogenen Ernährung unterstützen.',
     },
     {
       label: 'Alltagstauglichkeit',
@@ -260,23 +260,23 @@ const MOCK_RECOVERY_ANALYSIS: RecoveryAnalysis = {
       rationale: 'Vorstrukturierte Mahlzeiten reduzieren Planungsaufwand in belastenden Regenerationsphasen.',
     },
     {
-      label: 'Vertraeglichkeit',
+      label: 'Verträglichkeit',
       percent: 81,
       rationale: 'Milde Komponenten und klare Zutatenlisten erleichtern die Auswahl bei sensibler Verdauung.',
     },
   ],
   orientationNotes: [
-    'Regelmaessige kleine Mahlzeiten koennen helfen, Energie ueber den Tag zu verteilen.',
-    'Eine ausreichende Fluessigkeitsroutine liefert Orientierung fuer das taegliche Tracking.',
-    'Bei Appetitmangel koennen kleine, proteinbetonte Snacks alltagstauglicher sein als grosse Portionen.',
+    'Regelmäßige kleine Mahlzeiten können helfen, Energie über den Tag zu verteilen.',
+    'Eine ausreichende Flüssigkeitsroutine liefert Orientierung für das tägliche Tracking.',
+    'Bei Appetitmangel können kleine, proteinbetonte Snacks alltagstauglicher sein als große Portionen.',
   ],
   riskNotes: [
     'Bei starken Beschwerden, Gewichtsverlust oder Unsicherheit sollte Fachpersonal einbezogen werden.',
-    'Dokumente werden in dieser Demo nicht medizinisch ausgewertet; der Upload zeigt nur den spaeteren Prozess.',
+    'Dokumente werden in dieser Demo nicht medizinisch ausgewertet; der Upload zeigt nur den späteren Prozess.',
   ],
   nextSteps: [
     'Wochenplan im Dashboard ansehen',
-    'Passende Rezepte pruefen',
+    'Passende Rezepte prüfen',
     'Meal-Kit optional in den Warenkorb legen',
   ],
 };
@@ -337,7 +337,7 @@ export const nutritionMockApi = {
   },
 
   /**
-   * Regelbasierte Demo-Auswertung fuer die Analyse-Seite.
+   * Regelbasierte Demo-Auswertung für die Analyse-Seite.
    * Später: POST /api/frontend/intake/full-analyze
    */
   fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {

@@ -92,3 +92,20 @@ def test_frontend_curated_and_tracking_endpoints_follow_demo_flow() -> None:
     )
     assert add_water_response.status_code == 200
     assert add_water_response.json()["currentMl"] == 500
+
+
+def test_frontend_tracking_rejects_unknown_patient_and_invalid_water_amount() -> None:
+    missing_patient_response = client.post("/api/frontend/tracking/daily/unknown_patient/meal-box")
+    assert missing_patient_response.status_code == 404
+    assert missing_patient_response.json()["error"]["code"] == "not_found"
+
+    analyze_response = client.post("/api/frontend/intake/full-analyze", json=build_full_analyze_payload())
+    assert analyze_response.status_code == 200
+    patient_id = analyze_response.json()["patientId"]
+
+    invalid_water_response = client.post(
+        f"/api/frontend/tracking/hydration/{patient_id}/water",
+        json={"amountMl": 0},
+    )
+    assert invalid_water_response.status_code == 422
+    assert invalid_water_response.json()["error"]["code"] == "validation_error"

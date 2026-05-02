@@ -70,7 +70,7 @@ def _profile(
         allergies=allergies or [],
         dietary_preferences=["balanced", "easy_prep"],
         consent_data_processing=True,
-        notes="Demo-Profil fuer die Fallstudie.",
+        notes="Demo-Profil für die Fallstudie.",
     )
 
 
@@ -105,7 +105,7 @@ def _intake(
         activity_and_movement=ActivityAndMovement(
             daily_steps=1500,
             sports_per_week=0,
-            sports_description="Postoperativ eingeschraenkt",
+            sports_description="Postoperativ eingeschränkt",
         ),
         medication_and_supplements=MedicationAndSupplements(
             medications=["Schmerzmittel nach Entlassplan"],
@@ -144,9 +144,9 @@ def _intake(
         ),
         goals_and_expectations=GoalsAndExpectations(
             goals=["wundheilung", "gewicht_stabilisieren", "alltagstauglich_essen"],
-            expectation_notes="Konkreter Plan fuer die erste Woche nach Entlassung.",
+            expectation_notes="Konkreter Plan für die erste Woche nach Entlassung.",
         ),
-        additional_notes=additional_notes or "Demo-Intake fuer strukturierten Nachsorgeflow.",
+        additional_notes=additional_notes or "Demo-Intake für strukturierten Nachsorgeflow.",
     )
 
 
@@ -174,7 +174,7 @@ PERSONAS = {
             meals_per_day=1,
             eating_difficulties=["schluckprobleme"],
             fluid_ml=900,
-            additional_notes="Schluckprobleme seit Entlassung, fachliche Pruefung erforderlich.",
+            additional_notes="Schluckprobleme seit Entlassung, fachliche Prüfung erforderlich.",
         ),
         "safety_meal_kits": ["produktdetails_wundheilungs_box"],
     },

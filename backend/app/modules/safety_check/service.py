@@ -103,7 +103,7 @@ def run_safety_check(payload: SafetyCheckRequest) -> SafetyCheckResponse:
             warnings.append(
                 SafetyWarning(
                     code="recipe_ingredient_conflict",
-                    message=f"Rezept '{recipe.name}' enthaelt moegliche Konflikte: {', '.join(conflicts)}.",
+                    message=f"Rezept '{recipe.name}' enthält mögliche Konflikte: {', '.join(conflicts)}.",
                     item_id=recipe.id,
                     conflicts=conflicts,
                 )

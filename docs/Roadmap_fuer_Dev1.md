@@ -1,4 +1,4 @@
-# Roadmap fuer Dev1: Frontend und Patient Journey
+# Roadmap für Dev1: Frontend und Patient Journey
 
 ## Ziel
 
@@ -18,45 +18,45 @@ Der wichtigste Frontend-Beitrag ist ein durchgehender Flow:
 8. Tracking
 9. Export/Delete als Privacy-Aktion
 
-Der Flow darf fuer die Abgabe mit Demo-Daten arbeiten, sollte aber auf die echten Backend-Endpunkte vorbereitet sein.
+Der Flow darf für die Abgabe mit Demo-Daten arbeiten, sollte aber auf die echten Backend-Endpunkte vorbereitet sein.
 
 ## Prioritaet 2: Nutrition Plan als Hauptscreen
 
 Die Planansicht sollte der Mittelpunkt der App werden.
 
-- 7-Tage-Uebersicht mit Fruehstueck, Mittagessen, Abendessen und Snacks
+- 7-Tage-Übersicht mit Fruehstueck, Mittagessen, Abendessen und Snacks
 - Fokus des Plans sichtbar, zum Beispiel proteinreich, leicht zuzubereiten oder magenfreundlich
 - Hinweise und Anpassungen aus dem Backend klar anzeigen
-- Empfehlungserklaerung verstaendlich darstellen, ohne medizinisch zu uebertreiben
+- Empfehlungserklärung verständlich darstellen, ohne medizinisch zu übertreiben
 - Warnungen optisch klar von normalen Tipps trennen
 
 ## Prioritaet 3: Safety und Warnlogik sichtbar machen
 
-Das Backend liefert Safety Checks und Recommendation Explanations. Dev1 sollte diese Informationen so darstellen, dass sie in der Praesentation fachlich stark wirken.
+Das Backend liefert Safety Checks und Recommendation Explanations. Dev1 sollte diese Informationen so darstellen, dass sie in der Präsentation fachlich stark wirken.
 
 - Status `clear`, `warning` und `blocked` klar unterscheidbar anzeigen
-- Blockierte Meal-Kits nicht als kaufbare Option praesentieren
+- Blockierte Meal-Kits nicht als kaufbare Option präsentieren
 - Warnungen in einfacher Sprache anzeigen
-- Bei kritischen Angaben auf professionelle Ruecksprache oder Review verweisen
+- Bei kritischen Angaben auf professionelle Rücksprache oder Review verweisen
 - Keine UI-Texte verwenden, die Diagnose, Heilung oder medizinische Freigabe versprechen
 
 ## Prioritaet 4: Tracking UI
 
 Tracking soll zeigen, dass Food 4 Recovery mehr ist als ein einmaliger Plan.
 
-- Kurze Eingabe fuer Appetit, Mahlzeiten, Gewicht, Fluessigkeit oder Symptome
+- Kurze Eingabe für Appetit, Mahlzeiten, Gewicht, Flüssigkeit oder Symptome
 - Tagesstatus im Dashboard anzeigen
 - Fortschritt nicht als medizinisches Ergebnis, sondern als Beobachtung darstellen
 - Fehlende Eingaben freundlich behandeln
 
 ## Prioritaet 5: Privacy-Aktionen
 
-Datenschutz ist fuer die Abgabe ein starkes Argument und sollte im UI sichtbar sein.
+Datenschutz ist für die Abgabe ein starkes Argument und sollte im UI sichtbar sein.
 
 - Einwilligung beim Profil klar erfassen
 - Export patientenbezogener Daten erreichbar machen
-- Loeschen des Profils als bewusst bestaetigte Aktion einbauen
-- Erfolgs- und Fehlerzustaende verstaendlich anzeigen
+- Löschen des Profils als bewusst bestaetigte Aktion einbauen
+- Erfolgs- und Fehlerzustände verständlich anzeigen
 
 ## API-Anbindung
 
@@ -75,15 +75,15 @@ Wenn der bestehende Frontend-BFF genutzt wird, sollte die UI trotzdem fachlich d
 
 ## Akzeptanzkriterien
 
-- Der komplette Demo-Flow ist ohne manuelle API-Tools praesentierbar.
-- Nutrition Plan, Warnungen und Meal-Kit-Optionen sind fuer Nicht-Techniker verstaendlich.
+- Der komplette Demo-Flow ist ohne manuelle API-Tools präsentierbar.
+- Nutrition Plan, Warnungen und Meal-Kit-Optionen sind für Nicht-Techniker verständlich.
 - Blockierte oder riskante Optionen werden nicht wie normale Empfehlungen dargestellt.
 - Privacy Export und Delete sind im UI sichtbar oder mindestens im Demo-Flow vorbereitet.
-- Die App wirkt wie digitale Ernaehrungsnachsorge, nicht wie ein allgemeiner Rezeptshop.
+- Die App wirkt wie digitale Ernährungsnachsorge, nicht wie ein allgemeiner Rezeptshop.
 
 ## Nicht-Ziele
 
 - Keine echte medizinische Diagnose.
 - Keine echte Zahlungsabwicklung.
-- Keine vollstaendige Kliniksystemintegration.
+- Keine vollständige Kliniksystemintegration.
 - Kein KI-Chatbot mit medizinischen Freitextempfehlungen.

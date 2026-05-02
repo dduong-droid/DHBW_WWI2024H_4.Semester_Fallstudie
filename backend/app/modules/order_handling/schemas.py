@@ -8,7 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-OrderStatus = Literal["draft", "confirmed", "processing", "completed", "cancelled"]
+OrderStatus = Literal["draft", "pending", "confirmed", "processing", "completed", "cancelled", "demo_failed"]
 PaymentMethod = Literal["apple_pay", "card", "invoice"]
 
 

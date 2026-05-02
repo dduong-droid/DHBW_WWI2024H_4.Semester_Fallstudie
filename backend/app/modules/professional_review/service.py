@@ -73,7 +73,7 @@ def create_review_if_missing(
             plan_id=plan_id,
             source=source,
             risk_flag_ids=risk_flag_ids,
-            comments="Automatisch zur fachlichen Pruefung markiert.",
+            comments="Automatisch zur fachlichen Prüfung markiert.",
         )
     )
 

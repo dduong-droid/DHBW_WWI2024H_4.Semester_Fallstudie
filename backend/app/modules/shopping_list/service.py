@@ -20,7 +20,7 @@ from app.modules.shopping_list.schemas import ShoppingList, ShoppingListCreateFr
 
 
 _CATEGORY_MARKERS: dict[str, set[str]] = {
-    "Protein": {"huhn", "haehnchen", "pute", "lachs", "kabeljau", "fisch", "tofu", "ei", "protein"},
+    "Protein": {"huhn", "hähnchen", "pute", "lachs", "kabeljau", "fisch", "tofu", "ei", "protein"},
     "Getreide und Beilagen": {"reis", "quinoa", "hafer", "hirse", "kartoffel", "kartoffeln", "pasta", "polenta"},
     "Obst": {"banane", "beeren", "apfel", "birne"},
     "Gemuese": {"brokkoli", "karotte", "karotten", "zucchini", "fenchel", "spinat", "paprika", "gemuese"},

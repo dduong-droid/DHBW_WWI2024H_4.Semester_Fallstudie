@@ -59,9 +59,9 @@ export default function CuratedRecipesPage() {
               <HeartPulse size={16} strokeWidth={3} />
               Demo-Kuration
             </div>
-            <h1 className={styles.title}>Rezeptideen fuer deine Recovery-Routine.</h1>
+            <h1 className={styles.title}>Rezeptideen für deine Recovery-Routine.</h1>
             <p className={styles.subtitle}>
-              Basierend auf dem Demo-Profil zeigen wir alltagstaugliche Gerichte, die Orientierung fuer Protein, Energie und Vertraeglichkeit geben. Sie ersetzen keine individuelle Beratung.
+              Basierend auf dem Demo-Profil zeigen wir alltagstaugliche Gerichte, die Orientierung für Protein, Energie und Verträglichkeit geben. Sie ersetzen keine individuelle Beratung.
             </p>
           </header>
 

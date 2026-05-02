@@ -57,6 +57,22 @@ def test_ready_endpoint_checks_database() -> None:
     assert response.json() == {"status": "ok", "database": "ok"}
 
 
+def test_local_frontend_origin_can_preflight_json_posts_with_api_key_header() -> None:
+    response = client.options(
+        "/api/frontend/intake/full-analyze",
+        headers={
+            "Origin": "http://127.0.0.1:3000",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type,x-api-key",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "http://127.0.0.1:3000"
+    assert "POST" in response.headers["access-control-allow-methods"]
+    assert "X-API-Key" in response.headers["access-control-allow-headers"]
+
+
 def test_patient_profile_requires_data_processing_consent() -> None:
     payload = _create_profile_payload()
     payload.pop("consent_data_processing")

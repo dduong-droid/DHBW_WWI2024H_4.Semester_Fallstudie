@@ -12,7 +12,7 @@ Stand: 2026-04-30, Branch `main`, Commit `8fd191d`.
 
 - `docs/reports/github-project-analysis.md` war gegen den alten lokalen `master` geschrieben und widersprach `main`.
 - Die Behauptung, `AGENTS.md`, `shared/api_contracts.md`, `docs/API_Demo_Flow.md` und `backend/app/modules/frontend_bff/*` fehlten, war nur auf dem alten Checkout wahr. Auf `main` existieren diese Dateien.
-- Die fruehere Empfehlung, Next pauschal auf 14 zu setzen, ist veraltet. Aktuell ist Next `15.1.0` in `package.json`, `package-lock.json` und nach `npm install` installiert.
+- Die fruehere Empfehlung, Next pauschal auf 14 zu setzen, ist veraltet. Aktuell ist Next `15.5.15` in `package.json`, `package-lock.json` und nach `npm install` installiert.
 
 ## Aktuelle Backend-BFF-Endpunkte
 
@@ -34,7 +34,7 @@ Neu ist `frontend/src/services/apiClient.ts` als kleine API-Schicht:
 - sendet optional `X-API-Key` aus `NEXT_PUBLIC_API_KEY`
 - ruft BFF-Endpunkte unter `/api/frontend/...`
 - speichert nach Onboarding `patientId` und letzte Analyse lokal im Browser
-- faellt bei nicht erreichbarerer API oder fehlendem Seed auf `nutritionMockApi` zurueck
+- fällt bei nicht erreichbarerer API oder fehlendem Seed auf `nutritionMockApi` zurück
 
 ## Screens mit Backend-BFF
 
@@ -53,19 +53,18 @@ Neu ist `frontend/src/services/apiClient.ts` als kleine API-Schicht:
 
 ## Medizinische und Security-Texte
 
-Geaendert:
+Geändert:
 
-- `DSGVO konform` wurde in sichtbaren Profil-/Onboarding-Trust-Elementen zu `Demo-Datenschutzkonzept`.
-- `Ende-zu-Ende-Verschluesselung` wurde zu `lokaler Demo-Modus` bzw. vorsichtiger Demo-Transport-Formulierung.
+- Überzogene Datenschutz- und Verschluesselungsclaims wurden in sichtbaren Profil-/Onboarding-Trust-Elementen zu `Demo-Datenschutzkonzept` und `lokaler Demo-Modus` entschärft.
 
 Bereits vorhanden und beibehalten:
 
-- Disclaimer auf Landing/Analysis: `Food4Recovery ersetzt keine aerztliche Diagnose oder Behandlung...`
+- Disclaimer auf Landing/Analysis: `Food4Recovery ersetzt keine ärztliche Diagnose oder Behandlung...`
 - Rezept- und Shop-Texte formulieren Empfehlungen als Orientierung und nicht als Diagnose oder Behandlung.
 
 ## Checks
 
-Gruen:
+Grün:
 
 - `cd frontend && npm install`
 - `cd frontend && npm run build`
@@ -77,31 +76,31 @@ Gruen:
 Hinweise:
 
 - `npm install` meldet 2 Audit-Funde und eine Next-15.1.0-Sicherheitswarnung. Es wurde kein `npm audit fix --force` und kein Major-/Downgrade ausgefuehrt.
-- `npm run lint` ist erfolgreich, zeigt aber drei bestehende Warnungen fuer `<img>` statt `next/image`.
+- `npm run lint` ist erfolgreich, zeigt aber drei bestehende Warnungen für `<img>` statt `next/image`.
 
 ## Reparaturen Aus Checks
 
-- `frontend/package.json`: `lint` von `next lint` auf `eslint . --ext .ts,.tsx` geaendert, weil `next lint` in der aktuellen Next-/ESLint-Kombination nicht mehr passend ist.
-- `frontend/.eslintrc.json`: klassische Next-ESLint-Konfiguration ergaenzt.
+- `frontend/package.json`: `lint` von `next lint` auf `eslint . --ext .ts,.tsx` geändert, weil `next lint` in der aktuellen Next-/ESLint-Kombination nicht mehr passend ist.
+- `frontend/.eslintrc.json`: klassische Next-ESLint-Konfiguration ergänzt.
 - `frontend/eslint.config.js`: alte Vite/React-Refresh-Flat-Config entfernt.
 - `backend/pyproject.toml`: setuptools Package-Discovery auf `app*` begrenzt, damit `latest_logs` nicht als Top-Level-Package erkannt wird.
 - Backend: falsche Starlette-Konstante `HTTP_422_UNPROCESSABLE_CONTENT` durch `HTTP_422_UNPROCESSABLE_ENTITY` ersetzt.
 
 ## Rest-Risiken
 
-- Next `15.1.0` ist installierbar und buildet, wird aber von npm als verwundbar markiert. Ein gezieltes Patch-Upgrade sollte separat getestet werden.
-- Das Frontend hat bewusst Mock-Fallbacks. Ohne laufendes Backend und Demo-Daten ist der Flow praesentierbar, aber nicht voll backendgetrieben.
+- Next wurde gezielt innerhalb 15.x auf `15.5.15` angehoben. `npm audit` meldet weiterhin 2 moderate transitive PostCSS/Next-Warnungen; der angebotene Fix-Pfad ist kein sicherer 15.x-Patch.
+- Das Frontend hat bewusst Mock-Fallbacks. Ohne laufendes Backend und Demo-Daten ist der Flow präsentierbar, aber nicht voll backendgetrieben.
 - `/profile` und `/checkout` sind noch nicht produktiv an Backend-APIs angeschlossen.
-- `NEXT_PUBLIC_API_KEY` ist nur fuer Demo-Zwecke geeignet, weil Public Env Vars im Browser sichtbar sind.
+- `NEXT_PUBLIC_API_KEY` ist nur für Demo-Zwecke geeignet, weil Public Env Vars im Browser sichtbar sind.
 
-## Praesentationsstatus
+## Präsentationsstatus
 
-Praesentierbar fuer die Fallstudien-Demo: ja, mit klarem Hinweis auf lokalen Demo-Modus und Mock-Fallback. Der zentrale Flow Onboarding -> Analysis -> Dashboard/Recipes/Shop nutzt jetzt den vorhandenen Frontend-BFF, sofern Backend und optionaler API-Key passen.
+Präsentierbar für die Fallstudien-Demo: ja, mit klarem Hinweis auf lokalen Demo-Modus und Mock-Fallback. Der zentrale Flow Onboarding -> Analysis -> Dashboard/Recipes/Shop nutzt jetzt den vorhandenen Frontend-BFF, sofern Backend und optionaler API-Key passen.
 
 ## Naechste 5 To-dos
 
-1. Next `15.1.0` gezielt auf eine gepatchte kompatible 15.x-Version heben und Build/Lint erneut ausfuehren.
-2. Backend-Demo-Seed vor der Vorfuehrung dokumentiert ausfuehren und API-Key-Setup klaeren.
-3. Profilseite auf das echte PatientProfile-Schema mappen oder bewusst als lokales Demo-Profil kennzeichnen.
-4. Checkout auf `POST /api/orders` anbinden, inklusive Fehler- und Safety-Hinweisen.
-5. Drei `<img>`-Lint-Warnungen durch `next/image` oder eine bewusst konfigurierte Ausnahme bereinigen.
+1. Backend-Demo-Seed vor der Vorfuehrung ausfuehren und API-Key-Setup klaeren.
+2. Profilseite fachlich erweitern, falls alle Backend-Profilfelder editierbar sein sollen.
+3. Checkout bewusst als Demo-Order ohne Payment erklären.
+4. Moderate transitive npm-Audit-Warnungen beobachten und bei sicherem 15.x-Fix erneut prüfen.
+5. Optional: Browser-E2E-Smoke für Onboarding -> Analysis -> Shop -> Checkout automatisieren.

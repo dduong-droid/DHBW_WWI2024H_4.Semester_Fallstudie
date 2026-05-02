@@ -66,14 +66,14 @@ _TEMPLATE_RECIPES = {
         ],
         "lunch": [
             _recipe("po_l1", "Lachs mit Quinoa", "Entzuendungsarmer Mittagsteller.", 620, 42, 48, 22, ["Lachs", "Quinoa", "Brokkoli"]),
-            _recipe("po_l2", "Huhn mit Linsen", "Proteinstarke Regenerationsmahlzeit.", 640, 45, 50, 18, ["Haehnchen", "Linsen", "Karotten"]),
+            _recipe("po_l2", "Huhn mit Linsen", "Proteinstarke Regenerationsmahlzeit.", 640, 45, 50, 18, ["Hähnchen", "Linsen", "Karotten"]),
         ],
         "dinner": [
             _recipe("po_d1", "Putenpfanne mit Reis", "Leicht und ausgewogen.", 560, 39, 52, 14, ["Pute", "Reis", "Zucchini"]),
             _recipe("po_d2", "Kabeljau mit Kartoffeln", "Milde Abendmahlzeit.", 520, 37, 46, 12, ["Kabeljau", "Kartoffeln", "Fenchel"]),
         ],
         "snacks": [
-            _recipe("po_s1", "Protein-Smoothie", "Snack fuer die Genesungsphase.", 220, 18, 20, 6, ["Banane", "Beeren", "Protein"]),
+            _recipe("po_s1", "Protein-Smoothie", "Snack für die Genesungsphase.", 220, 18, 20, 6, ["Banane", "Beeren", "Protein"]),
         ],
     },
     "chemo_easy_digest": {
@@ -84,8 +84,8 @@ _TEMPLATE_RECIPES = {
             _recipe("ce_b2", "Reis-Porridge", "Sanftes Fruehstueck bei Appetitmangel.", 340, 10, 56, 6, ["Reis", "Banane", "Zimt"]),
         ],
         "lunch": [
-            _recipe("ce_l1", "Mildes Haehnchen mit Reis", "Leichte Hauptmahlzeit.", 520, 34, 58, 10, ["Haehnchen", "Reis", "Karotten"]),
-            _recipe("ce_l2", "Kartoffel-Zucchini-Eintopf", "Schonend fuer empfindliche Tage.", 480, 22, 60, 12, ["Kartoffeln", "Zucchini", "Huhn"]),
+            _recipe("ce_l1", "Mildes Hähnchen mit Reis", "Leichte Hauptmahlzeit.", 520, 34, 58, 10, ["Hähnchen", "Reis", "Karotten"]),
+            _recipe("ce_l2", "Kartoffel-Zucchini-Eintopf", "Schonend für empfindliche Tage.", 480, 22, 60, 12, ["Kartoffeln", "Zucchini", "Huhn"]),
         ],
         "dinner": [
             _recipe("ce_d1", "Fenchel-Suppe mit Pute", "Warme und sanfte Abendoption.", 420, 28, 34, 10, ["Fenchel", "Pute", "Kartoffel"]),
@@ -97,9 +97,9 @@ _TEMPLATE_RECIPES = {
     },
     "gut_balance_recovery": {
         "title": "Gut Balance Recovery",
-        "focus": "Darmfreundliche Kost mit milden, vertraeglichen Komponenten",
+        "focus": "Darmfreundliche Kost mit milden, verträglichen Komponenten",
         "breakfast": [
-            _recipe("gb_b1", "Reis-Congee", "Sehr sanft fuer den Start in den Tag.", 310, 9, 58, 4, ["Reis", "Ingwer", "Karotte"]),
+            _recipe("gb_b1", "Reis-Congee", "Sehr sanft für den Start in den Tag.", 310, 9, 58, 4, ["Reis", "Ingwer", "Karotte"]),
             _recipe("gb_b2", "Buchweizen-Bowl", "Glutenfreie Morgenmahlzeit.", 350, 14, 50, 8, ["Buchweizen", "Beeren", "Leinsamen"]),
         ],
         "lunch": [
@@ -126,7 +126,7 @@ _TEMPLATE_RECIPES = {
             _recipe("er_l2", "Linsen-Kartoffel-Teller", "Sattmachend und ausgewogen.", 590, 28, 70, 14, ["Linsen", "Kartoffeln", "Spinat"]),
         ],
         "dinner": [
-            _recipe("er_d1", "Ofengemuese mit Huhn", "Einfach und energiereich.", 560, 36, 44, 18, ["Haehnchen", "Suesskartoffel", "Brokkoli"]),
+            _recipe("er_d1", "Ofengemuese mit Huhn", "Einfach und energiereich.", 560, 36, 44, 18, ["Hähnchen", "Suesskartoffel", "Brokkoli"]),
             _recipe("er_d2", "Reis mit Eierspeise", "Schnelle Abendmahlzeit.", 520, 26, 58, 14, ["Reis", "Ei", "Zucchini"]),
         ],
         "snacks": [
@@ -135,14 +135,14 @@ _TEMPLATE_RECIPES = {
     },
     "balanced_general_recovery": {
         "title": "Balanced General Recovery",
-        "focus": "Ausgewogene Regeneration fuer den Alltag",
+        "focus": "Ausgewogene Regeneration für den Alltag",
         "breakfast": [
             _recipe("bg_b1", "Joghurtfreie Bowl", "Leichter und ausgewogener Start.", 390, 18, 46, 11, ["Pflanzenjoghurt", "Beeren", "Hafer"]),
             _recipe("bg_b2", "Porridge mit Birne", "Alltagstaugliches Fruehstueck.", 370, 14, 52, 8, ["Hafer", "Birne", "Zimt"]),
         ],
         "lunch": [
             _recipe("bg_l1", "Quinoa-Gemueseschale", "Ausgewogene Mittagsmahlzeit.", 540, 24, 60, 16, ["Quinoa", "Kichererbsen", "Brokkoli"]),
-            _recipe("bg_l2", "Huhn mit Kartoffeln", "Klassisch und gut vertraeglich.", 560, 34, 48, 17, ["Haehnchen", "Kartoffeln", "Karotten"]),
+            _recipe("bg_l2", "Huhn mit Kartoffeln", "Klassisch und gut verträglich.", 560, 34, 48, 17, ["Hähnchen", "Kartoffeln", "Karotten"]),
         ],
         "dinner": [
             _recipe("bg_d1", "Milde Gemuesepfanne", "Ausgeglichen und einfach.", 470, 20, 50, 14, ["Tofu", "Reis", "Gemuese"]),
@@ -202,13 +202,13 @@ _TEMPLATE_PRIORITY = [
 _TEMPLATE_RULES: dict[str, list[tuple[str, int, str]]] = {
     "chemo_easy_digest": [
         ("chemo_related_appetite_loss", 12, "Onkologischer Kontext mit Appetitmangel priorisiert leicht verdauliche Kost."),
-        ("oncology_context", 4, "Der Therapiekontext spricht fuer eine sanfte, niedrigschwellige Vorlage."),
+        ("oncology_context", 4, "Der Therapiekontext spricht für eine sanfte, niedrigschwellige Vorlage."),
         ("appetite_minimal", 3, "Sehr geringer Appetit verlangt kleine, einfache Mahlzeiten mit Snack-Fokus."),
         ("needs_easy_prep", 2, "Einfach vorbereitbare Mahlzeiten entlasten im Alltag."),
     ],
     "gut_balance_recovery": [
-        ("gut_sensitivity", 11, "Verdauungsbeschwerden und Intoleranzen sprechen fuer eine darmfreundliche Vorlage."),
-        ("digestive_symptom_count", 2, "Mehrere Verdauungssymptome verstaerken den Bedarf an milder Kost."),
+        ("gut_sensitivity", 11, "Verdauungsbeschwerden und Intoleranzen sprechen für eine darmfreundliche Vorlage."),
+        ("digestive_symptom_count", 2, "Mehrere Verdauungssymptome verstärken den Bedarf an milder Kost."),
         ("needs_easy_prep", 1, "Eine einfach umsetzbare Alltagsstruktur bleibt hilfreich."),
     ],
     "post_op_high_protein": [
@@ -217,13 +217,13 @@ _TEMPLATE_RULES: dict[str, list[tuple[str, int, str]]] = {
         ("anti_inflammatory_focus", 2, "Entzuendungsarme Optionen passen gut in die postoperative Phase."),
     ],
     "energy_rebuild": [
-        ("high_fatigue", 7, "Erschoepfung spricht fuer energiedichtere und alltagstaugliche Mahlzeiten."),
+        ("high_fatigue", 7, "Erschoepfung spricht für energiedichtere und alltagstaugliche Mahlzeiten."),
         ("energy_support", 4, "Der Fokus auf Energieaufbau stuetzt eine kalorien- und snackbetonte Vorlage."),
         ("needs_easy_prep", 2, "Alltagstauglichkeit bleibt bei geringer Belastbarkeit wichtig."),
     ],
     "balanced_general_recovery": [
         ("post_op_recovery", 1, "Regeneration bleibt ein allgemeiner Grundfokus."),
-        ("immune_focus", 1, "Ein ausgewogener Regenerationsplan deckt leichte Immununterstuetzung mit ab."),
+        ("immune_focus", 1, "Ein ausgewogener Regenerationsplan deckt leichte Immununterstützung mit ab."),
     ],
 }
 
@@ -233,7 +233,7 @@ _TEMPLATE_PENALTIES: dict[str, list[tuple[str, int, str]]] = {
         ("chemo_related_appetite_loss", -2, "Bei Appetitmangel ist eine sanftere Vorlage haeufig passender."),
     ],
     "post_op_high_protein": [
-        ("chemo_related_appetite_loss", -2, "Sehr proteindichte Optionen koennen bei Appetitmangel zu belastend wirken."),
+        ("chemo_related_appetite_loss", -2, "Sehr proteindichte Optionen können bei Appetitmangel zu belastend wirken."),
     ],
     "chemo_easy_digest": [
         ("high_protein_need", -1, "Ein reiner Easy-Digest-Fokus deckt hohen Proteinbedarf allein weniger gut ab."),
@@ -241,15 +241,15 @@ _TEMPLATE_PENALTIES: dict[str, list[tuple[str, int, str]]] = {
 }
 
 _MEAL_KIT_POSITIVE_RULES: dict[str, tuple[str, int, str]] = {
-    "post_op_recovery": ("post_op_recovery", 4, "unterstuetzt den postoperativen Regenerationsbedarf"),
+    "post_op_recovery": ("post_op_recovery", 4, "unterstützt den postoperativen Regenerationsbedarf"),
     "high_protein_need": ("high_protein_need", 4, "liefert einen passenden Protein-Fokus"),
     "chemo_related_appetite_loss": ("chemo_related_appetite_loss", 5, "passt zu onkologischer Belastung und Appetitmangel"),
     "gut_sensitivity": ("gut_sensitivity", 5, "ist auf sensible Verdauung ausgerichtet"),
     "immune_focus": ("immune_focus", 3, "stuetzt den immunbezogenen Schwerpunkt"),
     "high_fatigue": ("high_fatigue", 4, "adressiert Erschoepfung und geringe Belastbarkeit"),
-    "energy_support": ("energy_support", 3, "liefert energiedichte Unterstuetzung"),
+    "energy_support": ("energy_support", 3, "liefert energiedichte Unterstützung"),
     "anti_inflammatory_focus": ("anti_inflammatory_focus", 2, "passt zum entzuendungsarmen Schwerpunkt"),
-    "oncology_context": ("oncology_context", 2, "beruecksichtigt den onkologischen Kontext"),
+    "oncology_context": ("oncology_context", 2, "berücksichtigt den onkologischen Kontext"),
 }
 
 
@@ -310,7 +310,7 @@ def evaluate_template_selection(
                 score += weight
                 reasons.append(reason)
         scores[template_id] = score
-        rationales[template_id] = reasons or ["Ausgewogene Standardvorlage fuer die allgemeine Regeneration."]
+        rationales[template_id] = reasons or ["Ausgewogene Standardvorlage für die allgemeine Regeneration."]
 
     best_template_id = max(
         _TEMPLATE_PRIORITY,
@@ -345,7 +345,7 @@ def evaluate_meal_kit(
             score=0,
             positive_reasons=[],
             negative_reasons=[],
-            exclusion_reasons=[f"enthaelt Ausschluesse fuer: {', '.join(contraindication_hits)}"],
+            exclusion_reasons=[f"enthält Ausschluesse für: {', '.join(contraindication_hits)}"],
         )
 
     score = 0
@@ -366,7 +366,7 @@ def evaluate_meal_kit(
         positive_reasons.append("laesst sich einfach in den Alltag integrieren")
     if context.high_protein_need and meal_kit.nutritional_values.protein >= 40:
         score += 2
-        positive_reasons.append("liefert zusaetzlich eine hohe Proteindichte")
+        positive_reasons.append("liefert zusätzlich eine hohe Proteindichte")
     if context.appetite_reduced and meal_kit.nutritional_values.calories >= 650:
         score += 1
         positive_reasons.append("konzentriert Energie bei reduziertem Appetit")
@@ -376,7 +376,7 @@ def evaluate_meal_kit(
         negative_reasons.append("aufwendige Zubereitung passt schlecht zur aktuellen Belastbarkeit")
     if context.gut_sensitivity and not {"gut_friendly", "easy_digest"} & set(meal_kit.dietary_tags):
         score -= 2
-        negative_reasons.append("bei sensibler Verdauung ist die Vertraeglichkeit weniger klar")
+        negative_reasons.append("bei sensibler Verdauung ist die Verträglichkeit weniger klar")
     if context.chemo_related_appetite_loss and "easy_digest" not in meal_kit.dietary_tags:
         score -= 2
         negative_reasons.append("bei Appetitmangel waeren noch sanftere Komponenten ideal")
@@ -428,7 +428,7 @@ def _safe_substitute_recipe(recipe_id: str) -> Recipe:
     return _recipe(
         f"{recipe_id}_allergen_safe_substitute",
         "Allergenarme Ersatzmahlzeit",
-        "Milde Ersatzoption, wenn alle Planvarianten mit Allergien oder Unvertraeglichkeiten kollidieren.",
+        "Milde Ersatzoption, wenn alle Planvarianten mit Allergien oder Unverträglichkeiten kollidieren.",
         430,
         24,
         54,
@@ -440,7 +440,7 @@ def _safe_substitute_recipe(recipe_id: str) -> Recipe:
             "texture": "soft",
             "instructions": [
                 "Ersatzoption nur als sichere Demo-Alternative verwenden.",
-                "Bei komplexen Allergien oder Beschwerden fachliche Pruefung einplanen.",
+                "Bei komplexen Allergien oder Beschwerden fachliche Prüfung einplanen.",
             ],
         }
     )
@@ -478,12 +478,12 @@ def build_weekly_plan(
     if flags.needs_easy_prep:
         adjustments.append("Einfach vorzubereitende Mahlzeiten wurden bevorzugt.")
     if context.appetite_minimal:
-        adjustments.append("Es wurden zusaetzliche Snack-Fenster fuer sehr geringe Essmengen aktiviert.")
+        adjustments.append("Es wurden zusätzliche Snack-Fenster für sehr geringe Essmengen aktiviert.")
     if flags.high_fatigue:
-        adjustments.append("Kalorien- und Energieziel wurden fuer Fatigue moderat angehoben.")
+        adjustments.append("Kalorien- und Energieziel wurden für Fatigue moderat angehoben.")
     if questionnaire.gut_health.food_intolerances:
         adjustments.append(
-            "Ruecksicht auf Unvertraeglichkeiten: " + ", ".join(questionnaire.gut_health.food_intolerances)
+            "Rücksicht auf Unverträglichkeiten: " + ", ".join(questionnaire.gut_health.food_intolerances)
         )
 
     days: list[DailyPlan] = []

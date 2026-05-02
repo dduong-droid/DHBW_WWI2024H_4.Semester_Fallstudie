@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import {
   Utensils, HeartPulse, Ruler, UtensilsCrossed, Target,
   ArrowRight, Clock, Shield, Lock, Sparkles, CheckCircle2,
-  Upload, FileText, User, X, AlertCircle
+  Upload, FileText, User, X
 } from 'lucide-react';
 import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
@@ -43,13 +43,14 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
 
   // Form State
-  const [name, setName] = useState('');
+  const [name] = useState('');
   // Age, Weight, Height are collected in Profile
   const [appetite, setAppetite] = useState('normal');
   const [allergies, setAllergies] = useState<Set<string>>(new Set());
   const [intolerances, setIntolerances] = useState<Set<string>>(new Set());
   const [goals, setGoals] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   // File Upload State
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -103,8 +104,6 @@ export default function OnboardingPage() {
     setter(next);
   };
 
-  const progressPercent = Math.round(((step) / (STEPS.length - 1)) * 100);
-
   // Keine numerische Validierung für Age/Weight/Height mehr nötig
 
   const canGoNext = (): boolean => {
@@ -131,6 +130,16 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    setUploadStatus(uploadedFiles.length > 0 ? 'Dokument-Metadaten werden im Demo-Backend geprüft...' : '');
+    const uploadedDocuments = uploadedFiles.length > 0 ? await recoveryApi.uploadDocuments(uploadedFiles) : [];
+    if (uploadedDocuments.length > 0) {
+      const backendUploads = uploadedDocuments.filter(doc => !doc.document_id.startsWith('doc_local_')).length;
+      setUploadStatus(
+        backendUploads === uploadedDocuments.length
+          ? 'Dokument-Metadaten wurden im Backend angenommen. Es erfolgt keine medizinische Auswertung.'
+          : 'Dokument-Metadaten wurden lokal als Demo-Fallback erfasst. Es erfolgt keine medizinische Auswertung.',
+      );
+    }
     await recoveryApi.submitOnboardingAnalysis({
       name, 
       age: 0, // In dieser Demo-Version im Profil erfasst
@@ -140,17 +149,12 @@ export default function OnboardingPage() {
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
       goals: Array.from(goals),
-      uploadedFiles: uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
+      uploadedFiles: uploadedDocuments.length > 0
+        ? uploadedDocuments.map(doc => ({ name: doc.filename, size: doc.size, type: doc.content_type }))
+        : uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
     });
     setSubmitting(false);
     router.push('/analysis');
-  };
-
-  // Sanitize-Handler: Nur positive Zahlen zulassen
-  const sanitizeNumberInput = (value: string): string => {
-    // Entferne alles außer Ziffern und Punkt/Komma
-    const cleaned = value.replace(/[^0-9.,]/g, '');
-    return cleaned;
   };
 
   return (
@@ -483,6 +487,11 @@ export default function OnboardingPage() {
                         ))}
                       </div>
                     )}
+                    {uploadStatus && (
+                      <p style={{ marginTop: '1rem', fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                        {uploadStatus}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -525,8 +534,8 @@ export default function OnboardingPage() {
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><Shield size={22} /></div>
-            <span className={styles.securityTitle}>Verschlüsselt</span>
-            <span className={styles.securityDesc}>Transport und Zugriff sind fuer die Demo technisch abgegrenzt.</span>
+            <span className={styles.securityTitle}>Demo-Schutz</span>
+            <span className={styles.securityDesc}>Lokaler API-Key-Schutz für die Demo, keine produktive Authentifizierung.</span>
           </div>
           <div className={styles.securityItem}>
             <div className={styles.securityIconWrapper}><HeartPulse size={22} /></div>
@@ -551,60 +560,6 @@ export default function OnboardingPage() {
           </div>
         </div>
       </footer>
-    </div>
-  );
-}
-
-// --- Sub-Komponente: Input-Feld mit Validierung ---
-function InputField({ id, label, value, onChange, placeholder, type, suffix, min, max, error }: {
-  id: string; label: string; value: string; onChange: (v: string) => void;
-  placeholder: string; type: string; suffix?: string;
-  min?: number; max?: number; error?: string;
-}) {
-  const hasError = !!error;
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-      <label htmlFor={id} style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
-        {label}
-      </label>
-      <div style={{ position: 'relative' }}>
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          placeholder={placeholder}
-          min={min}
-          max={max}
-          onKeyDown={e => {
-            // Verhindere Minus-Zeichen bei Zahlenfeldern
-            if (type === 'number' && (e.key === '-' || e.key === 'e' || e.key === 'E')) {
-              e.preventDefault();
-            }
-          }}
-          style={{
-            width: '100%', height: '3.5rem', background: 'var(--background)',
-            border: `1px solid ${hasError ? '#ba1a1a' : 'var(--border)'}`,
-            borderRadius: 'var(--radius-md)',
-            padding: suffix ? '0 3rem 0 1rem' : '0 1rem', fontSize: '1rem',
-            color: 'var(--text)', outline: 'none', transition: 'all 0.2s ease',
-          }}
-        />
-        {suffix && (
-          <span style={{
-            position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)',
-            color: 'var(--text-muted)', fontSize: '0.875rem', pointerEvents: 'none',
-          }}>
-            {suffix}
-          </span>
-        )}
-      </div>
-      {hasError && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.75rem', color: '#ba1a1a' }}>
-          <AlertCircle size={14} />
-          {error}
-        </div>
-      )}
     </div>
   );
 }

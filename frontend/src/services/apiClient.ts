@@ -11,6 +11,7 @@ import {
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const DISABLE_MOCK_FALLBACK = process.env.NEXT_PUBLIC_DISABLE_MOCK_FALLBACK === 'true';
 const DEFAULT_PATIENT_ID = 'demo_maria_post_op';
 const PATIENT_ID_STORAGE_KEY = 'food4recovery.patientId';
 const LAST_ANALYSIS_STORAGE_KEY = 'food4recovery.lastAnalysis';
@@ -92,6 +93,16 @@ type FrontendHydrationProgress = {
   targetMl: number;
 };
 
+type DocumentUploadResult = {
+  document_id: string;
+  filename: string;
+  content_type: string;
+  size: number;
+  status: 'uploaded_demo';
+  analysis_available: boolean;
+  note: string;
+};
+
 type FullAnalyzeResponse = {
   patientId: string;
   intakeId: string;
@@ -100,6 +111,51 @@ type FullAnalyzeResponse = {
   recommendedMealKits: FrontendMealKit[];
   summary: string;
   rationale: string[];
+};
+
+type BackendPatientProfile = {
+  patient_id: string;
+  first_name: string;
+  last_name: string;
+  birth_date: string;
+  height_cm: number;
+  weight_kg: number;
+  known_conditions: string[];
+  allergies: string[];
+  notes?: string | null;
+};
+
+type CheckoutOrderItemInput = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+export type CheckoutOrderInput = {
+  items: CheckoutOrderItemInput[];
+  fullName: string;
+  street: string;
+  zip: string;
+  city: string;
+  paymentMethod: string;
+  timeSlot: string;
+};
+
+export type CheckoutOrderResult = {
+  orderId: string;
+  deliveryWindow: string;
+  backendUsed: boolean;
+};
+
+export type TrackingActionResult = {
+  backendUsed: boolean;
+};
+
+export type HydrationActionResult = {
+  currentLiters: number;
+  targetLiters: number;
+  backendUsed: boolean;
 };
 
 export type OnboardingAnalysisInput = {
@@ -142,10 +198,20 @@ function readStoredAnalysis(): RecoveryAnalysis | null {
   }
 }
 
+function fallbackOrThrow<T>(message: string, error: unknown, fallback: () => T | Promise<T>): T | Promise<T> {
+  const prefix = DISABLE_MOCK_FALLBACK ? '[BFF error]' : '[BFF fallback]';
+  console.warn(`${prefix} ${message}:`, error);
+  if (DISABLE_MOCK_FALLBACK) {
+    throw error;
+  }
+  return fallback();
+}
+
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   headers.set('Accept', 'application/json');
-  if (init?.body) headers.set('Content-Type', 'application/json');
+  const isFormData = typeof FormData !== 'undefined' && init?.body instanceof FormData;
+  if (init?.body && !isFormData) headers.set('Content-Type', 'application/json');
   if (API_KEY) headers.set('X-API-Key', API_KEY);
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -157,6 +223,25 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(`BFF request failed: ${response.status} ${response.statusText}`);
   }
   return response.json() as Promise<T>;
+}
+
+function normalizeConditionCode(code: string): string {
+  const normalized = code.trim().toLowerCase();
+  const aliases: Record<string, string> = {
+    post_op_recovery: 'post_op',
+    wound_healing: 'post_op',
+    chemotherapy_support: 'chemotherapy',
+    chemo_support: 'chemotherapy',
+    swallowing_issues: 'swallowing',
+    dysphagia: 'swallowing',
+    low_hydration: 'hydration',
+    dehydration_risk: 'hydration',
+  };
+  return aliases[normalized] || normalized;
+}
+
+function normalizeConditionCodes(codes: string[]): string[] {
+  return Array.from(new Set(codes.map(normalizeConditionCode)));
 }
 
 function mapRecipe(recipe: FrontendRecipe, type: DailyMeal['type'], label: string, time: string, checked = false): DailyMeal {
@@ -255,6 +340,87 @@ function birthDateFromAge(age: number): string {
   return `${currentYear - age}-01-01`;
 }
 
+function ageFromBirthDate(birthDate: string): number {
+  const birthYear = new Date(birthDate).getFullYear();
+  const currentYear = new Date().getFullYear();
+  return Number.isFinite(birthYear) ? currentYear - birthYear : 0;
+}
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  return {
+    firstName: parts[0] || 'Demo',
+    lastName: parts.slice(1).join(' ') || 'Patient',
+  };
+}
+
+function mapBackendProfile(profile: BackendPatientProfile): PatientProfile {
+  return {
+    id: profile.patient_id,
+    firstName: profile.first_name,
+    lastName: profile.last_name,
+    age: ageFromBirthDate(profile.birth_date),
+    weight: profile.weight_kg,
+    height: profile.height_cm,
+    conditions: normalizeConditionCodes(profile.known_conditions),
+    allergies: profile.allergies,
+    notes: profile.notes || '',
+    completionPercent: 100,
+  };
+}
+
+function buildPatientProfilePayload(profile: Partial<PatientProfile>) {
+  const patientId = getPatientId();
+  const firstName = profile.firstName || 'Demo';
+  const lastName = profile.lastName || 'Patient';
+  return {
+    patient_id: patientId,
+    first_name: firstName,
+    last_name: lastName,
+    birth_date: birthDateFromAge(profile.age || 60),
+    email: `${patientId}@example.com`,
+    phone: '+490000000',
+    height_cm: profile.height || 170,
+    weight_kg: profile.weight || 70,
+    activity_level: 'low',
+    support_at_home: 'partial_support',
+    known_conditions: profile.conditions || [],
+    allergies: profile.allergies || [],
+    dietary_preferences: [],
+    consent_data_processing: true,
+    notes: profile.notes || 'Lokaler Demo-Modus: Profil aus Frontend-Maske gespeichert.',
+  };
+}
+
+function mapPaymentMethod(paymentMethod: string): 'card' | 'invoice' | 'apple_pay' {
+  if (paymentMethod === 'apple_pay') return 'apple_pay';
+  if (paymentMethod === 'credit_card') return 'card';
+  return 'invoice';
+}
+
+function buildOrderPayload(input: CheckoutOrderInput) {
+  const { firstName, lastName } = splitName(input.fullName);
+  return {
+    patient_id: getPatientId(),
+    items: input.items.map(item => ({
+      meal_kit_id: item.id,
+      quantity: item.quantity,
+    })),
+    shipping_address: {
+      first_name: firstName,
+      last_name: lastName,
+      street: input.street,
+      postal_code: input.zip,
+      city: input.city,
+      country: 'DE',
+    },
+    payment_method: mapPaymentMethod(input.paymentMethod),
+    contact_email: `${getPatientId()}@example.com`,
+    contact_phone: '+490000000',
+    notes: `Demo-Bestellung ohne echte Zahlung. Gewaehltes Zeitfenster: ${input.timeSlot}`,
+  };
+}
+
 function mapAppetite(appetite: string) {
   if (appetite === 'low') return 'reduced';
   if (appetite === 'high') return 'good';
@@ -336,7 +502,7 @@ function buildFullAnalyzePayload(input: OnboardingAnalysisInput) {
       },
       goals_and_expectations: {
         goals: input.goals,
-        expectation_notes: 'orientierende Empfehlung fuer die Fallstudien-Demo',
+        expectation_notes: 'orientierende Empfehlung für die Fallstudien-Demo',
       },
       additional_notes: 'Dokumente werden in dieser Demo nicht medizinisch ausgewertet.',
     },
@@ -350,7 +516,7 @@ function mapAnalysis(response: FullAnalyzeResponse): RecoveryAnalysis {
     title: 'Orientierende Recovery-Auswertung',
     summary: `${response.summary} Diese Auswertung ersetzt keine ärztliche Diagnose oder Behandlung.`,
     recommendedKitId: response.recommendedMealKits[0]?.id || '',
-    recommendedKitName: response.recommendedMealKits[0]?.name || 'Meal-Kit nach Fachpruefung',
+    recommendedKitName: response.recommendedMealKits[0]?.name || 'Meal-Kit nach Fachprüfung',
     matchScores: response.rationale.slice(0, 3).map((line, index) => ({
       label: ['Profil-Fit', 'Alltagstauglichkeit', 'Sicherheitscheck'][index] || 'BFF-Rationale',
       percent: Math.max(72, 92 - index * 7),
@@ -360,7 +526,7 @@ function mapAnalysis(response: FullAnalyzeResponse): RecoveryAnalysis {
     riskNotes: response.nutritionPlan.diagnosis.restrictions.length > 0
       ? response.nutritionPlan.diagnosis.restrictions
       : ['Bei starken Beschwerden, Gewichtsverlust oder Unsicherheit sollte Fachpersonal einbezogen werden.'],
-    nextSteps: ['Wochenplan im Dashboard ansehen', 'Passende Rezepte pruefen', 'Meal-Kit optional in den Warenkorb legen'],
+    nextSteps: ['Wochenplan im Dashboard ansehen', 'Passende Rezepte prüfen', 'Meal-Kit optional in den Warenkorb legen'],
   };
 }
 
@@ -370,13 +536,18 @@ export const recoveryApi = {
       const patientId = getPatientId();
       const [plan, daily, hydration] = await Promise.all([
         fetchJson<FrontendNutritionPlan>(`/api/frontend/nutrition-plan/${patientId}`),
-        fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(() => null),
-        fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${patientId}`).catch(() => null),
+        fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(error => {
+          if (DISABLE_MOCK_FALLBACK) throw error;
+          return null;
+        }),
+        fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${patientId}`).catch(error => {
+          if (DISABLE_MOCK_FALLBACK) throw error;
+          return null;
+        }),
       ]);
       return mapDashboardData(plan, daily, hydration);
     } catch (error) {
-      console.warn('[BFF fallback] Dashboard nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchDashboardData();
+      return fallbackOrThrow('Dashboard nutzt Mock-Daten', error, () => nutritionMockApi.fetchDashboardData());
     }
   },
 
@@ -385,8 +556,7 @@ export const recoveryApi = {
       const inventory = await fetchJson<FrontendShopInventory>('/api/frontend/shop/inventory');
       return inventory.availableMealKits.map(mapMealKit);
     } catch (error) {
-      console.warn('[BFF fallback] Shop nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchShopInventory();
+      return fallbackOrThrow('Shop nutzt Mock-Daten', error, () => nutritionMockApi.fetchShopInventory());
     }
   },
 
@@ -394,8 +564,7 @@ export const recoveryApi = {
     try {
       return mapMealKit(await fetchJson<FrontendMealKit>(`/api/frontend/shop/meal-kits/${id}`));
     } catch (error) {
-      console.warn('[BFF fallback] Meal-Kit nutzt Mock-Daten:', error);
-      return nutritionMockApi.fetchMealKit(id);
+      return fallbackOrThrow('Meal-Kit nutzt Mock-Daten', error, () => nutritionMockApi.fetchMealKit(id));
     }
   },
 
@@ -404,8 +573,7 @@ export const recoveryApi = {
       const meals = await fetchJson<FrontendCuratedMeal[]>(`/api/frontend/recipes/curated/${getPatientId()}`);
       return meals.map(mapCuratedMeal);
     } catch (error) {
-      console.warn('[BFF fallback] Rezepte nutzen Mock-Daten:', error);
-      return nutritionMockApi.fetchCuratedMeals();
+      return fallbackOrThrow('Rezepte nutzen Mock-Daten', error, () => nutritionMockApi.fetchCuratedMeals());
     }
   },
 
@@ -420,31 +588,121 @@ export const recoveryApi = {
       storeAnalysis(analysis);
       return analysis;
     } catch (error) {
-      console.warn('[BFF fallback] Onboarding nutzt Mock-Auswertung:', error);
-      const analysis = await nutritionMockApi.fetchRecoveryAnalysis();
-      
-      // Falls 'Einfach Gesund' gewählt wurde, passe die Empfehlung an
-      if (input.goals.includes('simply_healthy')) {
-        analysis.recommendedKitId = 'mk6';
-        analysis.recommendedKitName = 'Einfach Gesund Paket';
-        analysis.title = 'Ernährungsoptimierung';
-        analysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und präventiven Gesundheitsförderung. Diese Auswertung ersetzt keine ärztliche Beratung.';
-      }
-      
+      const analysis = await fallbackOrThrow('Onboarding nutzt Mock-Auswertung', error, async () => {
+        const mockAnalysis = await nutritionMockApi.fetchRecoveryAnalysis();
+        // Falls 'Einfach Gesund' gew\u00e4hlt wurde, passe die Empfehlung an
+        if (input.goals.includes('simply_healthy')) {
+          mockAnalysis.recommendedKitId = 'mk6';
+          mockAnalysis.recommendedKitName = 'Einfach Gesund Paket';
+          mockAnalysis.title = 'Ern\u00e4hrungsoptimierung';
+          mockAnalysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und pr\u00e4ventiven Gesundheitsf\u00f6rderung. Diese Auswertung ersetzt keine \u00e4rztliche Beratung.';
+        }
+        return mockAnalysis;
+      });
       storeAnalysis(analysis);
       return analysis;
     }
   },
 
+  uploadDocuments: async (files: File[]): Promise<DocumentUploadResult[]> => {
+    const results: DocumentUploadResult[] = [];
+    for (const file of files) {
+      try {
+        const form = new FormData();
+        form.append('file', file);
+        results.push(await fetchJson<DocumentUploadResult>('/api/documents/upload', {
+          method: 'POST',
+          body: form,
+        }));
+      } catch (error) {
+        results.push(await fallbackOrThrow('Dokument-Upload nutzt nur lokale Metadaten', error, () => ({
+          document_id: `doc_local_${Math.random().toString(16).slice(2, 10)}`,
+          filename: file.name,
+          content_type: file.type || 'application/octet-stream',
+          size: file.size,
+          status: 'uploaded_demo',
+          analysis_available: false,
+          note: 'Dokumente werden im MVP nicht medizinisch ausgewertet.',
+        })));
+      }
+    }
+    return results;
+  },
+
   fetchRecoveryAnalysis: async (): Promise<RecoveryAnalysis> => {
-    return readStoredAnalysis() || nutritionMockApi.fetchRecoveryAnalysis();
+    const stored = readStoredAnalysis();
+    if (stored) return stored;
+    return fallbackOrThrow('Analysis nutzt Mock-Auswertung ohne gespeicherte BFF-Analyse', new Error('No stored BFF analysis found.'), () => nutritionMockApi.fetchRecoveryAnalysis());
   },
 
   fetchPatientProfile: async (): Promise<PatientProfile> => {
-    return nutritionMockApi.fetchPatientProfile();
+    try {
+      return mapBackendProfile(await fetchJson<BackendPatientProfile>(`/api/patient-profile/${getPatientId()}`));
+    } catch (error) {
+      return fallbackOrThrow('Profil nutzt Mock-Daten', error, () => nutritionMockApi.fetchPatientProfile());
+    }
   },
 
   savePatientProfile: async (profile: Partial<PatientProfile>): Promise<{ success: boolean }> => {
-    return nutritionMockApi.savePatientProfile(profile);
+    try {
+      await fetchJson<BackendPatientProfile>('/api/patient-profile', {
+        method: 'POST',
+        body: JSON.stringify(buildPatientProfilePayload(profile)),
+      });
+      return { success: true };
+    } catch (error) {
+      return fallbackOrThrow('Profil-Speichern nutzt Mock-Daten', error, () => nutritionMockApi.savePatientProfile(profile));
+    }
+  },
+
+  submitCheckoutOrder: async (input: CheckoutOrderInput): Promise<CheckoutOrderResult> => {
+    try {
+      const order = await fetchJson<{ order_id: string; estimated_delivery_window: string }>('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify(buildOrderPayload(input)),
+      });
+      return {
+        orderId: order.order_id,
+        deliveryWindow: order.estimated_delivery_window,
+        backendUsed: true,
+      };
+    } catch (error) {
+      return fallbackOrThrow('Checkout nutzt lokale Demo-Bestellung', error, () => ({
+        orderId: `F4R-${Math.floor(1000 + Math.random() * 9000)}-MOCK`,
+        deliveryWindow: input.timeSlot,
+        backendUsed: false,
+      }));
+    }
+  },
+
+  markMealBoxEaten: async (): Promise<TrackingActionResult> => {
+    try {
+      await fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${getPatientId()}/meal-box`, {
+        method: 'POST',
+      });
+      return { backendUsed: true };
+    } catch (error) {
+      return fallbackOrThrow('Meal-Tracking bleibt lokal', error, () => ({ backendUsed: false }));
+    }
+  },
+
+  addHydrationWater: async (amountMl: number): Promise<HydrationActionResult> => {
+    try {
+      const progress = await fetchJson<FrontendHydrationProgress>(`/api/frontend/tracking/hydration/${getPatientId()}/water`, {
+        method: 'POST',
+        body: JSON.stringify({ amountMl }),
+      });
+      return {
+        currentLiters: Number((progress.currentMl / 1000).toFixed(1)),
+        targetLiters: Number((progress.targetMl / 1000).toFixed(1)),
+        backendUsed: true,
+      };
+    } catch (error) {
+      return fallbackOrThrow('Hydration-Tracking bleibt lokal', error, () => ({
+        currentLiters: Number((amountMl / 1000).toFixed(1)),
+        targetLiters: 2.5,
+        backendUsed: false,
+      }));
+    }
   },
 };

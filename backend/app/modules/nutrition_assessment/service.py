@@ -57,9 +57,9 @@ def create_assessment_for_patient(patient_id: str) -> NutritionAssessment:
     if profile.allergies:
         constraints.append("Allergien: " + ", ".join(profile.allergies))
     if intake.gut_health.food_intolerances:
-        constraints.append("Unvertraeglichkeiten: " + ", ".join(intake.gut_health.food_intolerances))
+        constraints.append("Unverträglichkeiten: " + ", ".join(intake.gut_health.food_intolerances))
     if not intake.eating_habits.can_cook:
-        constraints.append("Eingeschraenkte Kochmoeglichkeit")
+        constraints.append("Eingeschränkte Kochmöglichkeit")
 
     assessment = NutritionAssessment(
         assessment_id=f"assessment_{uuid4().hex[:10]}",

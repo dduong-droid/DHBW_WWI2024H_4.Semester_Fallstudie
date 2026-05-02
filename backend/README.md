@@ -1,6 +1,6 @@
 # Backend
 
-FastAPI-Backend fuer `Food 4 Recovery`.
+FastAPI-Backend für `Food 4 Recovery`.
 
 ## Enthaltene Bereiche
 
@@ -10,17 +10,17 @@ FastAPI-Backend fuer `Food 4 Recovery`.
 - Meal-Kit-Katalog
 - Order Handling
 - Frontend-BFF unter `/api/frontend`
-- SQLite-Persistenz fuer Patienten, Frageboegen, Empfehlungen, Bestellungen und Tracking
+- SQLite-Persistenz für Patienten, Fragebögen, Empfehlungen, Bestellungen und Tracking
 - persistierte Nutrition Plans aus Empfehlungen
 - Nutrition Assessment mit Risk Flags und Recommendation Readiness
-- Safety Check fuer Allergien, Unvertraeglichkeiten und Meal-Kit-Kontraindikationen
+- Safety Check für Allergien, Unverträglichkeiten und Meal-Kit-Kontraindikationen
 - Recommendation Explanation mit Scores, Flags und Begruendungen
 - Rezeptkatalog aus den regelbasierten Planvorlagen
-- Shopping Lists aus 7-Tage-Plaenen
+- Shopping Lists aus 7-Tage-Plänen
 - Symptom-, Gewichts- und Appetit-Tracking
-- Professional Review Workflow fuer kritische Faelle
+- Professional Review Workflow für kritische Fälle
 - interne Analytics Events und Summary-Endpunkte
-- API-Key-Schutz fuer sensible Endpunkte, wenn `API_KEY` gesetzt ist
+- API-Key-Schutz für sensible Endpunkte, wenn `API_KEY` gesetzt ist
 - Privacy Export und Loeschung patientenbezogener Daten
 - API-, Unit- und Integrationstests
 
@@ -100,7 +100,7 @@ uvicorn app.main:app --reload
 
 ## Konfiguration
 
-Standardwerte fuer die lokale Entwicklung:
+Standardwerte für die lokale Entwicklung:
 
 ```bash
 APP_NAME="Food 4 Recovery Backend"
@@ -111,17 +111,17 @@ API_KEY=
 ```
 
 Wenn `API_KEY` leer bleibt, sind lokale Requests ohne Header moeglich.
-Wenn `API_KEY` gesetzt ist, muessen sensible Reads und alle Write-Endpunkte den Header `X-API-Key: <wert>` senden.
-`/health`, `/ready` und der Meal-Kit-Katalog bleiben oeffentlich.
+Wenn `API_KEY` gesetzt ist, müssen sensible Reads und alle Write-Endpunkte den Header `X-API-Key: <wert>` senden.
+`/health`, `/ready` und der Meal-Kit-Katalog bleiben öffentlich.
 
-Die SQLite-Datei wird beim Start automatisch angelegt. Es ist keine Alembic-Migration fuer dieses MVP-Paket noetig.
+Die SQLite-Datei wird beim Start automatisch angelegt. Es ist keine Alembic-Migration für dieses MVP-Paket nötig.
 
 ## Datenschutz-Endpunkte
 
-- `GET /api/patient-profile/{patient_id}/export` liefert Profil, Frageboegen, Empfehlungen, Bestellungen und Trackingdaten.
+- `GET /api/patient-profile/{patient_id}/export` liefert Profil, Fragebögen, Empfehlungen, Bestellungen und Trackingdaten.
 - `DELETE /api/patient-profile/{patient_id}` entfernt alle patientenbezogenen Daten und gibt `204` zurueck.
-- Neue Patientenprofile muessen `consent_data_processing: true` senden.
-- Der Export trennt Profil, Frageboegen, Assessments, Risk Flags, Empfehlungen, Plaene, Shopping Lists, Reviews, Orders, Tracking und Analytics Events.
+- Neue Patientenprofile müssen `consent_data_processing: true` senden.
+- Der Export trennt Profil, Fragebögen, Assessments, Risk Flags, Empfehlungen, Pläne, Shopping Lists, Reviews, Orders, Tracking und Analytics Events.
 
 Fehler werden einheitlich als `{"error": {"code": "...", "message": "...", "details": ...}}` ausgegeben.
 
@@ -130,10 +130,10 @@ Fehler werden einheitlich als `{"error": {"code": "...", "message": "...", "deta
 Das Backend bildet den Zielprozess `Intake -> Assessment -> Risk Flags -> Recommendation -> Nutrition Plan -> Shopping List -> Safety/Review -> Tracking/Analytics` ab.
 
 - Risk Flags werden regelbasiert erzeugt, z. B. bei Schluckproblemen, sehr geringem Appetit, kaum Nahrungsaufnahme, starkem Gewichtsverlust, kritischen Freitextangaben oder unklaren medizinischen Kontexten.
-- High-Risk-Flags oder `blocks_automatic_plan=true` setzen Plaene auf `review_required` oder `blocked`.
+- High-Risk-Flags oder `blocks_automatic_plan=true` setzen Pläne auf `review_required` oder `blocked`.
 - Ein Plan mit kritischen Flags ist ein Entwurf und wird nicht als medizinisch freigegeben dargestellt.
-- Professional Review ist im MVP eine Simulation: Fachrollen koennen Plaene mock-approven, ablehnen oder Aenderungen anfordern.
-- Recipe Matching schliesst Allergien und Unvertraeglichkeiten aus, priorisiert leichte Mahlzeiten bei Uebelkeit, einfache Zubereitung bei Fatigue und protein-/energiereichere Optionen bei Gewichtsrisiko.
+- Professional Review ist im MVP eine Simulation: Fachrollen können Pläne mock-approven, ablehnen oder Aenderungen anfordern.
+- Recipe Matching schließt Allergien und Unverträglichkeiten aus, priorisiert leichte Mahlzeiten bei Übelkeit, einfache Zubereitung bei Fatigue und protein-/energiereichere Optionen bei Gewichtsrisiko.
 - Meal-Kits bleiben optionaler Umsetzungsbaustein und werden nicht als Therapie verkauft.
 
 ## KI-Abgrenzung
@@ -143,7 +143,7 @@ Food 4 Recovery nutzt in diesem Backend keine echte medizinische KI-Entscheidung
 Erlaubt im MVP:
 
 - strukturierte Mock-/Heuristik-Auswertung von Intake-Daten
-- Rationale-Texte fuer Empfehlungen
+- Rationale-Texte für Empfehlungen
 - Freitext als `needs review` markieren
 - Analytics zur Produkt- und Prozessverbesserung
 
@@ -157,7 +157,7 @@ Nicht enthalten:
 
 ## Dev2 Demo-Flow
 
-Ein produktnaher Backend-Flow fuer die Fallstudie ist:
+Ein produktnaher Backend-Flow für die Fallstudie ist:
 
 1. `POST /api/patient-profile`
 2. `POST /api/questionnaire-intake`
@@ -174,7 +174,7 @@ Ein produktnaher Backend-Flow fuer die Fallstudie ist:
 
 Die Nutrition-Plan-API speichert den aus der Recommendation erzeugten Wochenplan als eigenstaendigen Plan.
 Der Safety Check ist eine regelbasierte Plausibilitaetspruefung und ersetzt keine medizinische Freigabe.
-Kritische Faelle werden ueber Risk Flags und Professional Reviews sichtbar.
+Kritische Fälle werden über Risk Flags und Professional Reviews sichtbar.
 
 ## Tests
 

@@ -1,6 +1,6 @@
 # Design Artefakte
 
-Diese Sammlung enthaelt exportierte UI-Artefakte fuer `Food 4 Recovery`.
+Diese Sammlung enthält exportierte UI-Artefakte für `Food 4 Recovery`.
 Jeder Screen liegt in der Regel in einem eigenen Ordner und besteht aus:
 
 - `code.html`: exportierter HTML-Code
@@ -16,7 +16,7 @@ Jeder Screen liegt in der Regel in einem eigenen Ordner und besteht aus:
 ## Aktueller Stand
 
 - Die frueheren `food_4_recovery_*`-Praefixe wurden aus den Screen-Ordnernamen entfernt.
-- Historische Duplikate bleiben nur dort erhalten, wo sie fuer Rueckverfolgung oder Vergleich noetig sind.
+- Historische Duplikate bleiben nur dort erhalten, wo sie für Rückverfolgung oder Vergleich nötig sind.
 - Neuere Stitch-Exporte sind im Manifest dokumentiert.
 
 ## Stitch Manifest
@@ -32,7 +32,7 @@ Jeder Screen liegt in der Regel in einem eigenen Ordner und besteht aus:
 - `empfehlung_wochenplan`
 - `dashboard_mit_makro_verteilung`
 - `essenpakete_shop`
-- `bestelluebersicht`
+- `bestellübersicht`
 - `bestellbestaetigung`
 - `produktdetails_wundheilungs_box`
 - `produktdetails_onko_box`
@@ -42,5 +42,5 @@ Jeder Screen liegt in der Regel in einem eigenen Ordner und besteht aus:
 
 ## Hinweis
 
-Einige aeltere Imports enthalten keine oder nur unvollstaendige `<title>`-Metadaten in `code.html`.
-Die Ordnernamen sind deshalb die verlaesslichste Referenz fuer die Zuordnung.
+Einige aeltere Imports enthalten keine oder nur unvollständige `<title>`-Metadaten in `code.html`.
+Die Ordnernamen sind deshalb die verlaesslichste Referenz für die Zuordnung.

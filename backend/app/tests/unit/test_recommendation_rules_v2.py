@@ -67,4 +67,4 @@ def test_build_weekly_plan_adds_extra_snacks_and_filters_gluten_sources() -> Non
     breakfast_ingredients = {item.lower() for item in weekly_plan.days[0].meals.breakfast.ingredients}
     assert len(weekly_plan.days[0].meals.snacks) == 2
     assert "hafer" not in breakfast_ingredients
-    assert any("Unvertraeglichkeiten" in item for item in weekly_plan.adjustments)
+    assert any("Unverträglichkeiten" in item for item in weekly_plan.adjustments)

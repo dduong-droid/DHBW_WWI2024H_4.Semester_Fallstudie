@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 
+from app.modules.analytics.service import record_event
 from app.modules.meal_kit_catalog.repository import get_meal_kit
 from app.modules.order_handling.repository import get_order, save_order
 from app.modules.order_handling.schemas import Order, OrderCreate, OrderItem, OrderItemCreate, OrderStatus
@@ -18,11 +19,13 @@ _MAX_QUANTITY_PER_MEAL_KIT = 10
 _FREE_SHIPPING_THRESHOLD = 60.00
 _STANDARD_SHIPPING_COST = 4.99
 _ALLOWED_STATUS_TRANSITIONS: dict[OrderStatus, set[OrderStatus]] = {
-    "draft": {"confirmed", "cancelled"},
-    "confirmed": {"processing", "cancelled"},
-    "processing": {"completed", "cancelled"},
+    "draft": {"pending", "confirmed", "cancelled", "demo_failed"},
+    "pending": {"confirmed", "cancelled", "demo_failed"},
+    "confirmed": {"processing", "cancelled", "demo_failed"},
+    "processing": {"completed", "cancelled", "demo_failed"},
     "completed": set(),
     "cancelled": set(),
+    "demo_failed": set(),
 }
 
 
@@ -101,7 +104,13 @@ def create_order(payload: OrderCreate) -> Order:
         ),
         created_at=datetime.now(timezone.utc),
     )
-    return save_order(order)
+    saved = save_order(order)
+    record_event(
+        "order_created",
+        patient_id=saved.patient_id,
+        metadata={"order_id": saved.order_id, "item_count": len(saved.items), "total": saved.total},
+    )
+    return saved
 
 
 def get_order_or_404(order_id: str) -> Order:

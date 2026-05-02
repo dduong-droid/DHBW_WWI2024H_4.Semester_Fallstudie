@@ -55,7 +55,7 @@
   - `ai_analysis_result/screen.png`
   - `bestellbestaetigung/screen.png`
   - `bestellbestaetigung_alt/screen.png`
-  - `bestelluebersicht/screen.png`
+  - `bestellübersicht/screen.png`
   - `checkout_zahlung/screen.png`
   - `dashboard/screen.png`
   - `dashboard_mit_makro_verteilung/screen.png`
@@ -184,7 +184,7 @@
 - Kein Frontend-Typecheck-Script vorhanden; manueller Typecheck funktioniert.
 - `frontend/README.md` wurde nach dem Setup-Check auf die tatsächliche Next.js-App aktualisiert.
 - Node `v24.15.0` ist sehr neu; Build und Dev-Smoke funktionieren, aber für Next.js-Projekte kann eine LTS-Version wie Node 20/22 stabiler sein.
-- Aktuell sind keine bekannten fremden uncommitted Code-Aenderungen als Setup-Blocker dokumentiert.
+- Aktuell sind keine bekannten fremden uncommitted Code-Änderungen als Setup-Blocker dokumentiert.
 - Keine fehlenden ENV-Variablen für den lokalen Frontend-Loop festgestellt; Backend kann mit leerem `API_KEY` lokal arbeiten.
 
 ## Empfehlung für den nächsten Frontend-Loop
@@ -195,7 +195,7 @@
   - Designreferenzen zuerst aus `docs/designs/*/screen.png` analysieren.
   - Medizinische Aussagen vorsichtig formulieren, keine Diagnosen oder Heilversprechen.
   - Bestehende Mock-Daten klar als Mock behandeln.
-  - Vor Code-Aenderungen immer `git status --short` pruefen und fremde lokale Aenderungen nicht ungefragt überschreiben.
+  - Vor Code-Änderungen immer `git status --short` prüfen und fremde lokale Änderungen nicht ungefragt überschreiben.
 - Empfohlene Befehle im Loop:
   - `cd frontend`
   - `npm.cmd run dev`
@@ -206,5 +206,5 @@
 - Riskante Bereiche:
   - Security-Stand von `next@15.1.0`.
   - Lint-Tooling ist rot.
-  - Medizinisch zu starke bestehende UI-Texte koennen Safety-Guardrails verletzen.
-  - Externe Bild-URLs in Mock-Daten koennen Demo-Stabilitaet beeinträchtigen.
+  - Medizinisch zu starke bestehende UI-Texte können Safety-Guardrails verletzen.
+  - Externe Bild-URLs in Mock-Daten können Demo-Stabilitaet beeinträchtigen.

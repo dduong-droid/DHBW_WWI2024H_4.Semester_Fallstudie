@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Food4Recovery",
-  description: "Digitale Orientierung fuer Recovery-Ernaehrung, Rezepte und Tracking",
+  description: "Digitale Orientierung für Recovery-Ernährung, Rezepte und Tracking",
 };
 
 export default function RootLayout({

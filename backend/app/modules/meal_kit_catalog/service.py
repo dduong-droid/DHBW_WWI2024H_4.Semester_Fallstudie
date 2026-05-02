@@ -45,7 +45,7 @@ def suggest_meal_kits_for_patient(patient_id: str) -> list[RecommendedMealKit]:
             item.model_copy(
                 update={
                     "rationale": item.rationale
-                    + " Kritischer Fall: nicht als Shop-Handlungsaufforderung, sondern nur als moegliche Option nach Pruefung anzeigen."
+                    + " Kritischer Fall: nicht als Shop-Handlungsaufforderung, sondern nur als mögliche Option nach Prüfung anzeigen."
                 }
             )
             for item in suggestions

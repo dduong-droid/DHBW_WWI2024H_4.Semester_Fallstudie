@@ -14,7 +14,7 @@ export default function Home() {
           <p className={styles.eyebrow}>Recovery-Ernährung als Orientierung</p>
           <h1 id="home-title" className={styles.title}>Food4Recovery</h1>
           <p className={styles.description}>
-            Food4Recovery verbindet Patientendaten, Dokumenten-Upload, Empfehlungen, Rezepte und Tracking zu einem klaren Demo-Flow fuer die Nachsorge.
+            Food4Recovery verbindet Patientendaten, Dokumenten-Upload, Empfehlungen, Rezepte und Tracking zu einem klaren Demo-Flow für die Nachsorge.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Home() {
 
         <p className={styles.disclaimer}>
           <ShieldCheck size={15} />
-          Food4Recovery ersetzt keine aerztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
+          Food4Recovery ersetzt keine ärztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
         </p>
       </section>
     </main>

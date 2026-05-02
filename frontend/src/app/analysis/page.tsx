@@ -11,17 +11,17 @@ import { recoveryApi } from '../../services/apiClient';
 import type { RecoveryAnalysis } from '../../services/mockApi';
 import { useCart } from '../../context/CartContext';
 
+const LOADING_MESSAGES = [
+  "Prüfe Gesundheitsziele...",
+  "Abgleich mit Recovery-Phase...",
+  "Erstelle initialen Ernährungsplan...",
+  "Ordne passende Meal-Kits zu..."
+];
+
 export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
   const [loadingTextIdx, setLoadingTextIdx] = useState(0);
   const { addToCart } = useCart();
-
-  const loadingMessages = [
-    "Prüfe Gesundheitsziele...",
-    "Abgleich mit Recovery-Phase...",
-    "Erstelle initialen Ernährungsplan...",
-    "Ordne passende Meal-Kits zu..."
-  ];
 
   useEffect(() => {
     // Start fetch
@@ -29,7 +29,7 @@ export default function AnalysisPage() {
 
     // Rotate text
     const interval = setInterval(() => {
-      setLoadingTextIdx(prev => (prev + 1) % loadingMessages.length);
+      setLoadingTextIdx(prev => (prev + 1) % LOADING_MESSAGES.length);
     }, 1200);
 
     return () => clearInterval(interval);
@@ -58,7 +58,7 @@ export default function AnalysisPage() {
           </div>
           <h1>Auswertung läuft</h1>
           <p style={{ minHeight: '1.5rem', transition: 'opacity 0.3s' }}>
-            {loadingMessages[loadingTextIdx]}
+            {LOADING_MESSAGES[loadingTextIdx]}
           </p>
           <div className={styles.loadingBar}>
             <span />
@@ -161,7 +161,7 @@ export default function AnalysisPage() {
       <section className={styles.disclaimer}>
         <CheckCircle2 size={18} />
         <p>
-          Food4Recovery ersetzt keine aerztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
+          Food4Recovery ersetzt keine ärztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
         </p>
       </section>
 
@@ -170,7 +170,7 @@ export default function AnalysisPage() {
           Wochenplan ansehen
           <ArrowRight size={18} />
         </Link>
-        <Link href="/recipes" className={styles.secondaryAction}>Rezepte pruefen</Link>
+        <Link href="/recipes" className={styles.secondaryAction}>Rezepte prüfen</Link>
       </div>
     </main>
   );
