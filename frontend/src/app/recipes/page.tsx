@@ -26,33 +26,6 @@ export default function CuratedRecipesPage() {
   return (
     <>
       <div className={styles.container}>
-        {/* Navigation */}
-        <nav className={styles.nav}>
-          <div className={styles.navContainer}>
-            <div className={styles.logoArea}>
-              <div className={styles.logoIcon}>
-                <Utensils size={20} strokeWidth={2.5} />
-              </div>
-              <span className={styles.logoText}>Food 4 Recovery</span>
-            </div>
-            <div className={styles.navLinks}>
-              <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
-              <Link href="/profile" className={styles.navLink}>Profil</Link>
-              <Link href="/recipes" className={`${styles.navLink} ${styles.navLinkActive}`}>Rezepte</Link>
-              <Link href="/shop" className={styles.navLink}>Shop</Link>
-            </div>
-            <div className={styles.userArea}>
-              <CartNavIcon />
-              <div className={styles.avatar}>
-                <div
-                  className={styles.avatarImg}
-                  style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY')" }}
-                />
-              </div>
-            </div>
-          </div>
-        </nav>
-
         <main className={styles.main}>
           <header className={styles.pageHeader}>
             <div className={styles.badge}>

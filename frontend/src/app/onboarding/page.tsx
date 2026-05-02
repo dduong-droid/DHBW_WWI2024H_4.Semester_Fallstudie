@@ -30,21 +30,18 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 
 const GOAL_OPTIONS = [
-  { id: 'wound_healing', label: 'Wundheilung', desc: 'Nach Operation oder Eingriff' },
-  { id: 'chemo_support', label: 'Chemo-Begleitung', desc: 'Während onkologischer Behandlung' },
-  { id: 'immune_boost', label: 'Immunstärkung', desc: 'Abwehrkräfte aufbauen' },
-  { id: 'gut_health', label: 'Darmgesundheit', desc: 'Mikrobiom wiederherstellen' },
-  { id: 'general_recovery', label: 'Allgemeine Erholung', desc: 'Vitalität zurückgewinnen' },
-  { id: 'simply_healthy', label: 'Einfach Gesund', desc: 'Gesunde Ernährungsoptimierung ohne Beschwerden' },
+  { id: 'chemo_support', label: 'Chemotherapie', desc: 'W\u00e4hrend onkologischer Behandlung' },
+  { id: 'simply_healthy', label: 'Einfach Gesund', desc: 'Gesunde Ern\u00e4hrungsoptimierung ohne Beschwerden' },
 ];
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
 
-  // Form State
-  const [name] = useState('');
-  // Age, Weight, Height are collected in Profile
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
   const [appetite, setAppetite] = useState('normal');
   const [allergies, setAllergies] = useState<Set<string>>(new Set());
   const [intolerances, setIntolerances] = useState<Set<string>>(new Set());
@@ -109,7 +106,7 @@ export default function OnboardingPage() {
   const canGoNext = (): boolean => {
     switch (step) {
       case 0: return true; // Welcome
-      case 1: return goals.size > 0; // Health goals
+      case 1: return goals.size > 0 && age !== '' && weight !== '' && height !== ''; // Health goals + Bio
       case 2: return true; // Preferences (optional)
       case 3: return true; // Upload (optional)
       default: return false;
@@ -142,9 +139,9 @@ export default function OnboardingPage() {
     }
     await recoveryApi.submitOnboardingAnalysis({
       name, 
-      age: 0, // In dieser Demo-Version im Profil erfasst
-      weight: null, 
-      height: null, 
+      age: Number(age),
+      weight: Number(weight), 
+      height: Number(height), 
       appetite,
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
@@ -164,28 +161,6 @@ export default function OnboardingPage() {
         <div className={styles.decorTopRight} />
         <div className={styles.decorBotLeft} />
       </div>
-
-      {/* Nav */}
-      <nav className={styles.nav}>
-        <div className={styles.navInner}>
-          <div className={styles.logoArea}>
-            <div className={styles.logoIcon}>
-              <Utensils size={20} />
-            </div>
-            <span className={styles.logoText}>
-              Food 4 <span className={styles.logoHighlight}>Recovery</span>
-            </span>
-          </div>
-          {step > 0 && (
-            <div className={styles.headerActions}>
-              <div className={styles.userBtn}>
-                <div className={styles.userAvatar}><User size={16} /></div>
-                <span className={styles.userName}>{name || 'Gast'}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
 
       <main className={styles.main}>
         <div className={styles.contentWrapper}>
@@ -289,33 +264,71 @@ export default function OnboardingPage() {
                 border: '1px solid var(--border)',
               }}>
 
-                {/* Step 1: Health Goals */}
+                {/* Step 1: Health Goals & Bio Data */}
                 {step === 1 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {GOAL_OPTIONS.map(g => (
-                      <label key={g.id} style={{
-                        display: 'flex', alignItems: 'center', gap: '1rem',
-                        padding: '1rem', borderRadius: 'var(--radius-lg)', cursor: 'pointer',
-                        border: goals.has(g.id) ? '2px solid var(--color-primary)' : '2px solid var(--border)',
-                        background: goals.has(g.id) ? 'rgba(51,199,88,0.05)' : 'var(--background)',
-                        transition: 'all 0.2s ease',
-                      }}>
-                        <input
-                          type="checkbox"
-                          checked={goals.has(g.id)}
-                          onChange={() => toggleChip(goals, g.id, setGoals)}
-                          style={{ display: 'none' }}
-                        />
-                        <div style={{ flex: 1 }}>
-                          <span style={{ fontWeight: 700, display: 'block' }}>{g.label}</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{g.desc}</span>
-                        </div>
-                        <CheckCircle2 size={22} style={{
-                          color: goals.has(g.id) ? 'var(--color-primary)' : 'var(--border)',
-                          transition: 'color 0.2s ease',
-                        }} />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {/* Bio Data Section */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                      <InputField
+                        id="age"
+                        label="Alter"
+                        type="number"
+                        placeholder="z.B. 30"
+                        value={age}
+                        onChange={setAge}
+                        suffix="Jahre"
+                      />
+                      <InputField
+                        id="weight"
+                        label="Gewicht"
+                        type="number"
+                        placeholder="z.B. 75"
+                        value={weight}
+                        onChange={setWeight}
+                        suffix="kg"
+                      />
+                      <InputField
+                        id="height"
+                        label="Gr\u00f6\u00dfe"
+                        type="number"
+                        placeholder="z.B. 180"
+                        value={height}
+                        onChange={setHeight}
+                        suffix="cm"
+                      />
+                    </div>
+
+                    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                        W\u00e4hle dein Gesundheitsziel
                       </label>
-                    ))}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {GOAL_OPTIONS.map(g => (
+                          <label key={g.id} style={{
+                            display: 'flex', alignItems: 'center', gap: '1rem',
+                            padding: '1rem', borderRadius: 'var(--radius-lg)', cursor: 'pointer',
+                            border: goals.has(g.id) ? '2px solid var(--color-primary)' : '2px solid var(--border)',
+                            background: goals.has(g.id) ? 'rgba(51,199,88,0.05)' : 'var(--background)',
+                            transition: 'all 0.2s ease',
+                          }}>
+                            <input
+                              type="checkbox"
+                              checked={goals.has(g.id)}
+                              onChange={() => toggleChip(goals, g.id, setGoals)}
+                              style={{ display: 'none' }}
+                            />
+                            <div style={{ flex: 1 }}>
+                              <span style={{ fontWeight: 700, display: 'block' }}>{g.label}</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{g.desc}</span>
+                            </div>
+                            <CheckCircle2 size={22} style={{
+                              color: goals.has(g.id) ? 'var(--color-primary)' : 'var(--border)',
+                              transition: 'color 0.2s ease',
+                            }} />
+                          </label>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 

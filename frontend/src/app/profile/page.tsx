@@ -93,21 +93,13 @@ export default function ProfilePage() {
     setSaved(true);
     setTimeout(() => {
       setSaved(false);
-      router.push('/onboarding');
+      router.push('/dashboard');
     }, 1000);
   };
 
   if (loading) {
     return (
       <div className={styles.container}>
-        <nav className={styles.nav}>
-          <div className={styles.navContainer}>
-            <div className={styles.logoArea}>
-              <div className={styles.logoIcon}><Utensils size={20} strokeWidth={2.5} /></div>
-              <span className={styles.logoText}>Food 4 Recovery</span>
-            </div>
-          </div>
-        </nav>
         <main className={styles.main}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--color-primary)' }}>
             <div style={{ width: '3rem', height: '3rem', border: '4px solid rgba(51,199,88,0.2)', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
@@ -120,33 +112,6 @@ export default function ProfilePage() {
 
   return (
     <div className={styles.container}>
-      {/* Navigation */}
-      <nav className={styles.nav}>
-        <div className={styles.navContainer}>
-          <div className={styles.logoArea}>
-            <div className={styles.logoIcon}>
-              <Utensils size={20} strokeWidth={2.5} />
-            </div>
-            <span className={styles.logoText}>Food 4 Recovery</span>
-          </div>
-          <div className={styles.navLinks}>
-            <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
-            <Link href="/profile" className={`${styles.navLink} ${styles.navLinkActive}`}>Profil</Link>
-            <Link href="/recipes" className={styles.navLink}>Rezepte</Link>
-            <Link href="/shop" className={styles.navLink}>Shop</Link>
-          </div>
-          <div className={styles.userArea}>
-            <button className={styles.iconBtn} aria-label="Benachrichtigungen">
-              <Bell size={20} />
-            </button>
-            <CartNavIcon />
-            <div className={styles.avatar}>
-              <div className={styles.avatarImg} style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY')" }} />
-            </div>
-          </div>
-        </div>
-      </nav>
-
       <main className={styles.main}>
         {/* Header mit Fortschritt */}
         <div className={styles.header}>

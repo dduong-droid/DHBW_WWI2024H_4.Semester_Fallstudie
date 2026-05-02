@@ -14,7 +14,13 @@ export interface CuratedMeal {
   protein: string;
   carbs: string;
   fat: string;
+  micronutrients?: {
+    vitaminC: number;
+    zinc: number;
+    iron: number;
+  };
   tags: string[];
+  boxName?: string;
 }
 
 export interface DailyMeal {
@@ -24,6 +30,14 @@ export interface DailyMeal {
   name: string;
   description: string;
   calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  micronutrients?: {
+    vitaminC: number;
+    zinc: number;
+    iron: number;
+  };
   prepTime: string;
   time: string;
   image: string;
@@ -38,6 +52,12 @@ export interface NutrientProgress {
   color: string;
 }
 
+export interface TrackingDataPoint {
+  date: string;
+  weight: number;
+  hydration: number;
+}
+
 export interface DashboardData {
   patientName: string;
   avatarUrl: string;
@@ -49,7 +69,9 @@ export interface DashboardData {
   nutrients: NutrientProgress[];
   hydration: { current: number; target: number };
   calories: { current: number; target: number };
-  macros: { carbs: number; protein: number; fat: number };
+  macrosTarget: { carbs: number; protein: number; fat: number };
+  streakDays: number;
+  trackingHistory: TrackingDataPoint[];
 }
 
 export interface MealKit {
@@ -60,14 +82,14 @@ export interface MealKit {
   currency: string;
   imageUrl: string;
   tags: string[];
-  category: 'wound_healing' | 'oncology' | 'immune' | 'gut_health' | 'vitality';
+  category: 'wound_healing' | 'oncology' | 'immune' | 'gut_health' | 'vitality' | 'general_health';
   nutrition: {
     calories: number;
     protein: string;
     carbs: string;
     fat: string;
   };
-  meals: string[];
+  meals: DailyMeal[];
   deliveryDays: string;
 }
 
@@ -105,73 +127,8 @@ export interface RecoveryAnalysis {
 
 const MOCK_MEAL_KITS: MealKit[] = [
   {
-    id: 'mk1',
-    name: 'Wundheilungs-Box',
-    description: 'Proteinreiche Demo-Box mit Aminosäuren und Mikronährstoffen, die eine ausgewogene Ernährung in der Regenerationsphase unterstützen kann.',
-    price: 89.90,
-    currency: '€',
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDR-s7oU9ghDmTQZ725k-ULlzfvQwWmMmk5RDaQfTYsitrchtJaWEQDLme01GN4GLnLANXekRz8LRydxeZB5o1iOOcod3Necl_aatJsSUXscxmferMUOIpyi0hxkUyZSOd_Mv1m-NPhZYklr4sr1CF4iqZLyMJMwfIN2cec9KNuZeAANtAvGbhfSoQN6hzMUq0aicbGZRTyEF6jkHJKMj72ozszb_sjeptzEbBT9l3tGsIxw9cHm571LEwzHTUsblQInKFXsl8Jr_4',
-    tags: ['Proteinreich', 'Zink & Vitamin C'],
-    category: 'wound_healing',
-    nutrition: { calories: 1850, protein: '120g', carbs: '180g', fat: '65g' },
-    meals: ['Avocado-Vollkornbrot mit Eiern', 'Lachs-Quinoa Bowl', 'Süßkartoffel-Kurkuma Bowl'],
-    deliveryDays: 'Di & Fr',
-  },
-  {
-    id: 'mk2',
-    name: 'Onko-Box',
-    description: 'Sanfte, kaloriendichte Mahlzeiten zur Erhaltung der Kraft und Minimierung von Übelkeit während intensiver Behandlungen.',
-    price: 95.00,
-    currency: '€',
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDz3rK5W6ZBzGfUL6tm0o3FU66TtnQX3zszYZMpflOWeYaKtY1m5xYnyCL3-rii_5LCNjou9wWKs_J24uAhWb_h1Brif1ztO3iAPdgz-9Y1AItSZCvw-mkblcrw0NO2NLyvIvdtyEWeuiPVDiyvf9Q1a8FcZSTOxAsF9k1aNVKQErSLtAIwm_EAbbkCPZOjhPpxbpdxOSwlnsWELqZM-4vzuAj5quK8VUw4JBMHi7VL3v9GqUeQPTvgA5bayogNFD7nruPVVpyt-H0',
-    tags: ['Leicht verdaulich', 'Kaloriendicht'],
-    category: 'oncology',
-    nutrition: { calories: 2100, protein: '90g', carbs: '220g', fat: '80g' },
-    meals: ['Kräftige Knochenbrühe', 'Cremige Gemüsesuppe', 'Weicher Kartoffel-Auflauf'],
-    deliveryDays: 'Mo & Do',
-  },
-  {
-    id: 'mk3',
-    name: 'Immun-Boost-Box',
-    description: 'Pflanzenbetonte Demo-Box mit antioxidativen Zutaten als Orientierung für eine abwechslungsreiche Ernährung.',
-    price: 79.90,
-    currency: '€',
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX9r9R1kuNjJZwKtLrRrehTCQAkLYV4rAtyolfBu3yLBI7H35JYbWuhFCCfOsTVjStaSF6VhT2OWuDYk916-otri4qeBao0VnQI54HxAuB4hEH0dM8CIYJ5zKSTOexeg4KJRY7ruGsgxb9IAxIHmzkHozsK-79uhNEbNp_6H2Ba5W7_Zw5yf1O8MFHyxNfM3HnoXgGJTrT6sbjRg91-TxzxQm7vSjtgpQ-eUMF71i9m8XRBUlT_UCzBMrp3GSTkOfO23pmo9Ww21c',
-    tags: ['Antioxidativ', 'Phytonährstoffe'],
-    category: 'immune',
-    nutrition: { calories: 1700, protein: '85g', carbs: '200g', fat: '55g' },
-    meals: ['Beeren-Smoothie Bowl', 'Zitrus-Ingwer Salat', 'Kurkuma-Linsen Eintopf'],
-    deliveryDays: 'Mi & Sa',
-  },
-  {
-    id: 'mk4',
-    name: 'Darm-Balance-Box',
-    description: 'Darmfreundlich ausgerichtete Demo-Box mit ballaststoffreichen und fermentierten Komponenten.',
-    price: 84.50,
-    currency: '€',
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB-YvPEIGCdxMoK65M2UqD-XJeBJqSeRMK4I4uzVmCsohPwzJBTJIuGXk65QfflpPMmoIQmX-P8GAPkqQGAwkz3LJSEWr7NOKLSZ3vY2cmFNzYtzTsDOm6paop_HzuByGDFbgDjwPF7UXOOkEA5kX2cOrjjZIuOwdnpGT0NI-t7gcMDXLaLTvlXqIxLC68Yw8fMgYrI5Kcjq1QsxLvE9vui-P41EiV7HZeMt9aqMMUtZkzDteIECdndcMybgdagin-9GMNfzHwoB40',
-    tags: ['Probiotisch', 'Ballaststoffreich'],
-    category: 'gut_health',
-    nutrition: { calories: 1600, protein: '70g', carbs: '210g', fat: '50g' },
-    meals: ['Joghurt mit fermentierten Früchten', 'Vollkorn-Kimchi Bowl', 'Kefir-Smoothie'],
-    deliveryDays: 'Di & Fr',
-  },
-  {
-    id: 'mk5',
-    name: 'Vitality-Box',
-    description: 'Energiegeladene Mahlzeiten für die allgemeine Erholung und Wiederherstellung der Vitalität nach längerer Bettruhe.',
-    price: 74.90,
-    currency: '€',
-    imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
-    tags: ['Energiereich', 'Eisenhaltig'],
-    category: 'vitality',
-    nutrition: { calories: 2000, protein: '100g', carbs: '240g', fat: '60g' },
-    meals: ['Energie-Granola mit Nüssen', 'Rote-Bete Power Bowl', 'Spinat-Lachs Pasta'],
-    deliveryDays: 'Mo & Do',
-  },
-  {
-    id: 'mk6',
-    name: 'Einfach Gesund Paket',
+    id: 'mk-einfach-gesund',
+    name: 'Einfach Gesund',
     description: 'Ausgewogene und nährstoffreiche Mahlzeiten zur allgemeinen Gesundheitsoptimierung und Vorbeugung.',
     price: 69.90,
     currency: '€',
@@ -179,9 +136,120 @@ const MOCK_MEAL_KITS: MealKit[] = [
     tags: ['Ausgewogen', 'Vitaminreich'],
     category: 'general_health',
     nutrition: { calories: 1800, protein: '80g', carbs: '220g', fat: '60g' },
-    meals: ['Bircher Müsli', 'Quinoa-Gemüse Pfanne', 'Vollkorn-Wrap mit Hummus'],
     deliveryDays: 'Di & Fr',
+    meals: [
+      {
+        id: 'm-eg-1',
+        type: 'breakfast',
+        label: 'Frühstück',
+        name: 'Bircher Müsli mit frischen Beeren',
+        description: 'Ballaststoffreicher Start in den Tag für lang anhaltende Energie.',
+        calories: 450,
+        protein: 20,
+        carbs: 60,
+        fat: 15,
+        micronutrients: { vitaminC: 50, zinc: 4, iron: 4 },
+        prepTime: '5 Min',
+        time: '08:00',
+        image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800',
+        checked: false,
+      },
+      {
+        id: 'm-eg-2',
+        type: 'lunch',
+        label: 'Mittagessen',
+        name: 'Quinoa-Gemüse Pfanne mit Kräutern',
+        description: 'Vollwertige pflanzliche Proteine und Vitamine für die Mittagspause.',
+        calories: 750,
+        protein: 30,
+        carbs: 90,
+        fat: 25,
+        micronutrients: { vitaminC: 60, zinc: 6, iron: 6 },
+        prepTime: '20 Min',
+        time: '13:00',
+        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800',
+        checked: false,
+      },
+      {
+        id: 'm-eg-3',
+        type: 'dinner',
+        label: 'Abendessen',
+        name: 'Vollkorn-Wrap mit Hummus & Spinat',
+        description: 'Leichtes Abendessen, das die Verdauung nicht belastet.',
+        calories: 600,
+        protein: 30,
+        carbs: 70,
+        fat: 20,
+        micronutrients: { vitaminC: 40, zinc: 5, iron: 4 },
+        prepTime: '10 Min',
+        time: '19:00',
+        image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800',
+        checked: false,
+      }
+    ]
   },
+  {
+    id: 'mk-chemo',
+    name: 'Chemotherapie Box',
+    description: 'Sanfte, kaloriendichte Mahlzeiten zur Erhaltung der Kraft und Minimierung von Übelkeit während intensiver Behandlungen.',
+    price: 95.00,
+    currency: '€',
+    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDz3rK5W6ZBzGfUL6tm0o3FU66TtnQX3zszYZMpflOWeYaKtY1m5xYnyCL3-rii_5LCNjou9wWKs_J24uAhWb_h1Brif1ztO3iAPdgz-9Y1AItSZCvw-mkblcrw0NO2NLyvIvdtyEWeuiPVDiyvf9Q1a8FcZSTOxAsF9k1aNVKQErSLtAIwm_EAbbkCPZOjhPpxbpdxOSwlnsWELqZM-4vzuAj5quK8VUw4JBMHi7VL3v9GqUeQPTvgA5bayogNFD7nruPVVpyt-H0',
+    tags: ['Leicht verdaulich', 'Kaloriendicht'],
+    category: 'oncology',
+    nutrition: { calories: 2100, protein: '90g', carbs: '220g', fat: '80g' },
+    deliveryDays: 'Mo & Do',
+    meals: [
+      {
+        id: 'm-ch-1',
+        type: 'breakfast',
+        label: 'Frühstück',
+        name: 'Milder Haferbrei mit Banane',
+        description: 'Magenfreundlich und leicht süßlich gegen morgendliche Übelkeit.',
+        calories: 550,
+        protein: 25,
+        carbs: 60,
+        fat: 20,
+        micronutrients: { vitaminC: 40, zinc: 5, iron: 5 },
+        prepTime: '10 Min',
+        time: '08:30',
+        image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800',
+        checked: false,
+      },
+      {
+        id: 'm-ch-2',
+        type: 'lunch',
+        label: 'Mittagessen',
+        name: 'Kräftige Knochenbrühe mit Nudeln',
+        description: 'Flüssigkeits- und nährstoffreich, besonders gut an schweren Tagen.',
+        calories: 750,
+        protein: 30,
+        carbs: 80,
+        fat: 30,
+        micronutrients: { vitaminC: 50, zinc: 5, iron: 5 },
+        prepTime: '15 Min',
+        time: '13:00',
+        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800',
+        checked: false,
+      },
+      {
+        id: 'm-ch-3',
+        type: 'dinner',
+        label: 'Abendessen',
+        name: 'Weicher Kartoffel-Auflauf mit Quark',
+        description: 'Weiche Textur, kaloriendicht zur Krafterhaltung ohne zu beschweren.',
+        calories: 800,
+        protein: 35,
+        carbs: 80,
+        fat: 30,
+        micronutrients: { vitaminC: 60, zinc: 5, iron: 4 },
+        prepTime: '25 Min',
+        time: '18:30',
+        image: 'https://images.unsplash.com/photo-1518133683791-0b9de5a055f0?w=800',
+        checked: false,
+      }
+    ]
+  }
 ];
 
 const MOCK_DASHBOARD: DashboardData = {
@@ -191,53 +259,17 @@ const MOCK_DASHBOARD: DashboardData = {
   phase: 'Phase 1',
   dayNumber: 3,
   weekProgress: 42,
-  calories: { current: 1350, target: 2100 },
-  hydration: { current: 1.8, target: 2.5 },
-  macros: { carbs: 50, protein: 25, fat: 25 },
+  calories: { current: 0, target: 2100 },
+  hydration: { current: 0, target: 2.5 },
+  macrosTarget: { carbs: 220, protein: 90, fat: 80 },
   nutrients: [
-    { name: 'Protein', current: 82, target: 120, unit: 'g', color: '#33c758' },
-    { name: 'Vitamin C', current: 110, target: 150, unit: 'mg', color: '#f97316' },
-    { name: 'Zink', current: 12, target: 15, unit: 'mg', color: '#3b82f6' },
-    { name: 'Eisen', current: 9, target: 14, unit: 'mg', color: '#ef4444' },
+    { name: 'Vitamin C', current: 0, target: 150, unit: 'mg', color: '#f97316' },
+    { name: 'Zink', current: 0, target: 15, unit: 'mg', color: '#3b82f6' },
+    { name: 'Eisen', current: 0, target: 14, unit: 'mg', color: '#ef4444' },
   ],
-  dailyMeals: [
-    {
-      id: 'm1',
-      type: 'breakfast',
-      label: 'Frühstück',
-      name: 'Avocado-Vollkornbrot mit pochierten Eiern',
-      description: 'Reich an Omega-3-Fettsäuren und Vitamin C zur Unterstützung der Kollagensynthese.',
-      calories: 420,
-      prepTime: '15 Min',
-      time: '08:30',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnM0xrmZ9Gc1bqwOYy5z81O_7DJFTNI5iFeJF3Az0kEC_59cihGMldM5z739eo_IMfipv6s_dQySX7R8oFZX2vm4TsC7qd5Gu2WaSHaefxqEXgZUnUITasiMdbwnBtfIDYHlPybxv8HP4dZgoKyYrE07WpSTzL89mq94VEfA0KXeccnd3GXYvgGyTIuGZmg5Z02yMYrfkQeGaWVNbEV_GbUIKzAWhpx6SZtPFJ3VNWs8Sm7CSOguzsZ8wj-al7JgDrwEXwyhsr5UI',
-      checked: true,
-    },
-    {
-      id: 'm2',
-      type: 'lunch',
-      label: 'Mittagessen',
-      name: 'Gegrillter Lachs mit Zink-reichem Quinoa',
-      description: 'Proteinreiches Mittagsgericht mit Mikronährstoffen als Orientierung für die Regenerationsphase.',
-      calories: 580,
-      prepTime: '25 Min',
-      time: '13:00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC9frIVGPGbHXtCM4o-9NR8WeAJOVU1PAW04JChrZk8QSKKjzQPfkP95yAVq4bV9w5IyWHb8bR9RovaIe-Y05HUaZWTHR16HFrjiFpN1LGHxJLRYuJgy8xyKMLId5Sv_HWP_KFIG9eWjYuTCGyT4CAkA1RaSTrMzf6jge0p8UWK1LA1LCHRkv_qk3wifARSmyl0szfA48UnqVoH9X6Dftz5dBY2lqvPivPziP-AAniJcJGupocgdqq9Mayv1Ry0176Xuy2Mltm-SAE',
-      checked: false,
-    },
-    {
-      id: 'm3',
-      type: 'dinner',
-      label: 'Abendessen',
-      name: 'Süßkartoffel-Bowl mit Kurkuma-Dressing',
-      description: 'Milde Bowl mit Kurkuma-Dressing als gut planbare Abendoption.',
-      calories: 350,
-      prepTime: '20 Min',
-      time: '19:00',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDGazVMJeBFtiBKvhOf30sB_0jtYfkXUjLwt7C3PD8QK8oDGq0dZFveZsvFQYFi680cTlHdMUmc1zQIe71X4ymwHlCnGhSjups3rIzb7WqgQOQ4q0wfWRLanpYG1lNhG-aRRJaLLy8np-D1F4FVjEIl6hUkSevAK3VFoNEVdD8flL_HiCwbvMFzGETgbw3VIv74INyXEEXgU7j68v5m0p0nmNbg8srviFM5rzb4Xp0GKo22YVGLq96-GJ4pLaXoAPrtWYju1HfV6VM',
-      checked: false,
-    },
-  ],
+  streakDays: 0,
+  trackingHistory: [],
+  dailyMeals: [],
 };
 
 const MOCK_RECOVERY_ANALYSIS: RecoveryAnalysis = {
@@ -289,30 +321,22 @@ export const nutritionMockApi = {
    * Später: GET /api/frontend/recipes/curated/{patient_id}
    */
   fetchCuratedMeals: async (): Promise<CuratedMeal[]> => {
-    return [
-      {
-        id: '1',
-        name: 'Lachs mit Quinoa',
-        description: 'Proteinreiche Rezeptidee mit Omega-3-Fettsäuren als Orientierung.',
-        image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800',
-        calories: 450,
-        protein: '35g',
-        carbs: '40g',
-        fat: '15g',
-        tags: ['Herzgesund', 'Proteinreich']
-      },
-      {
-        id: '2',
-        name: 'Grüner Power-Salat',
-        description: 'Pflanzenbetonte Rezeptidee mit vielen farbigen Zutaten.',
-        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800',
-        calories: 320,
-        protein: '12g',
-        carbs: '25g',
-        fat: '18g',
-        tags: ['Vegan', 'Antioxidantien']
-      }
-    ];
+    const allMeals: CuratedMeal[] = MOCK_MEAL_KITS.flatMap(kit => 
+      kit.meals.map(m => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        image: m.image,
+        calories: m.calories,
+        protein: kit.nutrition.protein,
+        carbs: kit.nutrition.carbs,
+        fat: kit.nutrition.fat,
+        micronutrients: m.micronutrients,
+        tags: kit.tags,
+        boxName: kit.name
+      }))
+    );
+    return allMeals;
   },
 
   /**
@@ -380,8 +404,31 @@ export const nutritionMockApi = {
    */
   savePatientProfile: async (profile: Partial<PatientProfile>): Promise<{ success: boolean }> => {
     await new Promise(resolve => setTimeout(resolve, 800));
-    // Mock: Logge die Daten, die ans Backend gehen würden
     console.log('[MockAPI] Profil gespeichert:', profile);
+    return { success: true };
+  },
+
+  /**
+   * MealKit für das Dashboard aktivieren.
+   */
+  /**
+   * MealKit kaufen und zum Inventar hinzufügen.
+   * Unterstützt Mengen: Wird dasselbe Kit erneut gekauft, erhöht sich die Quantity.
+   */
+  activateMealKit: async (kitId: string, quantity: number = 1): Promise<{ success: boolean }> => {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    const kit = MOCK_MEAL_KITS.find(k => k.id === kitId);
+    if (kit && typeof window !== 'undefined') {
+      const existingRaw = sessionStorage.getItem('f4r_purchased_kits');
+      const existingKits: Array<MealKit & { quantity: number }> = existingRaw ? JSON.parse(existingRaw) : [];
+      const idx = existingKits.findIndex(k => k.id === kitId);
+      if (idx >= 0) {
+        existingKits[idx].quantity += quantity;
+      } else {
+        existingKits.push({ ...kit, quantity });
+      }
+      sessionStorage.setItem('f4r_purchased_kits', JSON.stringify(existingKits));
+    }
     return { success: true };
   },
 };

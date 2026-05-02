@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowRight, BarChart3, CheckCircle2, ClipboardList, HeartPulse,
   PackageCheck, ShieldAlert, Sparkles, Utensils
@@ -22,6 +23,7 @@ export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
   const [loadingTextIdx, setLoadingTextIdx] = useState(0);
   const { addToCart } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     // Start fetch
@@ -46,6 +48,7 @@ export default function AnalysisPage() {
         quantity: 1,
         imageUrl: kit.imageUrl
       });
+      router.push('/shop');
     }
   };
 
@@ -69,14 +72,7 @@ export default function AnalysisPage() {
   }
 
   return (
-    <main className={styles.container}>
-      <nav className={styles.nav}>
-        <Link href="/" className={styles.brand}>
-          <span className={styles.brandIcon}><Utensils size={17} /></span>
-          Food4Recovery
-        </Link>
-        <Link href="/dashboard" className={styles.navAction}>Dashboard</Link>
-      </nav>
+      <main className={styles.container}>
 
       <section className={styles.progressCard}>
         <div>

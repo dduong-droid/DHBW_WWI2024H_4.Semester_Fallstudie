@@ -138,8 +138,8 @@ export default function LoginPage() {
           </div>
 
           {/* Demo Direct Access (Priority 1 Refinement) */}
-          <Link href="/dashboard" className={styles.demoDirectBtn}>
-            Direkt zum Dashboard (Demo-Modus)
+          <Link href="/onboarding" className={styles.demoDirectBtn}>
+            Demo starten (Onboarding)
           </Link>
 
           {/* Divider */}

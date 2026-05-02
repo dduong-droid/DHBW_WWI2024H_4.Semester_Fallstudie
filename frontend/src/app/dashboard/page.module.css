@@ -63,6 +63,57 @@
   .navLinks { display: flex; }
 }
 
+.mobileNav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  padding: 0.75rem 1rem 1.5rem 1rem;
+  justify-content: space-around;
+  z-index: 1000;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+@media (min-width: 768px) {
+  .mobileNav { display: none; }
+}
+
+.mobileNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.5;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.mobileNavItemActive {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.notificationsDropdown {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  width: 300px;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 1rem;
+  z-index: 100;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
 .navLink {
   font-size: 0.875rem;
   font-weight: 600;

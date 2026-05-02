@@ -11,6 +11,7 @@ import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
+import { nutritionMockApi } from '../../services/mockApi';
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
 
@@ -57,6 +58,12 @@ export default function CheckoutPage() {
       paymentMethod,
       timeSlot,
     });
+
+    // Aktiviere die gekauften Meal-Kits für das Dashboard (mit Menge)
+    for (const item of items) {
+      await nutritionMockApi.activateMealKit(item.id, item.quantity);
+    }
+
     setOrderId(order.orderId);
     setDeliveryWindow(order.deliveryWindow);
     setBackendOrderUsed(order.backendUsed);
@@ -69,14 +76,6 @@ export default function CheckoutPage() {
   if (orderComplete) {
     return (
       <div className={styles.container}>
-        <nav className={styles.nav}>
-          <div className={styles.navContainer}>
-            <div className={styles.logoArea}>
-              <div className={styles.logoIcon}><Utensils size={20} strokeWidth={2.5} /></div>
-              <span className={styles.logoText}>Food 4 Recovery</span>
-            </div>
-          </div>
-        </nav>
         <main className={styles.main}>
           <div className={styles.successContainer}>
             <div className={styles.successIcon}>
@@ -150,19 +149,6 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className={styles.container}>
-        <nav className={styles.nav}>
-          <div className={styles.navContainer}>
-            <div className={styles.logoArea}>
-              <div className={styles.logoIcon}><Utensils size={20} strokeWidth={2.5} /></div>
-              <span className={styles.logoText}>Food 4 Recovery</span>
-            </div>
-            <div className={styles.navLinks}>
-              <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
-              <Link href="/shop" className={styles.navLink}>Shop</Link>
-            </div>
-            <div className={styles.userArea}><CartNavIcon /></div>
-          </div>
-        </nav>
         <main className={styles.main}>
           <div className={styles.emptyCart}>
             <ShoppingBag size={64} style={{ opacity: 0.2 }} />
@@ -180,26 +166,6 @@ export default function CheckoutPage() {
   // === Checkout Formular ===
   return (
     <div className={styles.container}>
-      {/* Navigation */}
-      <nav className={styles.nav}>
-        <div className={styles.navContainer}>
-          <div className={styles.logoArea}>
-            <div className={styles.logoIcon}><Utensils size={20} strokeWidth={2.5} /></div>
-            <span className={styles.logoText}>Food 4 Recovery</span>
-          </div>
-          <div className={styles.navLinks}>
-            <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
-            <Link href="/profile" className={styles.navLink}>Profil</Link>
-            <Link href="/recipes" className={styles.navLink}>Rezepte</Link>
-            <Link href="/shop" className={styles.navLink}>Shop</Link>
-          </div>
-          <div className={styles.userArea}>
-            <button className={styles.iconBtn} aria-label="Benachrichtigungen"><Bell size={20} /></button>
-            <CartNavIcon />
-          </div>
-        </div>
-      </nav>
-
       <main className={styles.main}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Kasse</h1>
