@@ -200,9 +200,12 @@ function readStoredAnalysis(): RecoveryAnalysis | null {
 
 function fallbackOrThrow<T>(message: string, error: unknown, fallback: () => T | Promise<T>): T | Promise<T> {
   const prefix = DISABLE_MOCK_FALLBACK ? '[BFF error]' : '[BFF fallback]';
-  console.warn(`${prefix} ${message}:`, error);
+  const errorMsg = error instanceof Error ? error.message : JSON.stringify(error) === '{}' ? String(error) : JSON.stringify(error);
+  
+  console.warn(`${prefix} ${message}:`, errorMsg);
+  
   if (DISABLE_MOCK_FALLBACK) {
-    throw error;
+    throw new Error(`${message}: ${errorMsg}`);
   }
   return fallback();
 }

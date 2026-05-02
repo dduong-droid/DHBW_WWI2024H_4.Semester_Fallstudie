@@ -33,6 +33,10 @@ const CuratedMealCard: React.FC<CuratedMealCardProps> = ({ meal, onClick }) => {
           height={400}
           sizes="(max-width: 768px) 100vw, 33vw"
           style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+          onError={(e) => {
+            // Fallback image if Unsplash fails
+            (e.target as any).src = 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800';
+          }}
         />
         {meal.boxName && (
           <div style={{
