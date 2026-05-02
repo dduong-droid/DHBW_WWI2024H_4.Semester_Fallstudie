@@ -403,7 +403,7 @@ export default function OnboardingPage() {
                       </label>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {ALLERGY_CHIPS.map(chip => (
-                          <button key={chip} onClick={() => toggleChip(allergies, chip, setAllergies)}
+                          <button key={chip} type="button" onClick={() => toggleChip(allergies, chip, setAllergies)}
                             style={{
                               padding: '0.625rem 1rem', borderRadius: 'var(--radius-lg)', fontWeight: 600,
                               fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease',
@@ -424,7 +424,7 @@ export default function OnboardingPage() {
                       </label>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {INTOLERANCE_CHIPS.map(chip => (
-                          <button key={chip} onClick={() => toggleChip(intolerances, chip, setIntolerances)}
+                          <button key={chip} type="button" onClick={() => toggleChip(intolerances, chip, setIntolerances)}
                             style={{
                               padding: '0.625rem 1rem', borderRadius: 'var(--radius-lg)', fontWeight: 600,
                               fontSize: '0.875rem', cursor: 'pointer', transition: 'all 0.2s ease',
@@ -630,7 +630,12 @@ function InputField({
           type={type}
           placeholder={placeholder}
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={e => {
+            const val = e.target.value;
+            if (type === 'number' && val !== '' && parseFloat(val) < 0) return;
+            onChange(val);
+          }}
+          min={type === 'number' ? 0 : undefined}
           style={{
             width: '100%',
             padding: suffix ? '0.75rem 3rem 0.75rem 1rem' : '0.75rem 1rem',

@@ -221,3 +221,16 @@
   border-top: 1px solid var(--border);
   background: var(--surface);
 }
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .chatbotContainer {
+    bottom: 6rem; /* Move up to avoid overlap with mobile nav */
+    right: 1.5rem;
+  }
+  
+  .chatbotWindow {
+    width: calc(100vw - 2rem);
+    height: 400px;
+    right: 0;
+  }
+}

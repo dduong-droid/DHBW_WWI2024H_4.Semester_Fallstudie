@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const [plannedMealsByDay, setPlannedMealsByDay] = useState<Record<string, PlannedMeal[]>>({});
   const [showInventory, setShowInventory] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   const FULL_DAYS: Record<string, string> = {
@@ -39,6 +40,7 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    setIsMounted(true);
     // Setze initialen Tag dynamisch
     const currentDayIndex = new Date().getDay(); // 0 = So, 1 = Mo...
     const weekdayMap = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -622,34 +624,36 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div style={{ width: '100%', height: '300px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={data.trackingHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                    <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} dy={10} />
-                    <YAxis 
-                      domain={chartMetric === 'weight' ? [60, 90] : [0, 'dataMax + 1']} 
-                      axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} 
-                    />
-                    <Tooltip 
-                      contentStyle={{ borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
-                      itemStyle={{ fontWeight: 600, color: chartMetric === 'weight' ? '#33c758' : '#3b82f6' }}
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey={chartMetric} 
-                      stroke={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} 
-                      strokeWidth={3}
-                      fillOpacity={1} 
-                      fill="url(#colorMetric)" 
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {isMounted && (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data.trackingHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                      <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} dy={10} />
+                      <YAxis 
+                        domain={chartMetric === 'weight' ? [60, 90] : [0, 'dataMax + 1']} 
+                        axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--text-muted)' }} 
+                      />
+                      <Tooltip 
+                        contentStyle={{ borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
+                        itemStyle={{ fontWeight: 600, color: chartMetric === 'weight' ? '#33c758' : '#3b82f6' }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey={chartMetric} 
+                        stroke={chartMetric === 'weight' ? '#33c758' : '#3b82f6'} 
+                        strokeWidth={3}
+                        fillOpacity={1} 
+                        fill="url(#colorMetric)" 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </div>
 
@@ -665,10 +669,23 @@ export default function DashboardPage() {
                   <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                     Appetit heute
                   </label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {['Low', 'Mid', 'High'].map(level => (
-                      <button key={level} className={styles.trackBtn} onClick={() => alert(`${level} Appetit getrackt!`)}>
-                        {level}
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    {[
+                      { l: 'Low', e: '🤢', c: '#ef4444' },
+                      { l: 'Mid', e: '😐', c: '#f59e0b' },
+                      { l: 'High', e: '😋', c: 'var(--color-primary)' }
+                    ].map(item => (
+                      <button 
+                        key={item.l} 
+                        className={styles.trackBtn} 
+                        onClick={() => {
+                          setTrackingNote(`Appetit "${item.l}" getrackt!`);
+                          setTimeout(() => setTrackingNote(''), 3000);
+                        }}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', padding: '0.75rem 0.5rem' }}
+                      >
+                        <span style={{ fontSize: '1.25rem' }}>{item.e}</span>
+                        <span style={{ fontSize: '0.7rem' }}>{item.l}</span>
                       </button>
                     ))}
                   </div>
@@ -679,19 +696,31 @@ export default function DashboardPage() {
                     Symptome / Schmerzen
                   </label>
                   <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'space-between' }}>
-                    {[1, 2, 3, 4, 5].map(level => (
+                    {[
+                      { v: 1, e: '😌' },
+                      { v: 2, e: '😕' },
+                      { v: 3, e: '😟' },
+                      { v: 4, e: '😫' },
+                      { v: 5, e: '😖' }
+                    ].map(item => (
                       <button 
-                        key={level} 
+                        key={item.v} 
                         className={styles.trackBtn} 
                         style={{ 
                           padding: '0.5rem 0', 
-                          background: symptom === level ? 'var(--color-primary)' : 'var(--surface)',
-                          color: symptom === level ? 'white' : 'var(--text)',
-                          borderColor: symptom === level ? 'var(--color-primary)' : 'var(--border)'
+                          flex: 1,
+                          background: symptom === item.v ? 'var(--color-primary)' : 'var(--surface)',
+                          color: symptom === item.v ? 'white' : 'var(--text)',
+                          borderColor: symptom === item.v ? 'var(--color-primary)' : 'var(--border)'
                         }}
-                        onClick={() => { setSymptom(level); alert(`Schmerzlevel ${level} getrackt!`); }}
+                        onClick={() => { 
+                          setSymptom(item.v); 
+                          setTrackingNote(`Schmerzlevel ${item.v} getrackt. Wir empfehlen heute Schonkost.`);
+                          setTimeout(() => setTrackingNote(''), 4000);
+                        }}
                       >
-                        {level}
+                        <div style={{ fontSize: '1.25rem' }}>{item.e}</div>
+                        <div style={{ fontSize: '0.6rem', fontWeight: 700 }}>{item.v}</div>
                       </button>
                     ))}
                   </div>

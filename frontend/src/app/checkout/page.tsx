@@ -54,7 +54,7 @@ export default function CheckoutPage() {
       if (p.firstName || p.lastName) {
         setFullName(`${p.firstName} ${p.lastName}`.trim());
       }
-    }).catch(console.error);
+    }).catch(err => console.error('[Checkout] Fetch failed:', err));
   }, []);
 
   const shippingCost = 0;

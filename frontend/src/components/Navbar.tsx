@@ -16,7 +16,7 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
-    recoveryApi.fetchDashboardData().then(setData).catch(console.error);
+    recoveryApi.fetchDashboardData().then(setData).catch(err => console.warn('[Navbar] fetch failed:', err));
   }, []);
 
   // Don't show navbar on landing page or login (optional, but usually better)
