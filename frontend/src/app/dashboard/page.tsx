@@ -515,7 +515,7 @@ export default function DashboardPage() {
         <div className={styles.grid}>
           {/* Left: Mahlzeiten */}
           <div>
-            <div className={styles.cardHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className={styles.cardHeader}>
               <h2 className={styles.cardTitle} style={{ fontSize: '1.5rem', margin: 0 }}>Mahlzeiten für {FULL_DAYS[selectedDay as keyof typeof FULL_DAYS]}</h2>
               {purchasedKits.length > 0 && (
                 <button onClick={() => setShowInventory(!showInventory)} style={{ background: 'var(--color-primary)', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>
@@ -539,16 +539,16 @@ export default function DashboardPage() {
                     <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
                       <ShoppingBag size={14} style={{ display: 'inline', marginRight: '0.25rem', verticalAlign: 'middle' }} />{kit.name} ({kit.quantity}x)
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    <div className={styles.inventoryGrid}>
                       {kit.meals.map(meal => (
                         <button 
                           key={meal.id} 
                           draggable 
                           onDragStart={(e) => handleDragStart(e, meal, kit.name)}
                           onClick={() => addMealToDay(meal, kit.name)} 
-                          style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'var(--background)', padding: '0.75rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', cursor: 'grab', textAlign: 'left' }}
+                          className={styles.inventoryItem}
                         >
-                          <div style={{ width: 40, height: 40, backgroundImage: `url('${meal.image}')`, backgroundSize: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
+                          <div className={styles.mealImage} style={{ backgroundImage: `url('${meal.image}')`, backgroundSize: 'cover', width: 40, height: 40 }} />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontWeight: 600, fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{meal.name}</div>
                             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{meal.calories} kcal</div>
