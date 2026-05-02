@@ -266,6 +266,7 @@ function mapDashboardData(
   plan: FrontendNutritionPlan,
   daily: FrontendDailyProgress | null,
   hydration: FrontendHydrationProgress | null,
+  profileName?: string
 ): DashboardData {
   const today = plan.weeklyPlan[0];
   const total = today?.totalMetrics || {};
@@ -278,7 +279,7 @@ function mapDashboardData(
   ];
 
   return {
-    patientName: plan.userId.replace(/^demo_/, '').replace(/[_-]/g, ' ') || 'Demo',
+    patientName: profileName || plan.userId.replace(/^demo_/, '').replace(/[_-]/g, ' ') || 'Demo',
     avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9edJZrKoVYMUbVYeAL11mBb9NDRyQd6pXOSuAEU8Xzm26sBMxoNrcvps2apoGo4tKTfTiiE0U67oUUIghGuFfAkXqH2Q9vZwXrA8CiIlScjZxpd7ep81lHgE9-vO7xhdwnzxYL8ro90cofPsAiLNLRKHIx4QHQaUyTAZdyYXFwW7VEDq8MgInJz6INCGHXzzz_WBx0mlPnZcfNUAQTGtUcrpfYJqPStjaCQmkkMB7Rfgpy1VN1hnTT-eZ_Nv9YUFyYr_drHDwYNY',
     diagnosis: plan.diagnosis.condition,
     phase: 'lokaler Demo-Modus',
@@ -539,7 +540,7 @@ export const recoveryApi = {
   fetchDashboardData: async (): Promise<DashboardData> => {
     try {
       const patientId = getPatientId();
-      const [plan, daily, hydration] = await Promise.all([
+      const [plan, daily, hydration, profile] = await Promise.all([
         fetchJson<FrontendNutritionPlan>(`/api/frontend/nutrition-plan/${patientId}`),
         fetchJson<FrontendDailyProgress>(`/api/frontend/tracking/daily/${patientId}`).catch(error => {
           if (DISABLE_MOCK_FALLBACK) throw error;
@@ -549,10 +550,16 @@ export const recoveryApi = {
           if (DISABLE_MOCK_FALLBACK) throw error;
           return null;
         }),
+        recoveryApi.fetchPatientProfile().catch(() => undefined)
       ]);
-      return mapDashboardData(plan, daily, hydration);
+      return mapDashboardData(plan, daily, hydration, profile?.firstName);
     } catch (error) {
-      return fallbackOrThrow('Dashboard nutzt Mock-Daten', error, () => nutritionMockApi.fetchDashboardData());
+      return fallbackOrThrow('Dashboard nutzt Mock-Daten', error, async () => {
+        const d = await nutritionMockApi.fetchDashboardData();
+        const p = await recoveryApi.fetchPatientProfile().catch(() => null);
+        if (p && p.firstName) d.patientName = p.firstName;
+        return d;
+      });
     }
   },
 
@@ -597,10 +604,15 @@ export const recoveryApi = {
         const mockAnalysis = await nutritionMockApi.fetchRecoveryAnalysis();
         // Falls 'Einfach Gesund' gew\u00e4hlt wurde, passe die Empfehlung an
         if (input.goals.includes('simply_healthy')) {
-          mockAnalysis.recommendedKitId = 'mk6';
-          mockAnalysis.recommendedKitName = 'Einfach Gesund Paket';
-          mockAnalysis.title = 'Ern\u00e4hrungsoptimierung';
-          mockAnalysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und pr\u00e4ventiven Gesundheitsf\u00f6rderung. Diese Auswertung ersetzt keine \u00e4rztliche Beratung.';
+          mockAnalysis.recommendedKitId = 'mk-einfach-gesund';
+          mockAnalysis.recommendedKitName = 'Einfach Gesund';
+          mockAnalysis.title = 'Ernährungsoptimierung';
+          mockAnalysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und präventiven Gesundheitsförderung. Diese Auswertung ersetzt keine ärztliche Beratung.';
+        } else if (input.goals.includes('chemo_support')) {
+          mockAnalysis.recommendedKitId = 'mk-chemo';
+          mockAnalysis.recommendedKitName = 'Chemotherapie Box';
+          mockAnalysis.title = 'Onkologische Unterstützung';
+          mockAnalysis.summary = 'Sanfte, kaloriendichte Mahlzeiten zur Erhaltung der Kraft während deiner Behandlung. Diese Auswertung ersetzt keine ärztliche Beratung.';
         }
         return mockAnalysis;
       });

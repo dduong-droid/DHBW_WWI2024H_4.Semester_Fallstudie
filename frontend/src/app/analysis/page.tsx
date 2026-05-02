@@ -48,7 +48,7 @@ export default function AnalysisPage() {
         quantity: 1,
         imageUrl: kit.imageUrl
       });
-      router.push('/shop');
+      router.push('/checkout');
     }
   };
 

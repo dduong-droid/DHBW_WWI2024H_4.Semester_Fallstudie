@@ -38,14 +38,15 @@ export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
 
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [appetite, setAppetite] = useState('normal');
   const [allergies, setAllergies] = useState<Set<string>>(new Set());
   const [intolerances, setIntolerances] = useState<Set<string>>(new Set());
-  const [goals, setGoals] = useState<Set<string>>(new Set());
+  const [goal, setGoal] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
 
@@ -106,7 +107,7 @@ export default function OnboardingPage() {
   const canGoNext = (): boolean => {
     switch (step) {
       case 0: return true; // Welcome
-      case 1: return goals.size > 0 && age !== '' && weight !== '' && height !== ''; // Health goals + Bio
+      case 1: return firstName.trim() !== '' && lastName.trim() !== '' && goal !== null && age !== '' && weight !== '' && height !== ''; // Name + Health goals + Bio
       case 2: return true; // Preferences (optional)
       case 3: return true; // Upload (optional)
       default: return false;
@@ -137,6 +138,20 @@ export default function OnboardingPage() {
           : 'Dokument-Metadaten wurden lokal als Demo-Fallback erfasst. Es erfolgt keine medizinische Auswertung.',
       );
     }
+    // Save to profile for persistence
+    const name = `${firstName} ${lastName}`.trim();
+
+    await recoveryApi.savePatientProfile({
+      firstName,
+      lastName,
+      age: Number(age),
+      weight: Number(weight),
+      height: Number(height),
+      conditions: goal ? [goal] : [],
+      allergies: Array.from(allergies),
+      notes: `Demo-Onboarding. Intoleranzen: ${Array.from(intolerances).join(', ')}`,
+    });
+
     await recoveryApi.submitOnboardingAnalysis({
       name, 
       age: Number(age),
@@ -145,11 +160,12 @@ export default function OnboardingPage() {
       appetite,
       allergies: Array.from(allergies),
       intolerances: Array.from(intolerances),
-      goals: Array.from(goals),
+      goals: goal ? [goal] : [],
       uploadedFiles: uploadedDocuments.length > 0
         ? uploadedDocuments.map(doc => ({ name: doc.filename, size: doc.size, type: doc.content_type }))
         : uploadedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
     });
+
     setSubmitting(false);
     router.push('/analysis');
   };
@@ -167,7 +183,7 @@ export default function OnboardingPage() {
 
           {/* === STEP 0: Welcome === */}
           {step === 0 && (
-            <>
+            <div key="step0" className="fade-in">
               <div className={styles.hero}>
                 <div className={styles.badge}>
                   <Sparkles size={14} />
@@ -225,7 +241,7 @@ export default function OnboardingPage() {
                   Dauert nur 2 Minuten
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {/* === STEPS 1-4: Fragebogen === */}
@@ -266,9 +282,27 @@ export default function OnboardingPage() {
 
                 {/* Step 1: Health Goals & Bio Data */}
                 {step === 1 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  <div key="step1" className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {/* Name Section */}
+                    <div className="responsive-grid-2">
+                      <InputField
+                        id="firstName"
+                        label="Vorname"
+                        placeholder="z.B. Maria"
+                        value={firstName}
+                        onChange={setFirstName}
+                      />
+                      <InputField
+                        id="lastName"
+                        label="Nachname"
+                        placeholder="z.B. Müller"
+                        value={lastName}
+                        onChange={setLastName}
+                      />
+                    </div>
+
                     {/* Bio Data Section */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                    <div className="responsive-grid-3">
                       <InputField
                         id="age"
                         label="Alter"
@@ -289,7 +323,7 @@ export default function OnboardingPage() {
                       />
                       <InputField
                         id="height"
-                        label="Gr\u00f6\u00dfe"
+                        label="Größe"
                         type="number"
                         placeholder="z.B. 180"
                         value={height}
@@ -299,30 +333,31 @@ export default function OnboardingPage() {
                     </div>
 
                     <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                        W\u00e4hle dein Gesundheitsziel
+                      <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text)', marginBottom: '0.75rem', fontFamily: 'inherit' }}>
+                        Wähle dein Gesundheitsziel
                       </label>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {GOAL_OPTIONS.map(g => (
                           <label key={g.id} style={{
                             display: 'flex', alignItems: 'center', gap: '1rem',
                             padding: '1rem', borderRadius: 'var(--radius-lg)', cursor: 'pointer',
-                            border: goals.has(g.id) ? '2px solid var(--color-primary)' : '2px solid var(--border)',
-                            background: goals.has(g.id) ? 'rgba(51,199,88,0.05)' : 'var(--background)',
+                            border: goal === g.id ? '2px solid var(--color-primary)' : '2px solid var(--border)',
+                            background: goal === g.id ? 'rgba(51,199,88,0.05)' : 'var(--background)',
                             transition: 'all 0.2s ease',
                           }}>
                             <input
-                              type="checkbox"
-                              checked={goals.has(g.id)}
-                              onChange={() => toggleChip(goals, g.id, setGoals)}
+                              type="radio"
+                              name="goal"
+                              checked={goal === g.id}
+                              onChange={() => setGoal(g.id)}
                               style={{ display: 'none' }}
                             />
                             <div style={{ flex: 1 }}>
-                              <span style={{ fontWeight: 700, display: 'block' }}>{g.label}</span>
+                              <span style={{ fontWeight: 700, display: 'block', color: 'var(--text)' }}>{g.label}</span>
                               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{g.desc}</span>
                             </div>
                             <CheckCircle2 size={22} style={{
-                              color: goals.has(g.id) ? 'var(--color-primary)' : 'var(--border)',
+                              color: goal === g.id ? 'var(--color-primary)' : 'var(--border)',
                               transition: 'color 0.2s ease',
                             }} />
                           </label>
@@ -334,10 +369,10 @@ export default function OnboardingPage() {
 
                 {/* Step 2: Preferences */}
                 {step === 2 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  <div key="step2" className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     {/* Appetite */}
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text)', marginBottom: '0.75rem', fontFamily: 'inherit' }}>
                         Appetit aktuell
                       </label>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -363,7 +398,7 @@ export default function OnboardingPage() {
 
                     {/* Allergies Chips */}
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text)', marginBottom: '0.75rem', fontFamily: 'inherit' }}>
                         Allergien
                       </label>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -384,7 +419,7 @@ export default function OnboardingPage() {
 
                     {/* Intolerances Chips */}
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text)', marginBottom: '0.75rem', fontFamily: 'inherit' }}>
                         Unverträglichkeiten
                       </label>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -407,7 +442,7 @@ export default function OnboardingPage() {
 
                 {/* Step 3: Document Upload */}
                 {step === 3 && (
-                  <div>
+                  <div key="step3" className="fade-in">
                     {/* Hidden file input */}
                     <input
                       ref={fileInputRef}
@@ -585,8 +620,8 @@ function InputField({
   value: string; onChange: (v: string) => void; suffix?: string;
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-      <label htmlFor={id} style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', fontFamily: 'inherit' }}>
+      <label htmlFor={id} style={{ fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text)', fontFamily: 'inherit' }}>
         {label}
       </label>
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>

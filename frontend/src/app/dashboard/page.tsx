@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Utensils, Droplets, Flame, Clock, ChevronRight,
-  Activity, ShoppingBag, HeartPulse, Sparkles, Check, Zap, LineChart, Plus, Trash2, ChevronDown
+  Activity, ShoppingBag, HeartPulse, Sparkles, Check, Zap, LineChart, Plus, Trash2, ChevronDown, X
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
@@ -30,6 +30,7 @@ export default function DashboardPage() {
   const [purchasedKits, setPurchasedKits] = useState<PurchasedKit[]>([]);
   const [plannedMealsByDay, setPlannedMealsByDay] = useState<Record<string, PlannedMeal[]>>({});
   const [showInventory, setShowInventory] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   const FULL_DAYS: Record<string, string> = {
@@ -159,7 +160,8 @@ export default function DashboardPage() {
       const planIdx = Date.now() + Math.random();
       return { ...prev, [selectedDay]: [...current, { ...meal, boxName, planIdx }] };
     });
-    setShowInventory(false);
+    setTrackingNote('Gericht wurde hinzugefügt!');
+    setTimeout(() => setTrackingNote(''), 3000);
   };
 
   const removeMealFromDay = (planIdx: number) => {
@@ -167,6 +169,38 @@ export default function DashboardPage() {
       const current = prev[selectedDay] || [];
       return { ...prev, [selectedDay]: current.filter(m => m.planIdx !== planIdx) };
     });
+  };
+
+  const handleDragStart = (e: React.DragEvent, meal: any, boxName: string) => {
+    e.dataTransfer.setData('meal', JSON.stringify(meal));
+    e.dataTransfer.setData('boxName', boxName);
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    const mealData = e.dataTransfer.getData('meal');
+    const boxName = e.dataTransfer.getData('boxName');
+    if (mealData && boxName) {
+      const meal = JSON.parse(mealData);
+      addMealToDay(meal, boxName);
+    }
   };
 
   useEffect(() => {
@@ -301,30 +335,9 @@ export default function DashboardPage() {
       <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.hero}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <h1 className={styles.greeting}>Willkommen zurück, {data.patientName}</h1>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <span className={styles.diagnosisBox}>
-                  <HeartPulse size={14} />
-                  Heute: Tag {data.dayNumber}
-                </span>
-                <span className={styles.date}>{data.diagnosis} • {data.phase}</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
-              <div className={styles.focusBadge}>
-                <Sparkles size={16} />
-                Fokus: Proteinreich & Magenfreundlich
-              </div>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                background: 'rgba(249, 115, 22, 0.1)', color: '#f97316',
-                padding: '0.5rem 1rem', borderRadius: '9999px', fontWeight: 700, fontSize: '0.875rem'
-              }}>
-                <Zap size={18} fill="#f97316" />
-                {data.streakDays} Tage Tracking-Streak!
-              </div>
+              <h1 className={styles.greeting}>Willkommen zurück, {profile?.firstName || data.patientName}</h1>
             </div>
           </div>
         </section>
@@ -442,9 +455,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Wasser Card */}
-          <div className={styles.card} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className={`${styles.card} ${currentDayHydration >= data.hydration.target ? styles.waterGoalReached : ''}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardTitle}>Flüssigkeit</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className={styles.cardTitle}>Flüssigkeit</span>
+                {currentDayHydration >= data.hydration.target && <span className={styles.successBadge}>Erreicht!</span>}
+              </div>
               <Droplets size={24} className={styles.waterColor} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flex: 1 }}>
@@ -495,8 +511,16 @@ export default function DashboardPage() {
               )}
             </div>
             {showInventory && (
-              <div style={{ background: 'var(--surface)', border: '1px solid var(--color-primary)', borderRadius: 'var(--radius-xl)', padding: '1rem', marginBottom: '1.5rem', marginTop: '1rem' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem', fontWeight: 700 }}>Deine Speisekammer</h3>
+              <div style={{ background: 'var(--surface)', border: '1px solid var(--color-primary)', borderRadius: 'var(--radius-xl)', padding: '1.5rem', marginBottom: '1.5rem', marginTop: '1rem', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1.125rem', margin: 0, fontWeight: 700 }}>Deine Speisekammer</h3>
+                  <button 
+                    onClick={() => setShowInventory(false)} 
+                    style={{ background: 'rgba(51, 199, 88, 0.1)', color: 'var(--color-primary)', border: 'none', padding: '0.4rem 0.8rem', borderRadius: 'var(--radius-full)', fontWeight: 700, cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                  >
+                    <X size={14} /> Schließen
+                  </button>
+                </div>
                 {purchasedKits.map(kit => (
                   <div key={kit.id} style={{ marginBottom: '1rem' }}>
                     <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
@@ -504,7 +528,13 @@ export default function DashboardPage() {
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                       {kit.meals.map(meal => (
-                        <button key={meal.id} onClick={() => addMealToDay(meal, kit.name)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'var(--background)', padding: '0.75rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', cursor: 'pointer', textAlign: 'left' }}>
+                        <button 
+                          key={meal.id} 
+                          draggable 
+                          onDragStart={(e) => handleDragStart(e, meal, kit.name)}
+                          onClick={() => addMealToDay(meal, kit.name)} 
+                          style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'var(--background)', padding: '0.75rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', cursor: 'grab', textAlign: 'left' }}
+                        >
                           <div style={{ width: 40, height: 40, backgroundImage: `url('${meal.image}')`, backgroundSize: 'cover', borderRadius: 'var(--radius-md)', flexShrink: 0 }} />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontWeight: 600, fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{meal.name}</div>
@@ -518,12 +548,18 @@ export default function DashboardPage() {
                 ))}
               </div>
             )}
-            <div className={styles.mealList}>
+            <div 
+              className={`${styles.mealList} ${isDraggingOver ? styles.dragOver : ''}`}
+              onDragOver={handleDragOver}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               {currentDayPlanned.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '3rem 2rem', background: 'var(--surface)', borderRadius: 'var(--radius-xl)', color: 'var(--text-muted)', border: '1px dashed var(--border)' }}>
+                <div style={{ textAlign: 'center', padding: '3rem 2rem', background: 'var(--surface)', borderRadius: 'var(--radius-xl)', color: 'var(--text-muted)', border: isDraggingOver ? '2px dashed var(--color-primary)' : '1px dashed var(--border)', transition: 'all 0.2s ease' }}>
                   <Utensils size={40} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
                   <p style={{ fontWeight: 600, color: 'var(--text)' }}>{purchasedKits.length > 0 ? 'Noch keine Mahlzeiten geplant' : 'Keine Boxen gekauft'}</p>
-                  <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>{purchasedKits.length > 0 ? 'Klicke auf "Gericht hinzufügen" um aus deinen Boxen zu wählen.' : 'Besuche den Shop, um eine Recovery-Box zu kaufen.'}</p>
+                  <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>{purchasedKits.length > 0 ? 'Ziehe ein Gericht hierher oder klicke auf "Gericht hinzufügen".' : 'Besuche den Shop, um eine Recovery-Box zu kaufen.'}</p>
                   {purchasedKits.length === 0 && (
                     <Link href="/shop" style={{ display: 'inline-block', marginTop: '1.5rem', background: 'var(--color-primary)', color: 'white', padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-full)', fontWeight: 600, textDecoration: 'none' }}>Zum Shop</Link>
                   )}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -20,6 +20,14 @@ const PAYMENT_METHODS = [
   { id: 'paypal', label: 'PayPal', icon: <span style={{ fontWeight: 800, fontStyle: 'italic', color: '#003087', fontSize: '1.125rem' }}>PayPal</span> },
 ];
 
+const MOCK_ADDRESSES = [
+  { street: 'Musterstraße 1', zip: '10115', city: 'Berlin' },
+  { street: 'Königsallee 42', zip: '40212', city: 'Düsseldorf' },
+  { street: 'Marienplatz 1', zip: '80331', city: 'München' },
+  { street: 'Hauptstraße 100', zip: '20095', city: 'Hamburg' },
+  { street: 'Schillerstraße 10', zip: '60313', city: 'Frankfurt am Main' }
+];
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -36,6 +44,18 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState('');
   const [deliveryWindow, setDeliveryWindow] = useState('');
   const [backendOrderUsed, setBackendOrderUsed] = useState(false);
+  
+  // Autocomplete State
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [filteredAddresses, setFilteredAddresses] = useState(MOCK_ADDRESSES);
+
+  useEffect(() => {
+    recoveryApi.fetchPatientProfile().then(p => {
+      if (p.firstName || p.lastName) {
+        setFullName(`${p.firstName} ${p.lastName}`.trim());
+      }
+    }).catch(console.error);
+  }, []);
 
   const shippingCost = 0;
   const taxRate = 0.07;
@@ -44,6 +64,30 @@ export default function CheckoutPage() {
   const total = subtotal + shippingCost;
 
   const canOrder = fullName.trim() && street.trim() && zip.trim() && city.trim() && items.length > 0;
+
+  const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setStreet(val);
+    if (val.trim() === '') {
+      setFilteredAddresses(MOCK_ADDRESSES);
+      setShowAutocomplete(false);
+    } else {
+      const filtered = MOCK_ADDRESSES.filter(addr =>
+        addr.street.toLowerCase().includes(val.toLowerCase()) ||
+        addr.city.toLowerCase().includes(val.toLowerCase()) ||
+        addr.zip.includes(val)
+      );
+      setFilteredAddresses(filtered);
+      setShowAutocomplete(filtered.length > 0);
+    }
+  };
+
+  const selectAddress = (addr: typeof MOCK_ADDRESSES[0]) => {
+    setStreet(addr.street);
+    setZip(addr.zip);
+    setCity(addr.city);
+    setShowAutocomplete(false);
+  };
 
   const handleOrder = async () => {
     if (!canOrder) return;
@@ -209,9 +253,48 @@ export default function CheckoutPage() {
                   <label htmlFor="co-name" className={styles.label}>Vollständiger Name</label>
                   <input id="co-name" className={styles.input} placeholder="Max Mustermann" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
-                <div className={styles.formGridFull}>
+                <div className={styles.formGridFull} style={{ position: 'relative' }}>
                   <label htmlFor="co-street" className={styles.label}>Straße & Hausnummer</label>
-                  <input id="co-street" className={styles.input} placeholder="Beispielstraße 123" value={street} onChange={e => setStreet(e.target.value)} />
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <MapPin size={18} style={{ position: 'absolute', left: '1rem', color: 'var(--text-muted)' }} />
+                    <input 
+                      id="co-street" 
+                      className={styles.input} 
+                      style={{ paddingLeft: '2.5rem' }}
+                      placeholder="Tippe z.B. Musterstraße..." 
+                      value={street} 
+                      onChange={handleStreetChange}
+                      onFocus={() => {
+                        if (street.trim() !== '' && filteredAddresses.length > 0) setShowAutocomplete(true);
+                      }}
+                      onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+                      autoComplete="off"
+                    />
+                  </div>
+                  {showAutocomplete && (
+                    <ul style={{
+                      position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 10,
+                      background: 'var(--surface)', border: '1px solid var(--border)', 
+                      borderRadius: 'var(--radius-md)', marginTop: '0.25rem', padding: '0.5rem 0',
+                      boxShadow: 'var(--shadow-md)', listStyle: 'none', maxHeight: '200px', overflowY: 'auto'
+                    }}>
+                      {filteredAddresses.map((addr, idx) => (
+                        <li 
+                          key={idx} 
+                          style={{ padding: '0.75rem 1rem', cursor: 'pointer', transition: 'background 0.2s ease', borderBottom: idx < filteredAddresses.length - 1 ? '1px solid var(--border)' : 'none' }}
+                          onMouseDown={(e) => {
+                              e.preventDefault(); // Prevents input onBlur
+                              selectAddress(addr);
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(51, 199, 88, 0.1)'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{addr.street}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{addr.zip} {addr.city}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="co-zip" className={styles.label}>Postleitzahl</label>

@@ -383,8 +383,8 @@ export const nutritionMockApi = {
    * Später: GET /api/patient-profile/{patient_id}
    */
   fetchPatientProfile: async (): Promise<PatientProfile> => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    const defaultProfile: PatientProfile = {
       id: 'p-001',
       firstName: 'Daniel',
       lastName: 'Müller',
@@ -396,15 +396,39 @@ export const nutritionMockApi = {
       notes: '',
       completionPercent: 50,
     };
+
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('f4r_profile');
+      if (saved) return JSON.parse(saved);
+    }
+    return defaultProfile;
   },
 
   /**
-   * Patientenprofil speichern (Mock — gibt nur Erfolg zurück).
-   * Später: POST /api/patient-profile
+   * Patientenprofil speichern (Mock).
+   * Nutzt sessionStorage für Persistenz zwischen Seiten in der Demo.
    */
   savePatientProfile: async (profile: Partial<PatientProfile>): Promise<{ success: boolean }> => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    console.log('[MockAPI] Profil gespeichert:', profile);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    if (typeof window !== 'undefined') {
+      const currentRaw = sessionStorage.getItem('f4r_profile');
+      const current = currentRaw ? JSON.parse(currentRaw) : {
+        id: 'p-001',
+        firstName: 'Daniel',
+        lastName: 'Müller',
+        age: 28,
+        weight: 72,
+        height: 180,
+        conditions: ['chemotherapy'],
+        allergies: [],
+        notes: '',
+        completionPercent: 50,
+      };
+      
+      const updated = { ...current, ...profile };
+      sessionStorage.setItem('f4r_profile', JSON.stringify(updated));
+      console.log('[MockAPI] Profil in sessionStorage aktualisiert:', updated);
+    }
     return { success: true };
   },
 

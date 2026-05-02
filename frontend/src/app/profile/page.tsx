@@ -13,10 +13,7 @@ import CartNavIcon from '../../components/CartNavIcon';
 // --- Konfiguration: Beschwerden und Allergien ---
 
 const CONDITIONS = [
-  { id: 'post_op', label: 'Post-OP Erholung', desc: 'Chirurgischer Eingriff in den letzten 6 Monaten' },
   { id: 'chemotherapy', label: 'Chemotherapie', desc: 'Laufende oder kürzliche onkologische Behandlung' },
-  { id: 'chronic_pain', label: 'Chronische Schmerzen', desc: 'Anhaltende Beschwerden oder eingeschränkte Mobilität' },
-  { id: 'cardiovascular', label: 'Herz-Kreislauf', desc: 'Vorgeschichte oder Überwachung des Herzens' },
 ];
 
 const ALLERGIES = [
@@ -32,6 +29,8 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
 
   // Form State
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
@@ -44,6 +43,8 @@ export default function ProfilePage() {
   // Lade bestehende Profildaten
   useEffect(() => {
     recoveryApi.fetchPatientProfile().then(profile => {
+      setFirstName(profile.firstName || '');
+      setLastName(profile.lastName || '');
       setAge(profile.age ? String(profile.age) : '');
       setWeight(profile.weight ? String(profile.weight) : '');
       setHeight(profile.height ? String(profile.height) : '');
@@ -82,6 +83,8 @@ export default function ProfilePage() {
     setSaving(true);
     setSaved(false);
     await recoveryApi.savePatientProfile({
+      firstName,
+      lastName,
       age: Number(age),
       weight: Number(weight),
       height: Number(height),
@@ -136,6 +139,30 @@ export default function ProfilePage() {
             <div className={styles.sectionHeader}>
               <span className={styles.sectionIcon}><User size={22} /></span>
               <h2 className={styles.sectionTitle}>Physisches Profil</h2>
+            </div>
+            <div className={styles.grid2} style={{ marginBottom: '1.5rem' }}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="profile-firstname" className={styles.label}>Vorname</label>
+                <input
+                  id="profile-firstname"
+                  type="text"
+                  className={styles.input}
+                  placeholder="Maria"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="profile-lastname" className={styles.label}>Nachname</label>
+                <input
+                  id="profile-lastname"
+                  type="text"
+                  className={styles.input}
+                  placeholder="Müller"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                />
+              </div>
             </div>
             <div className={styles.grid3}>
               <div className={styles.inputGroup}>
