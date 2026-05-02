@@ -69,6 +69,11 @@ export default function LoginPage() {
       {/* === Left Side: Visual Hero === */}
       <div className={styles.heroSide}>
         <div className={styles.heroBg}>
+          <Image
+            className={styles.heroBgImage}
+            src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80"
+            alt="Frische gesunde Mahlzeit mit buntem Gemüse"
+            fill
             priority
             sizes="50vw"
             onError={(e) => {
@@ -96,6 +101,10 @@ export default function LoginPage() {
         <div className={styles.formContainer}>
           {/* Mobile Hero Image */}
           <div className={styles.mobileHero}>
+            <Image
+              className={styles.mobileHeroImg}
+              src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80"
+              alt="Frische gesunde Mahlzeit"
               fill
               sizes="100vw"
               onError={(e) => {
