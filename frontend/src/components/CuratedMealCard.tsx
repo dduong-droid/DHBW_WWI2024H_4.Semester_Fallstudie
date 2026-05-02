@@ -67,7 +67,6 @@ const CuratedMealCard: React.FC<CuratedMealCardProps> = ({ meal, onClick }) => {
           </div>
         </div>
       </div>
-      </div>
     </div>
   );
 };

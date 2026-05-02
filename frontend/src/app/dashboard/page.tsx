@@ -175,6 +175,34 @@ export default function DashboardPage() {
     setInputHydration(currentDayHydration > 0 ? currentDayHydration.toString() : '');
   }, [selectedDay, hydrationByDay]);
 
+  const handleTrackData = (type: 'weight' | 'hydration') => {
+    if (!data) return;
+    const val = type === 'weight' ? parseFloat(inputWeight) : parseFloat(inputHydration);
+    if (isNaN(val)) return;
+
+    if (type === 'hydration') {
+      setHydrationByDay(prev => ({ ...prev, [selectedDay]: val }));
+    }
+
+    setData(prev => {
+      if (!prev) return prev;
+      const newHistory = [...prev.trackingHistory];
+      const existingIdx = newHistory.findIndex(h => h.date === selectedDay);
+      if (existingIdx >= 0) {
+        newHistory[existingIdx] = { ...newHistory[existingIdx], [type]: val };
+      } else {
+        newHistory.push({
+          date: selectedDay,
+          weight: type === 'weight' ? val : 70,
+          hydration: type === 'hydration' ? val : 0,
+        });
+      }
+      return { ...prev, trackingHistory: newHistory, streakDays: prev.streakDays + 1 };
+    });
+
+    if (type === 'weight') setInputWeight('');
+  };
+
   const exportPlan = (format: 'md' | 'json') => {
     if (!data) return;
     
@@ -690,25 +718,6 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-<<<<<<< Updated upstream
-            {/* Wochenfortschritt */}
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <span className={styles.cardTitle}>Wochenfortschritt</span>
-                <span style={{ fontWeight: 800, color: 'var(--color-primary)' }}>{data.weekProgress}%</span>
-              </div>
-              <div style={{ width: '100%', height: '0.625rem', background: 'rgba(51,199,88,0.1)', borderRadius: '9999px', overflow: 'hidden' }}>
-                <div style={{ width: `${data.weekProgress}%`, height: '100%', background: 'var(--color-primary)', borderRadius: '9999px', transition: 'width 1s ease' }} />
-              </div>
-              {trackingNote && (
-                <p style={{ marginTop: '0.875rem', color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.5 }}>
-                  {trackingNote}
-                </p>
-              )}
-            </div>
-=======
-
->>>>>>> Stashed changes
           </div>
         </div>
       </main>

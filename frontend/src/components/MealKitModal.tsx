@@ -79,7 +79,7 @@ export default function MealKitModal({ isOpen, onClose, kit }: MealKitModalProps
                 {kit.meals.map((meal, idx) => (
                   <div key={idx} className={styles.mealItem}>
                     <Utensils size={20} className={styles.mealIcon} />
-                    <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{meal}</span>
+                    <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{typeof meal === 'string' ? meal : meal.name}</span>
                   </div>
                 ))}
               </div>

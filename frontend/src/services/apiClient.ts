@@ -252,6 +252,9 @@ function mapRecipe(recipe: FrontendRecipe, type: DailyMeal['type'], label: strin
     name: recipe.name,
     description: recipe.description,
     calories: recipe.calories,
+    protein: recipe.macros?.protein || 0,
+    carbs: recipe.macros?.carbs || 0,
+    fat: recipe.macros?.fat || 0,
     prepTime: `${recipe.prepTimeMinutes} Min`,
     time,
     image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
@@ -292,11 +295,13 @@ function mapDashboardData(
       target: hydration ? Number((hydration.targetMl / 1000).toFixed(1)) : 2.5,
     },
     calories: { current: calorieCurrent, target: 2100 },
-    macros: {
-      carbs: Math.round(((total.carbs || 0) / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
-      protein: Math.round((proteinCurrent / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
-      fat: Math.round(((total.fat || 0) / Math.max(1, (total.carbs || 0) + proteinCurrent + (total.fat || 0))) * 100),
+    macrosTarget: {
+      carbs: total.carbs || 220,
+      protein: proteinCurrent || 120,
+      fat: total.fat || 70,
     },
+    streakDays: 0,
+    trackingHistory: [],
   };
 }
 
@@ -316,7 +321,7 @@ function mapMealKit(kit: FrontendMealKit): MealKit {
       carbs: `${kit.nutritionalValues.carbs}g`,
       fat: `${kit.nutritionalValues.fat}g`,
     },
-    meals: kit.meals || [],
+    meals: [] as DailyMeal[],
     deliveryDays: 'lokaler Demo-Modus',
   };
 }

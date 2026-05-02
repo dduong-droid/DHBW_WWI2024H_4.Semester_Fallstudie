@@ -576,3 +576,46 @@ export default function OnboardingPage() {
     </div>
   );
 }
+
+// --- Sub-Komponente: Einzel-Eingabefeld ---
+function InputField({
+  id, label, type = 'text', placeholder, value, onChange, suffix
+}: {
+  id: string; label: string; type?: string; placeholder?: string;
+  value: string; onChange: (v: string) => void; suffix?: string;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+      <label htmlFor={id} style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+        {label}
+      </label>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <input
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          style={{
+            width: '100%',
+            padding: suffix ? '0.75rem 3rem 0.75rem 1rem' : '0.75rem 1rem',
+            borderRadius: 'var(--radius-lg)',
+            border: '1.5px solid var(--border)',
+            background: 'var(--background)',
+            color: 'var(--text)',
+            fontSize: '1rem',
+            outline: 'none',
+            transition: 'border-color 0.2s ease',
+          }}
+          onFocus={e => e.currentTarget.style.borderColor = 'var(--color-primary)'}
+          onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
+        />
+        {suffix && (
+          <span style={{ position: 'absolute', right: '0.875rem', fontSize: '0.875rem', color: 'var(--text-muted)', pointerEvents: 'none' }}>
+            {suffix}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
