@@ -12,6 +12,7 @@ import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
 import { nutritionMockApi } from '../../services/mockApi';
+import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
 
@@ -20,13 +21,7 @@ const PAYMENT_METHODS = [
   { id: 'paypal', label: 'PayPal', icon: <span style={{ fontWeight: 800, fontStyle: 'italic', color: '#003087', fontSize: '1.125rem' }}>PayPal</span> },
 ];
 
-const MOCK_ADDRESSES = [
-  { street: 'Musterstraße 1', zip: '10115', city: 'Berlin' },
-  { street: 'Königsallee 42', zip: '40212', city: 'Düsseldorf' },
-  { street: 'Marienplatz 1', zip: '80331', city: 'München' },
-  { street: 'Hauptstraße 100', zip: '20095', city: 'Hamburg' },
-  { street: 'Schillerstraße 10', zip: '60313', city: 'Frankfurt am Main' }
-];
+// Google Places Autocomplete handled by use-places-autocomplete hook
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -45,9 +40,21 @@ export default function CheckoutPage() {
   const [deliveryWindow, setDeliveryWindow] = useState('');
   const [backendOrderUsed, setBackendOrderUsed] = useState(false);
   
-  // Autocomplete State
+  // Google Places Autocomplete
+  const {
+    ready,
+    value,
+    suggestions: { status, data: suggestions },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "de" }, // Optional: Restrict to Germany
+    },
+    debounce: 300,
+  });
+
   const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const [filteredAddresses, setFilteredAddresses] = useState(MOCK_ADDRESSES);
 
   useEffect(() => {
     recoveryApi.fetchPatientProfile().then(p => {
@@ -68,25 +75,39 @@ export default function CheckoutPage() {
   const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setStreet(val);
-    if (val.trim() === '') {
-      setFilteredAddresses(MOCK_ADDRESSES);
-      setShowAutocomplete(false);
-    } else {
-      const filtered = MOCK_ADDRESSES.filter(addr =>
-        addr.street.toLowerCase().includes(val.toLowerCase()) ||
-        addr.city.toLowerCase().includes(val.toLowerCase()) ||
-        addr.zip.includes(val)
-      );
-      setFilteredAddresses(filtered);
-      setShowAutocomplete(filtered.length > 0);
-    }
+    setValue(val); // Update Google Autocomplete value
+    setShowAutocomplete(val.length > 2);
   };
 
-  const selectAddress = (addr: typeof MOCK_ADDRESSES[0]) => {
-    setStreet(addr.street);
-    setZip(addr.zip);
-    setCity(addr.city);
+  const selectAddress = async (suggestion: google.maps.places.AutocompletePrediction) => {
+    const description = suggestion.description;
+    setStreet(description);
+    setValue(description, false);
+    clearSuggestions();
     setShowAutocomplete(false);
+
+    try {
+      const results = await getGeocode({ address: description });
+      const addressComponents = results[0].address_components;
+      
+      // Extract ZIP and City from address components
+      let extractedZip = '';
+      let extractedCity = '';
+      
+      addressComponents.forEach(component => {
+        if (component.types.includes('postal_code')) {
+          extractedZip = component.long_name;
+        }
+        if (component.types.includes('locality')) {
+          extractedCity = component.long_name;
+        }
+      });
+      
+      if (extractedZip) setZip(extractedZip);
+      if (extractedCity) setCity(extractedCity);
+    } catch (error) {
+      console.error("Error fetching geocode: ", error);
+    }
   };
 
   const handleOrder = async () => {
@@ -265,32 +286,32 @@ export default function CheckoutPage() {
                       value={street} 
                       onChange={handleStreetChange}
                       onFocus={() => {
-                        if (street.trim() !== '' && filteredAddresses.length > 0) setShowAutocomplete(true);
+                        if (street.trim() !== '' && suggestions.length > 0) setShowAutocomplete(true);
                       }}
                       onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                       autoComplete="off"
                     />
                   </div>
-                  {showAutocomplete && (
+                  {showAutocomplete && status === "OK" && (
                     <ul style={{
                       position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 10,
                       background: 'var(--surface)', border: '1px solid var(--border)', 
                       borderRadius: 'var(--radius-md)', marginTop: '0.25rem', padding: '0.5rem 0',
                       boxShadow: 'var(--shadow-md)', listStyle: 'none', maxHeight: '200px', overflowY: 'auto'
                     }}>
-                      {filteredAddresses.map((addr, idx) => (
+                      {suggestions.map((suggestion) => (
                         <li 
-                          key={idx} 
-                          style={{ padding: '0.75rem 1rem', cursor: 'pointer', transition: 'background 0.2s ease', borderBottom: idx < filteredAddresses.length - 1 ? '1px solid var(--border)' : 'none' }}
+                          key={suggestion.place_id} 
+                          style={{ padding: '0.75rem 1rem', cursor: 'pointer', transition: 'background 0.2s ease', borderBottom: '1px solid var(--border)' }}
                           onMouseDown={(e) => {
-                              e.preventDefault(); // Prevents input onBlur
-                              selectAddress(addr);
+                              e.preventDefault();
+                              selectAddress(suggestion);
                           }}
                           onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(51, 199, 88, 0.1)'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
-                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{addr.street}</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{addr.zip} {addr.city}</div>
+                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{suggestion.structured_formatting.main_text}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{suggestion.structured_formatting.secondary_text}</div>
                         </li>
                       ))}
                     </ul>
