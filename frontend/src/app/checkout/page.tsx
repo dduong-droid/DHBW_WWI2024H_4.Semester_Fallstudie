@@ -14,7 +14,14 @@ import CartNavIcon from '../../components/CartNavIcon';
 import { nutritionMockApi } from '../../services/mockApi';
 import { useRef } from 'react';
 
+const GmpMap = 'gmp-map' as any;
+const GmpBasicPlaceAutocomplete = 'gmp-basic-place-autocomplete' as any;
+const GmpPlaceDetailsCompact = 'gmp-place-details-compact' as any;
+const GmpPlaceDetailsPlaceRequest = 'gmp-place-details-place-request' as any;
+const GmpPlaceStandardContent = 'gmp-place-standard-content' as any;
+
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
+
 
 const PAYMENT_METHODS = [
   { id: 'credit_card', label: 'Kreditkarte', icon: <CreditCard size={28} /> },
@@ -53,98 +60,123 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let placeAutocomplete: any = null;
-
     const initMap = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (typeof window === 'undefined' || !(window as any).google) return;
       
+      const placeAutocompleteElement = document.querySelector('gmp-basic-place-autocomplete') as any;
+      const placeDetailsElement = document.querySelector('gmp-place-details-compact') as any;
+      const gmpMapElement = document.querySelector('gmp-map') as any;
+
+      if (!placeAutocompleteElement || !placeDetailsElement || !gmpMapElement) return;
+
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (window as any).google.maps.importLibrary('places');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (window as any).google.maps.importLibrary('maps');
+        const { AdvancedMarkerElement } = await (window as any).google.maps.importLibrary('marker');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (window as any).google.maps.importLibrary('marker');
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let map: any = null;
-        if (mapContainerRef.current) {
-          map = new (window as any).google.maps.Map(mapContainerRef.current, {
-            center: { lat: 51.165, lng: 10.45 },
-            zoom: 5,
-            mapId: "DEMO_MAP_ID",
-            disableDefaultUI: true
-          });
-        }
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { InfoWindow } = await (window as any).google.maps.importLibrary('maps');
 
-        placeAutocomplete = new (window as any).google.maps.places.PlaceAutocompleteElement({
-          componentRestrictions: { country: ['de'] }
+        let map = gmpMapElement.innerMap;
+        if (!map) {
+          await new Promise(r => setTimeout(r, 300));
+          map = gmpMapElement.innerMap;
+        }
+        if (!map) return;
+
+        const center = gmpMapElement.center || { lat: 51.165, lng: 10.45 };
+        placeAutocompleteElement.locationBias = center;
+
+        map.setOptions({
+            clickableIcons: false,
+            mapTypeControl: false,
+            streetViewControl: false,
         });
-        
-        // Versuche das Styling etwas an unser Input-Feld anzugleichen
-        placeAutocomplete.style.width = '100%';
-        placeAutocomplete.style.setProperty('--pac-background-color', 'var(--surface)');
-        placeAutocomplete.style.setProperty('--pac-text-color', 'var(--text)');
-        placeAutocomplete.style.setProperty('--pac-border-radius', 'var(--radius-md)');
 
-        if (autocompleteContainerRef.current) {
-          autocompleteContainerRef.current.innerHTML = '';
-          autocompleteContainerRef.current.appendChild(placeAutocomplete);
-        }
+        const advancedMarkerElement = new AdvancedMarkerElement({
+            map: map,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            collisionBehavior: (window as any).google.maps.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL,
+        });
+
+        const infoWindow = new InfoWindow({
+            minWidth: 360,
+            disableAutoPan: true,
+            headerDisabled: true,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            pixelOffset: new (window as any).google.maps.Size(0, -10),
+        });
+
+        const placeDetailsParent = placeDetailsElement.parentElement;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let marker: any = null;
+        placeAutocompleteElement.addEventListener('gmp-select', (event: any) => {
+            if (placeDetailsParent) placeDetailsParent.appendChild(placeDetailsElement);
+            placeDetailsElement.style.display = 'block';
+            advancedMarkerElement.position = null;
+            infoWindow.close();
+            const placeDetailsRequest = placeDetailsElement.querySelector('gmp-place-details-place-request');
+            if (placeDetailsRequest) placeDetailsRequest.place = event.place.id;
+        });
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        placeAutocomplete.addEventListener('gmp-placeselect', async ({ placePrediction }: any) => {
-          if (!placePrediction) return;
-          const place = placePrediction.toPlace();
-          await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] });
-          
-          const addr = place.formattedAddress || place.displayName;
-          if (addr) setStreet(addr);
-          
-          let extractedZip = 'N/A';
-          let extractedCity = 'N/A';
-          const components = place.addressComponents || [];
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          components.forEach((c: any) => {
-            if (c.types.includes('postal_code')) extractedZip = c.longText;
-            if (c.types.includes('locality')) extractedCity = c.longText;
-          });
-          
-          setZip(extractedZip);
-          setCity(extractedCity);
-
-          if (place.location && map) {
-            map.setCenter(place.location);
-            map.setZoom(15);
-            if (!marker) {
-              marker = new (window as any).google.maps.marker.AdvancedMarkerElement({
+        placeDetailsElement.addEventListener('gmp-load', () => {
+            const location = placeDetailsElement.place.location;
+            advancedMarkerElement.position = location;
+            infoWindow.setContent(placeDetailsElement);
+            infoWindow.open({
                 map,
-                position: place.location,
-              });
-            } else {
-              marker.position = place.location;
-            }
-          }
+                anchor: advancedMarkerElement,
+            });
+            map.setCenter(location);
+            
+            // UPDATE FORM STATE
+            const place = placeDetailsElement.place;
+            const addr = place.formattedAddress || place.displayName;
+            if (addr) setStreet(addr);
+            
+            let extractedZip = 'N/A';
+            let extractedCity = 'N/A';
+            const components = place.addressComponents || [];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            components.forEach((c: any) => {
+              if (c.types.includes('postal_code')) extractedZip = c.longText;
+              if (c.types.includes('locality')) extractedCity = c.longText;
+            });
+            setZip(extractedZip);
+            setCity(extractedCity);
         });
+
+        map.addListener('click', () => {
+            infoWindow.close();
+            advancedMarkerElement.position = null;
+        });
+
+        map.addListener('idle', () => {
+            const newCenter = map.getCenter();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            placeAutocompleteElement.locationBias = new (window as any).google.maps.Circle({
+                center: {
+                    lat: newCenter.lat(),
+                    lng: newCenter.lng(),
+                },
+                radius: 10000,
+            });
+        });
+
       } catch (err) {
         console.warn('Google Maps Autocomplete failed to initialize', err);
       }
     };
 
-    initMap();
+    const intervalId = setInterval(() => {
+        if (document.querySelector('gmp-map') && (window as any).google) {
+            clearInterval(intervalId);
+            initMap();
+        }
+    }, 150);
 
-    return () => {
-      if (autocompleteContainerRef.current) {
-        autocompleteContainerRef.current.innerHTML = '';
-      }
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   const shippingCost = 0;
@@ -322,30 +354,37 @@ export default function CheckoutPage() {
                 </div>
                 <div className={styles.formGridFull} style={{ position: 'relative' }}>
                   <label htmlFor="co-street" className={styles.label}>Adresse</label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    {/* Das Google Places Web Component wird in diesen Container gerendert */}
-                    <div 
-                      ref={autocompleteContainerRef} 
-                      style={{ 
-                        width: '100%', 
-                        display: 'flex',
-                        alignItems: 'center',
-                        minHeight: '50px'
-                      }} 
-                    />
+                  
+                  <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                    <GmpMap
+                        zoom="6"
+                        center="51.165691,10.451526"
+                        map-id="DEMO_MAP_ID">
+                        <GmpBasicPlaceAutocomplete
+                            slot="control-inline-start-block-start"
+                            style={{ position: 'absolute', top: '10px', left: '10px', width: 'clamp(200px, 90%, 400px)', height: '40px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px', zIndex: 10 }}
+                        ></GmpBasicPlaceAutocomplete>
+                    </GmpMap>
+                    
+                    {/* Place Details Element inside InfoWindow */}
+                    <GmpPlaceDetailsCompact
+                        orientation="horizontal"
+                        style={{
+                            width: '360px',
+                            display: 'none',
+                            border: 'none',
+                            padding: '0',
+                            margin: '0',
+                            backgroundColor: 'transparent',
+                            colorScheme: 'light'
+                        }}>
+                        <GmpPlaceDetailsPlaceRequest></GmpPlaceDetailsPlaceRequest>
+                        <GmpPlaceStandardContent></GmpPlaceStandardContent>
+                    </GmpPlaceDetailsCompact>
                   </div>
-                  <div 
-                    ref={mapContainerRef} 
-                    style={{ 
-                      width: '100%', 
-                      height: '250px', 
-                      marginTop: '1rem', 
-                      borderRadius: 'var(--radius-lg)', 
-                      overflow: 'hidden',
-                      border: '1px solid var(--border)'
-                    }} 
-                  />
-                  <p className={styles.inputHelp}>Wähle deine Adresse aus den Vorschlägen für eine automatische Befüllung.</p>
+
+                  <p className={styles.inputHelp}>Suche direkt auf der Karte nach deiner Adresse, um sie zu bestätigen.</p>
+
                 </div>
               </div>
             </section>
