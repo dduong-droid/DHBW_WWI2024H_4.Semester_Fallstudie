@@ -12,7 +12,6 @@ import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
 import { nutritionMockApi } from '../../services/mockApi';
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
 
@@ -40,20 +39,8 @@ export default function CheckoutPage() {
   const [deliveryWindow, setDeliveryWindow] = useState('');
   const [backendOrderUsed, setBackendOrderUsed] = useState(false);
   
-  // Google Places Autocomplete
-  const {
-    ready,
-    value,
-    suggestions: { status, data: suggestions },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: "de" }, // Optional: Restrict to Germany
-    },
-    debounce: 300,
-  });
-
+  // Google Places Autocomplete (BFF Proxy)
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
 
   useEffect(() => {
@@ -72,41 +59,34 @@ export default function CheckoutPage() {
 
   const canOrder = fullName.trim() && street.trim() && zip.trim() && city.trim() && items.length > 0;
 
-  const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStreetChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setStreet(val);
-    setValue(val); // Update Google Autocomplete value
-    setShowAutocomplete(val.length > 2);
+    
+    if (val.length > 2) {
+      const data = await recoveryApi.fetchPlacesAutocomplete(val);
+      setSuggestions(data.suggestions || []);
+      setShowAutocomplete(true);
+    } else {
+      setSuggestions([]);
+      setShowAutocomplete(false);
+    }
   };
 
-  const selectAddress = async (suggestion: google.maps.places.AutocompletePrediction) => {
-    const description = suggestion.description;
-    setStreet(description);
-    setValue(description, false);
-    clearSuggestions();
+  const selectAddress = (suggestion: any) => {
+    const text = suggestion.placePrediction.text.text;
+    setStreet(text);
     setShowAutocomplete(false);
-
-    try {
-      const results = await getGeocode({ address: description });
-      const addressComponents = results[0].address_components;
-      
-      // Extract ZIP and City from address components
-      let extractedZip = '';
-      let extractedCity = '';
-      
-      addressComponents.forEach(component => {
-        if (component.types.includes('postal_code')) {
-          extractedZip = component.long_name;
-        }
-        if (component.types.includes('locality')) {
-          extractedCity = component.long_name;
-        }
-      });
-      
-      if (extractedZip) setZip(extractedZip);
-      if (extractedCity) setCity(extractedCity);
-    } catch (error) {
-      console.error("Error fetching geocode: ", error);
+    
+    // Try to extract ZIP and City from the text (fallback for Demo)
+    const parts = text.split(',');
+    if (parts.length >= 2) {
+      const lastPart = parts[parts.length - 2].trim(); // e.g. "10115 Berlin"
+      const zipMatch = lastPart.match(/(\d{5})\s+(.+)/);
+      if (zipMatch) {
+        setZip(zipMatch[1]);
+        setCity(zipMatch[2]);
+      }
     }
   };
 
@@ -286,22 +266,22 @@ export default function CheckoutPage() {
                       value={street} 
                       onChange={handleStreetChange}
                       onFocus={() => {
-                        if (street.trim() !== '' && suggestions.length > 0) setShowAutocomplete(true);
+                        if (street.trim().length > 2 && suggestions.length > 0) setShowAutocomplete(true);
                       }}
                       onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                       autoComplete="off"
                     />
                   </div>
-                  {showAutocomplete && status === "OK" && (
+                  {showAutocomplete && suggestions.length > 0 && (
                     <ul style={{
                       position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 10,
                       background: 'var(--surface)', border: '1px solid var(--border)', 
                       borderRadius: 'var(--radius-md)', marginTop: '0.25rem', padding: '0.5rem 0',
                       boxShadow: 'var(--shadow-md)', listStyle: 'none', maxHeight: '200px', overflowY: 'auto'
                     }}>
-                      {suggestions.map((suggestion) => (
+                      {suggestions.map((suggestion, idx) => (
                         <li 
-                          key={suggestion.place_id} 
+                          key={idx} 
                           style={{ padding: '0.75rem 1rem', cursor: 'pointer', transition: 'background 0.2s ease', borderBottom: '1px solid var(--border)' }}
                           onMouseDown={(e) => {
                               e.preventDefault();
@@ -310,8 +290,12 @@ export default function CheckoutPage() {
                           onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(51, 199, 88, 0.1)'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
-                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{suggestion.structured_formatting.main_text}</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{suggestion.structured_formatting.secondary_text}</div>
+                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>
+                            {suggestion.placePrediction.text.text.split(',')[0]}
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            {suggestion.placePrediction.text.text.split(',').slice(1).join(',').trim()}
+                          </div>
                         </li>
                       ))}
                     </ul>
