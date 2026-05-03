@@ -114,7 +114,7 @@ export default function CheckoutPage() {
         const placeDetailsParent = placeDetailsElement.parentElement;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        placeAutocompleteElement.addEventListener('gmp-select', (event: any) => {
+        placeAutocompleteElement.addEventListener('gmp-placeselect', (event: any) => {
             if (placeDetailsParent) placeDetailsParent.appendChild(placeDetailsElement);
             placeDetailsElement.style.display = 'block';
             advancedMarkerElement.position = null;
@@ -135,7 +135,10 @@ export default function CheckoutPage() {
             
             // UPDATE FORM STATE
             const place = placeDetailsElement.place;
-            const addr = place.formattedAddress || place.displayName;
+            let addr = place.formattedAddress;
+            if (!addr && place.displayName) {
+                addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
+            }
             if (addr) setStreet(addr);
             
             let extractedZip = 'N/A';
