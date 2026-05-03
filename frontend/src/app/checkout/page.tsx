@@ -51,7 +51,10 @@ export default function CheckoutPage() {
   const autocompleteContainerRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
+    setIsClient(true);
     recoveryApi.fetchPatientProfile().then(p => {
       if (p.firstName || p.lastName) {
         setFullName(`${p.firstName} ${p.lastName}`.trim());
@@ -356,31 +359,35 @@ export default function CheckoutPage() {
                   <label htmlFor="co-street" className={styles.label}>Adresse</label>
                   
                   <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                    <GmpMap
-                        zoom="6"
-                        center="51.165691,10.451526"
-                        map-id="DEMO_MAP_ID">
-                        <GmpBasicPlaceAutocomplete
-                            slot="control-inline-start-block-start"
-                            style={{ position: 'absolute', top: '10px', left: '10px', width: 'clamp(200px, 90%, 400px)', height: '40px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px', zIndex: 10 }}
-                        ></GmpBasicPlaceAutocomplete>
-                    </GmpMap>
-                    
-                    {/* Place Details Element inside InfoWindow */}
-                    <GmpPlaceDetailsCompact
-                        orientation="horizontal"
-                        style={{
-                            width: '360px',
-                            display: 'none',
-                            border: 'none',
-                            padding: '0',
-                            margin: '0',
-                            backgroundColor: 'transparent',
-                            colorScheme: 'light'
-                        }}>
-                        <GmpPlaceDetailsPlaceRequest></GmpPlaceDetailsPlaceRequest>
-                        <GmpPlaceStandardContent></GmpPlaceStandardContent>
-                    </GmpPlaceDetailsCompact>
+                    {isClient && (
+                      <>
+                        <GmpMap
+                            zoom="6"
+                            center="51.165691,10.451526"
+                            map-id="DEMO_MAP_ID">
+                            <GmpBasicPlaceAutocomplete
+                                slot="control-inline-start-block-start"
+                                style={{ position: 'absolute', top: '10px', left: '10px', width: 'clamp(200px, 90%, 400px)', height: '40px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px', zIndex: 10 }}
+                            ></GmpBasicPlaceAutocomplete>
+                        </GmpMap>
+                        
+                        {/* Place Details Element inside InfoWindow */}
+                        <GmpPlaceDetailsCompact
+                            orientation="horizontal"
+                            style={{
+                                width: '360px',
+                                display: 'none',
+                                border: 'none',
+                                padding: '0',
+                                margin: '0',
+                                backgroundColor: 'transparent',
+                                colorScheme: 'light'
+                            }}>
+                            <GmpPlaceDetailsPlaceRequest></GmpPlaceDetailsPlaceRequest>
+                            <GmpPlaceStandardContent></GmpPlaceStandardContent>
+                        </GmpPlaceDetailsCompact>
+                      </>
+                    )}
                   </div>
 
                   <p className={styles.inputHelp}>Suche direkt auf der Karte nach deiner Adresse, um sie zu bestätigen.</p>
