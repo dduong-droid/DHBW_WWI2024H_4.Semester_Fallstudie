@@ -14,11 +14,7 @@ import CartNavIcon from '../../components/CartNavIcon';
 import { nutritionMockApi } from '../../services/mockApi';
 import { useRef } from 'react';
 
-const GmpMap = 'gmp-map' as any;
-const GmpBasicPlaceAutocomplete = 'gmp-basic-place-autocomplete' as any;
-const GmpPlaceDetailsCompact = 'gmp-place-details-compact' as any;
-const GmpPlaceDetailsPlaceRequest = 'gmp-place-details-place-request' as any;
-const GmpPlaceStandardContent = 'gmp-place-standard-content' as any;
+
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
 
@@ -47,195 +43,12 @@ export default function CheckoutPage() {
   const [deliveryWindow, setDeliveryWindow] = useState('');
   const [backendOrderUsed, setBackendOrderUsed] = useState(false);
 
-  // Web Component Ref
-  const autocompleteContainerRef = useRef<HTMLDivElement>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    setIsClient(true);
     recoveryApi.fetchPatientProfile().then(p => {
       if (p.firstName || p.lastName) {
         setFullName(`${p.firstName} ${p.lastName}`.trim());
       }
     }).catch(err => console.warn('[Checkout] Fetch failed:', err instanceof Error ? err.message : String(err)));
-  }, []);
-
-  // Dedicated effect to capture address selection immediately, regardless of map initialization
-  useEffect(() => {
-    const el = autocompleteContainerRef.current as any;
-    if (!el) return;
-
-    const handlePlaceSelect = async (event: any) => {
-      try {
-        await event.place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents'] });
-        const place = event.place;
-        
-        let addr = place.formattedAddress;
-        if (!addr && place.displayName) {
-          addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
-        }
-        if (!addr && el.inputValue) {
-          addr = el.inputValue;
-        }
-
-        if (addr) setStreet(addr);
-        
-        let extractedZip = 'N/A';
-        let extractedCity = 'N/A';
-        const components = place.addressComponents || [];
-        components.forEach((c: any) => {
-          if (c.types.includes('postal_code')) extractedZip = c.longText;
-          if (c.types.includes('locality')) extractedCity = c.longText;
-        });
-        
-        if (extractedZip !== 'N/A') setZip(extractedZip);
-        if (extractedCity !== 'N/A') setCity(extractedCity);
-      } catch (err) {
-        console.warn('Dedicated place extraction failed:', err);
-        // Fallback to raw input text
-        if (el.inputValue) setStreet(el.inputValue);
-      }
-    };
-
-    el.addEventListener('gmp-placeselect', handlePlaceSelect);
-    return () => el.removeEventListener('gmp-placeselect', handlePlaceSelect);
-  }, [isClient]);
-
-  useEffect(() => {
-    const initMap = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (typeof window === 'undefined' || !(window as any).google) return;
-      
-      const placeAutocompleteElement = document.querySelector('gmp-basic-place-autocomplete') as any;
-      const placeDetailsElement = document.querySelector('gmp-place-details-compact') as any;
-      const gmpMapElement = document.querySelector('gmp-map') as any;
-
-      if (!placeAutocompleteElement || !placeDetailsElement || !gmpMapElement) return;
-
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (window as any).google.maps.importLibrary('places');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { AdvancedMarkerElement } = await (window as any).google.maps.importLibrary('marker');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { InfoWindow } = await (window as any).google.maps.importLibrary('maps');
-
-        let map = gmpMapElement.innerMap;
-        if (!map) {
-          await new Promise(r => setTimeout(r, 300));
-          map = gmpMapElement.innerMap;
-        }
-        if (!map) return;
-
-        const center = gmpMapElement.center || { lat: 51.165, lng: 10.45 };
-        placeAutocompleteElement.locationBias = center;
-
-        map.setOptions({
-            clickableIcons: false,
-            mapTypeControl: false,
-            streetViewControl: false,
-        });
-
-        const advancedMarkerElement = new AdvancedMarkerElement({
-            map: map,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            collisionBehavior: (window as any).google.maps.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL,
-        });
-
-        const infoWindow = new InfoWindow({
-            minWidth: 360,
-            disableAutoPan: true,
-            headerDisabled: true,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            pixelOffset: new (window as any).google.maps.Size(0, -10),
-        });
-
-        const placeDetailsParent = placeDetailsElement.parentElement;
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        placeAutocompleteElement.addEventListener('gmp-placeselect', async (event: any) => {
-            if (placeDetailsParent) placeDetailsParent.appendChild(placeDetailsElement);
-            placeDetailsElement.style.display = 'block';
-            advancedMarkerElement.position = null;
-            infoWindow.close();
-            
-            const placeDetailsRequest = placeDetailsElement.querySelector('gmp-place-details-place-request');
-            if (placeDetailsRequest) placeDetailsRequest.place = event.place.id;
-
-            try {
-                // Manually fetch fields to guarantee React State update immediately
-                await event.place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] });
-                const place = event.place;
-
-                // Move Map
-                advancedMarkerElement.position = place.location;
-                infoWindow.setContent(placeDetailsElement);
-                infoWindow.open({
-                    map,
-                    anchor: advancedMarkerElement,
-                });
-                map.setCenter(place.location);
-
-                // Update React Form State
-                let addr = place.formattedAddress;
-                if (!addr && place.displayName) {
-                    addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
-                }
-                
-                // FALLBACK: Wenn die API weder formattedAddress noch displayName liefert, nutze den Text aus dem Suchfeld
-                if (!addr && placeAutocompleteElement.inputValue) {
-                    addr = placeAutocompleteElement.inputValue;
-                }
-
-                if (addr) setStreet(addr);
-                
-                let extractedZip = 'N/A';
-                let extractedCity = 'N/A';
-                const components = place.addressComponents || [];
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                components.forEach((c: any) => {
-                  if (c.types.includes('postal_code')) extractedZip = c.longText;
-                  if (c.types.includes('locality')) extractedCity = c.longText;
-                });
-                setZip(extractedZip);
-                setCity(extractedCity);
-            } catch (err) {
-                console.warn('Could not fetch place fields:', err);
-            }
-        });
-
-        map.addListener('click', () => {
-            infoWindow.close();
-            advancedMarkerElement.position = null;
-        });
-
-        map.addListener('idle', () => {
-            const newCenter = map.getCenter();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            placeAutocompleteElement.locationBias = new (window as any).google.maps.Circle({
-                center: {
-                    lat: newCenter.lat(),
-                    lng: newCenter.lng(),
-                },
-                radius: 10000,
-            });
-        });
-
-      } catch (err) {
-        console.warn('Google Maps Autocomplete failed to initialize', err);
-      }
-    };
-
-    const intervalId = setInterval(() => {
-        if (document.querySelector('gmp-map') && (window as any).google) {
-            clearInterval(intervalId);
-            initMap();
-        }
-    }, 150);
-
-    return () => clearInterval(intervalId);
   }, []);
 
   const shippingCost = 0;
@@ -411,57 +224,33 @@ export default function CheckoutPage() {
                   <label htmlFor="co-name" className={styles.label}>Vollständiger Name</label>
                   <input id="co-name" className={styles.input} placeholder="Max Mustermann" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
-                <div className={styles.formGridFull} style={{ position: 'relative' }}>
-                  <label htmlFor="co-street" className={styles.label}>Adresse</label>
-                  
-                  <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                    {isClient && (
-                      <>
-                        <GmpMap
-                            zoom="6"
-                            center="51.165691,10.451526"
-                            map-id="DEMO_MAP_ID">
-                            <GmpBasicPlaceAutocomplete
-                                ref={autocompleteContainerRef}
-                                slot="control-inline-start-block-start"
-                                style={{ position: 'absolute', top: '10px', left: '10px', width: 'clamp(200px, 90%, 400px)', height: '40px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px', zIndex: 10 }}
-                            ></GmpBasicPlaceAutocomplete>
-                        </GmpMap>
-                        
-                        {/* Place Details Element inside InfoWindow */}
-                        <GmpPlaceDetailsCompact
-                            orientation="horizontal"
-                            style={{
-                                width: '360px',
-                                display: 'none',
-                                border: 'none',
-                                padding: '0',
-                                margin: '0',
-                                backgroundColor: 'transparent',
-                                colorScheme: 'light'
-                            }}>
-                            <GmpPlaceDetailsPlaceRequest></GmpPlaceDetailsPlaceRequest>
-                            <GmpPlaceStandardContent></GmpPlaceStandardContent>
-                        </GmpPlaceDetailsCompact>
-                      </>
-                    )}
+                <div className={styles.formGridFull}>
+                  <label htmlFor="co-street" className={styles.label}>Straße und Hausnummer</label>
+                  <input
+                    id="co-street"
+                    list="dummy-addresses"
+                    className={styles.input}
+                    placeholder="Musterstraße 1"
+                    value={street}
+                    onChange={e => setStreet(e.target.value)}
+                  />
+                  <datalist id="dummy-addresses">
+                    <option value="Alexanderplatz 1, Berlin" />
+                    <option value="Marienplatz 1, München" />
+                    <option value="Königsallee 1, Düsseldorf" />
+                    <option value="Reeperbahn 1, Hamburg" />
+                    <option value="Zeil 1, Frankfurt am Main" />
+                  </datalist>
+                </div>
+                <div className={styles.formGridHalf}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="co-zip" className={styles.label}>Postleitzahl</label>
+                    <input id="co-zip" className={styles.input} placeholder="10178" value={zip} onChange={e => setZip(e.target.value)} />
                   </div>
-
-                  {street ? (
-                    <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-primary)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: 'var(--color-primary)' }}>
-                        <CheckCircle2 size={18} />
-                        <span style={{ fontWeight: 600 }}>Lieferadresse bestätigt</span>
-                      </div>
-                      <p style={{ margin: 0, fontSize: '0.875rem' }}>{street}</p>
-                      {(zip !== 'N/A' || city !== 'N/A') && (
-                        <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{zip} {city}</p>
-                      )}
-                    </div>
-                  ) : (
-                    <p className={styles.inputHelp}>Suche direkt auf der Karte nach deiner Lieferadresse, um sie zu bestätigen.</p>
-                  )}
-                  
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="co-city" className={styles.label}>Stadt</label>
+                    <input id="co-city" className={styles.input} placeholder="Berlin" value={city} onChange={e => setCity(e.target.value)} />
+                  </div>
                 </div>
               </div>
             </section>
