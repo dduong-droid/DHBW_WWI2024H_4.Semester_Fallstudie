@@ -114,43 +114,49 @@ export default function CheckoutPage() {
         const placeDetailsParent = placeDetailsElement.parentElement;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        placeAutocompleteElement.addEventListener('gmp-placeselect', (event: any) => {
+        placeAutocompleteElement.addEventListener('gmp-placeselect', async (event: any) => {
             if (placeDetailsParent) placeDetailsParent.appendChild(placeDetailsElement);
             placeDetailsElement.style.display = 'block';
             advancedMarkerElement.position = null;
             infoWindow.close();
+            
             const placeDetailsRequest = placeDetailsElement.querySelector('gmp-place-details-place-request');
             if (placeDetailsRequest) placeDetailsRequest.place = event.place.id;
-        });
 
-        placeDetailsElement.addEventListener('gmp-load', () => {
-            const location = placeDetailsElement.place.location;
-            advancedMarkerElement.position = location;
-            infoWindow.setContent(placeDetailsElement);
-            infoWindow.open({
-                map,
-                anchor: advancedMarkerElement,
-            });
-            map.setCenter(location);
-            
-            // UPDATE FORM STATE
-            const place = placeDetailsElement.place;
-            let addr = place.formattedAddress;
-            if (!addr && place.displayName) {
-                addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
+            try {
+                // Manually fetch fields to guarantee React State update immediately
+                await event.place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] });
+                const place = event.place;
+
+                // Move Map
+                advancedMarkerElement.position = place.location;
+                infoWindow.setContent(placeDetailsElement);
+                infoWindow.open({
+                    map,
+                    anchor: advancedMarkerElement,
+                });
+                map.setCenter(place.location);
+
+                // Update React Form State
+                let addr = place.formattedAddress;
+                if (!addr && place.displayName) {
+                    addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
+                }
+                if (addr) setStreet(addr);
+                
+                let extractedZip = 'N/A';
+                let extractedCity = 'N/A';
+                const components = place.addressComponents || [];
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                components.forEach((c: any) => {
+                  if (c.types.includes('postal_code')) extractedZip = c.longText;
+                  if (c.types.includes('locality')) extractedCity = c.longText;
+                });
+                setZip(extractedZip);
+                setCity(extractedCity);
+            } catch (err) {
+                console.warn('Could not fetch place fields:', err);
             }
-            if (addr) setStreet(addr);
-            
-            let extractedZip = 'N/A';
-            let extractedCity = 'N/A';
-            const components = place.addressComponents || [];
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            components.forEach((c: any) => {
-              if (c.types.includes('postal_code')) extractedZip = c.longText;
-              if (c.types.includes('locality')) extractedCity = c.longText;
-            });
-            setZip(extractedZip);
-            setCity(extractedCity);
         });
 
         map.addListener('click', () => {
