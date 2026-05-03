@@ -142,6 +142,12 @@ export default function CheckoutPage() {
                 if (!addr && place.displayName) {
                     addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
                 }
+                
+                // FALLBACK: Wenn die API weder formattedAddress noch displayName liefert, nutze den Text aus dem Suchfeld
+                if (!addr && placeAutocompleteElement.inputValue) {
+                    addr = placeAutocompleteElement.inputValue;
+                }
+
                 if (addr) setStreet(addr);
                 
                 let extractedZip = 'N/A';
@@ -399,8 +405,21 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
-                  <p className={styles.inputHelp}>Suche direkt auf der Karte nach deiner Adresse, um sie zu bestätigen.</p>
-
+                  {street ? (
+                    <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-primary)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: 'var(--color-primary)' }}>
+                        <CheckCircle2 size={18} />
+                        <span style={{ fontWeight: 600 }}>Lieferadresse bestätigt</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '0.875rem' }}>{street}</p>
+                      {(zip !== 'N/A' || city !== 'N/A') && (
+                        <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{zip} {city}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className={styles.inputHelp}>Suche direkt auf der Karte nach deiner Lieferadresse, um sie zu bestätigen.</p>
+                  )}
+                  
                 </div>
               </div>
             </section>
@@ -490,9 +509,10 @@ export default function CheckoutPage() {
                 className={styles.ctaBtn}
                 onClick={handleOrder}
                 disabled={!canOrder || processing}
+                title={!fullName.trim() ? 'Bitte gib deinen Namen ein' : !street.trim() ? 'Bitte wähle eine Lieferadresse' : ''}
               >
                 <Lock size={18} />
-                {processing ? 'Wird verarbeitet...' : 'Demo-Bestellung absenden'}
+                {processing ? 'Wird verarbeitet...' : !fullName.trim() ? 'Name fehlt' : !street.trim() ? 'Adresse fehlt' : 'Demo-Bestellung absenden'}
               </button>
 
               <p className={styles.legalText}>
