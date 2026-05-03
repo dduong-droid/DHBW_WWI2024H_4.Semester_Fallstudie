@@ -42,6 +42,7 @@ export default function CheckoutPage() {
 
   // Web Component Ref
   const autocompleteContainerRef = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     recoveryApi.fetchPatientProfile().then(p => {
@@ -62,8 +63,24 @@ export default function CheckoutPage() {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (window as any).google.maps.importLibrary('places');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (window as any).google.maps.importLibrary('maps');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (window as any).google.maps.importLibrary('marker');
         
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let map: any = null;
+        if (mapContainerRef.current) {
+          map = new (window as any).google.maps.Map(mapContainerRef.current, {
+            center: { lat: 51.165, lng: 10.45 },
+            zoom: 5,
+            mapId: "DEMO_MAP_ID",
+            disableDefaultUI: true
+          });
+        }
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         placeAutocomplete = new (window as any).google.maps.places.PlaceAutocompleteElement({
           componentRestrictions: { country: ['de'] }
         });
@@ -80,16 +97,19 @@ export default function CheckoutPage() {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let marker: any = null;
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         placeAutocomplete.addEventListener('gmp-placeselect', async ({ placePrediction }: any) => {
           if (!placePrediction) return;
           const place = placePrediction.toPlace();
-          await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents'] });
+          await place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents', 'location'] });
           
           const addr = place.formattedAddress || place.displayName;
           if (addr) setStreet(addr);
           
-          let extractedZip = '';
-          let extractedCity = '';
+          let extractedZip = 'N/A';
+          let extractedCity = 'N/A';
           const components = place.addressComponents || [];
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           components.forEach((c: any) => {
@@ -97,8 +117,21 @@ export default function CheckoutPage() {
             if (c.types.includes('locality')) extractedCity = c.longText;
           });
           
-          if (extractedZip) setZip(extractedZip);
-          if (extractedCity) setCity(extractedCity);
+          setZip(extractedZip);
+          setCity(extractedCity);
+
+          if (place.location && map) {
+            map.setCenter(place.location);
+            map.setZoom(15);
+            if (!marker) {
+              marker = new (window as any).google.maps.marker.AdvancedMarkerElement({
+                map,
+                position: place.location,
+              });
+            } else {
+              marker.position = place.location;
+            }
+          }
         });
       } catch (err) {
         console.warn('Google Maps Autocomplete failed to initialize', err);
@@ -120,7 +153,7 @@ export default function CheckoutPage() {
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = subtotal + shippingCost;
 
-  const canOrder = fullName.trim() && street.trim() && zip.trim() && city.trim() && items.length > 0;
+  const canOrder = fullName.trim() && street.trim() && items.length > 0;
 
 
   const handleOrder = async () => {
@@ -288,7 +321,7 @@ export default function CheckoutPage() {
                   <input id="co-name" className={styles.input} placeholder="Max Mustermann" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
                 <div className={styles.formGridFull} style={{ position: 'relative' }}>
-                  <label htmlFor="co-street" className={styles.label}>Straße & Hausnummer</label>
+                  <label htmlFor="co-street" className={styles.label}>Adresse</label>
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     {/* Das Google Places Web Component wird in diesen Container gerendert */}
                     <div 
@@ -296,18 +329,23 @@ export default function CheckoutPage() {
                       style={{ 
                         width: '100%', 
                         display: 'flex',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        minHeight: '50px'
                       }} 
                     />
                   </div>
-                </div>
-                <div>
-                  <label htmlFor="co-zip" className={styles.label}>Postleitzahl</label>
-                  <input id="co-zip" className={styles.input} placeholder="10115" value={zip} onChange={e => setZip(e.target.value)} />
-                </div>
-                <div>
-                  <label htmlFor="co-city" className={styles.label}>Stadt</label>
-                  <input id="co-city" className={styles.input} placeholder="Berlin" value={city} onChange={e => setCity(e.target.value)} />
+                  <div 
+                    ref={mapContainerRef} 
+                    style={{ 
+                      width: '100%', 
+                      height: '250px', 
+                      marginTop: '1rem', 
+                      borderRadius: 'var(--radius-lg)', 
+                      overflow: 'hidden',
+                      border: '1px solid var(--border)'
+                    }} 
+                  />
+                  <p className={styles.inputHelp}>Wähle deine Adresse aus den Vorschlägen für eine automatische Befüllung.</p>
                 </div>
               </div>
             </section>

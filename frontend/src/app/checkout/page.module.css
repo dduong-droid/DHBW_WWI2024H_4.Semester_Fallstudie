@@ -222,6 +222,13 @@
   box-shadow: 0 0 0 3px rgba(51, 199, 88, 0.15);
 }
 
+.inputHelp {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 /* Time Slots */
 .timeSlot {
   display: flex;
