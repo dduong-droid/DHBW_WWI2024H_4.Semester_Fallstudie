@@ -62,6 +62,47 @@ export default function CheckoutPage() {
     }).catch(err => console.warn('[Checkout] Fetch failed:', err instanceof Error ? err.message : String(err)));
   }, []);
 
+  // Dedicated effect to capture address selection immediately, regardless of map initialization
+  useEffect(() => {
+    const el = autocompleteContainerRef.current as any;
+    if (!el) return;
+
+    const handlePlaceSelect = async (event: any) => {
+      try {
+        await event.place.fetchFields({ fields: ['displayName', 'formattedAddress', 'addressComponents'] });
+        const place = event.place;
+        
+        let addr = place.formattedAddress;
+        if (!addr && place.displayName) {
+          addr = typeof place.displayName === 'string' ? place.displayName : place.displayName.text;
+        }
+        if (!addr && el.inputValue) {
+          addr = el.inputValue;
+        }
+
+        if (addr) setStreet(addr);
+        
+        let extractedZip = 'N/A';
+        let extractedCity = 'N/A';
+        const components = place.addressComponents || [];
+        components.forEach((c: any) => {
+          if (c.types.includes('postal_code')) extractedZip = c.longText;
+          if (c.types.includes('locality')) extractedCity = c.longText;
+        });
+        
+        if (extractedZip !== 'N/A') setZip(extractedZip);
+        if (extractedCity !== 'N/A') setCity(extractedCity);
+      } catch (err) {
+        console.warn('Dedicated place extraction failed:', err);
+        // Fallback to raw input text
+        if (el.inputValue) setStreet(el.inputValue);
+      }
+    };
+
+    el.addEventListener('gmp-placeselect', handlePlaceSelect);
+    return () => el.removeEventListener('gmp-placeselect', handlePlaceSelect);
+  }, [isClient]);
+
   useEffect(() => {
     const initMap = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -381,6 +422,7 @@ export default function CheckoutPage() {
                             center="51.165691,10.451526"
                             map-id="DEMO_MAP_ID">
                             <GmpBasicPlaceAutocomplete
+                                ref={autocompleteContainerRef}
                                 slot="control-inline-start-block-start"
                                 style={{ position: 'absolute', top: '10px', left: '10px', width: 'clamp(200px, 90%, 400px)', height: '40px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px', zIndex: 10 }}
                             ></GmpBasicPlaceAutocomplete>
