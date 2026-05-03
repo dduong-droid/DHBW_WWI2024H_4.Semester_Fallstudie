@@ -106,7 +106,7 @@ export default function AnalysisPage() {
               <h2>{analysis.recommendedKitName}</h2>
             </div>
             <button onClick={handleAddKit} className={styles.smallButton} style={{ border: 'none', cursor: 'pointer' }}>
-              In den Warenkorb
+              Zur Kasse
             </button>
           </div>
         </article>
@@ -162,11 +162,11 @@ export default function AnalysisPage() {
       </section>
 
       <div className={styles.actions}>
-        <Link href="/dashboard" className={styles.primaryAction}>
-          Wochenplan ansehen
+        <button onClick={handleAddKit} className={styles.primaryAction} style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
+          Zur Kasse
           <ArrowRight size={18} />
-        </Link>
-        <Link href="/recipes" className={styles.secondaryAction}>Rezepte prüfen</Link>
+        </button>
+        <Link href="/dashboard" className={styles.secondaryAction}>Wochenplan ansehen</Link>
       </div>
     </main>
   );
