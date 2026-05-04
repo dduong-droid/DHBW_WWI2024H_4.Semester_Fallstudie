@@ -24,15 +24,9 @@ from app.modules.frontend_bff.service import (
     run_full_analyze,
     track_meal_box,
 )
-from app.modules.frontend_bff.places_service import get_google_autocomplete_suggestions
 
 
 router = APIRouter()
-
-
-@router.get("/frontend/places/autocomplete")
-async def autocomplete(q: str):
-    return await get_google_autocomplete_suggestions(q)
 
 
 @router.post("/frontend/intake/full-analyze", response_model=FullAnalyzeResponse)

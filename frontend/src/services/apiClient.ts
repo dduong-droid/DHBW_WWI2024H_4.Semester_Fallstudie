@@ -725,12 +725,4 @@ export const recoveryApi = {
       }));
     }
   },
-  fetchPlacesAutocomplete: async (query: string): Promise<any> => {
-    try {
-      return await fetchJson<any>(`/api/frontend/places/autocomplete?q=${encodeURIComponent(query)}`);
-    } catch (error) {
-      console.warn('[Places] BFF failed:', error);
-      return { suggestions: [] };
-    }
-  },
 };

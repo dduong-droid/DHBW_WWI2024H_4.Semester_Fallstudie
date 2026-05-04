@@ -12,19 +12,21 @@ import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
 import { nutritionMockApi } from '../../services/mockApi';
-import { useRef } from 'react';
-
-
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
-
 
 const PAYMENT_METHODS = [
   { id: 'credit_card', label: 'Kreditkarte', icon: <CreditCard size={28} /> },
   { id: 'paypal', label: 'PayPal', icon: <span style={{ fontWeight: 800, fontStyle: 'italic', color: '#003087', fontSize: '1.125rem' }}>PayPal</span> },
 ];
 
-// Google Places Autocomplete handled by use-places-autocomplete hook
+const MOCK_ADDRESSES = [
+  { street: 'Musterstraße 1', zip: '10115', city: 'Berlin' },
+  { street: 'Königsallee 42', zip: '40212', city: 'Düsseldorf' },
+  { street: 'Marienplatz 1', zip: '80331', city: 'München' },
+  { street: 'Hauptstraße 100', zip: '20095', city: 'Hamburg' },
+  { street: 'Schillerstraße 10', zip: '60313', city: 'Frankfurt am Main' }
+];
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -42,6 +44,10 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState('');
   const [deliveryWindow, setDeliveryWindow] = useState('');
   const [backendOrderUsed, setBackendOrderUsed] = useState(false);
+  
+  // Autocomplete State
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [filteredAddresses, setFilteredAddresses] = useState(MOCK_ADDRESSES);
 
   useEffect(() => {
     recoveryApi.fetchPatientProfile().then(p => {
@@ -57,8 +63,31 @@ export default function CheckoutPage() {
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = subtotal + shippingCost;
 
-  const canOrder = fullName.trim() && street.trim() && items.length > 0;
+  const canOrder = fullName.trim() && street.trim() && zip.trim() && city.trim() && items.length > 0;
 
+  const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setStreet(val);
+    if (val.trim() === '') {
+      setFilteredAddresses(MOCK_ADDRESSES);
+      setShowAutocomplete(false);
+    } else {
+      const filtered = MOCK_ADDRESSES.filter(addr =>
+        addr.street.toLowerCase().includes(val.toLowerCase()) ||
+        addr.city.toLowerCase().includes(val.toLowerCase()) ||
+        addr.zip.includes(val)
+      );
+      setFilteredAddresses(filtered);
+      setShowAutocomplete(filtered.length > 0);
+    }
+  };
+
+  const selectAddress = (addr: typeof MOCK_ADDRESSES[0]) => {
+    setStreet(addr.street);
+    setZip(addr.zip);
+    setCity(addr.city);
+    setShowAutocomplete(false);
+  };
 
   const handleOrder = async () => {
     if (!canOrder) return;
@@ -224,33 +253,56 @@ export default function CheckoutPage() {
                   <label htmlFor="co-name" className={styles.label}>Vollständiger Name</label>
                   <input id="co-name" className={styles.input} placeholder="Max Mustermann" value={fullName} onChange={e => setFullName(e.target.value)} />
                 </div>
-                <div className={styles.formGridFull}>
-                  <label htmlFor="co-street" className={styles.label}>Straße und Hausnummer</label>
-                  <input
-                    id="co-street"
-                    list="dummy-addresses"
-                    className={styles.input}
-                    placeholder="Musterstraße 1"
-                    value={street}
-                    onChange={e => setStreet(e.target.value)}
-                  />
-                  <datalist id="dummy-addresses">
-                    <option value="Alexanderplatz 1, Berlin" />
-                    <option value="Marienplatz 1, München" />
-                    <option value="Königsallee 1, Düsseldorf" />
-                    <option value="Reeperbahn 1, Hamburg" />
-                    <option value="Zeil 1, Frankfurt am Main" />
-                  </datalist>
+                <div className={styles.formGridFull} style={{ position: 'relative' }}>
+                  <label htmlFor="co-street" className={styles.label}>Straße & Hausnummer</label>
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <MapPin size={18} style={{ position: 'absolute', left: '1rem', color: 'var(--text-muted)' }} />
+                    <input 
+                      id="co-street" 
+                      className={styles.input} 
+                      style={{ paddingLeft: '2.5rem' }}
+                      placeholder="Tippe z.B. Musterstraße..." 
+                      value={street} 
+                      onChange={handleStreetChange}
+                      onFocus={() => {
+                        if (street.trim() !== '' && filteredAddresses.length > 0) setShowAutocomplete(true);
+                      }}
+                      onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+                      autoComplete="off"
+                    />
+                  </div>
+                  {showAutocomplete && (
+                    <ul style={{
+                      position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 10,
+                      background: 'var(--surface)', border: '1px solid var(--border)', 
+                      borderRadius: 'var(--radius-md)', marginTop: '0.25rem', padding: '0.5rem 0',
+                      boxShadow: 'var(--shadow-md)', listStyle: 'none', maxHeight: '200px', overflowY: 'auto'
+                    }}>
+                      {filteredAddresses.map((addr, idx) => (
+                        <li 
+                          key={idx} 
+                          style={{ padding: '0.75rem 1rem', cursor: 'pointer', transition: 'background 0.2s ease', borderBottom: idx < filteredAddresses.length - 1 ? '1px solid var(--border)' : 'none' }}
+                          onMouseDown={(e) => {
+                              e.preventDefault(); // Prevents input onBlur
+                              selectAddress(addr);
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(51, 199, 88, 0.1)'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text)' }}>{addr.street}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{addr.zip} {addr.city}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <div className={styles.formGridHalf}>
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="co-zip" className={styles.label}>Postleitzahl</label>
-                    <input id="co-zip" className={styles.input} placeholder="10178" value={zip} onChange={e => setZip(e.target.value)} />
-                  </div>
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="co-city" className={styles.label}>Stadt</label>
-                    <input id="co-city" className={styles.input} placeholder="Berlin" value={city} onChange={e => setCity(e.target.value)} />
-                  </div>
+                <div>
+                  <label htmlFor="co-zip" className={styles.label}>Postleitzahl</label>
+                  <input id="co-zip" className={styles.input} placeholder="10115" value={zip} onChange={e => setZip(e.target.value)} />
+                </div>
+                <div>
+                  <label htmlFor="co-city" className={styles.label}>Stadt</label>
+                  <input id="co-city" className={styles.input} placeholder="Berlin" value={city} onChange={e => setCity(e.target.value)} />
                 </div>
               </div>
             </section>
@@ -340,10 +392,9 @@ export default function CheckoutPage() {
                 className={styles.ctaBtn}
                 onClick={handleOrder}
                 disabled={!canOrder || processing}
-                title={!fullName.trim() ? 'Bitte gib deinen Namen ein' : !street.trim() ? 'Bitte wähle eine Lieferadresse' : ''}
               >
                 <Lock size={18} />
-                {processing ? 'Wird verarbeitet...' : !fullName.trim() ? 'Name fehlt' : !street.trim() ? 'Adresse fehlt' : 'Demo-Bestellung absenden'}
+                {processing ? 'Wird verarbeitet...' : 'Demo-Bestellung absenden'}
               </button>
 
               <p className={styles.legalText}>

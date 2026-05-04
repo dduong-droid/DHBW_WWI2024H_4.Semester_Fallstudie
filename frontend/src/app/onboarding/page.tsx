@@ -225,6 +225,7 @@ export default function OnboardingPage() {
                       {item.icon}
                     </div>
                     <span style={{ fontSize: '1.125rem', fontWeight: 600, flex: 1 }}>{item.label}</span>
+                    <ArrowRight size={20} style={{ color: 'var(--text-muted)' }} />
                   </div>
                 ))}
               </div>
@@ -626,19 +627,15 @@ function InputField({
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <input
           id={id}
-          type={type === 'number' ? 'text' : type}
-          inputMode={type === 'number' ? 'numeric' : undefined}
+          type={type}
           placeholder={placeholder}
           value={value}
           onChange={e => {
-            let val = e.target.value;
-            if (type === 'number') {
-              // Only allow digits and decimal point/comma
-              val = val.replace(/[^0-9.,]/g, '');
-              if (val !== '' && parseFloat(val.replace(',', '.')) < 0) return;
-            }
+            const val = e.target.value;
+            if (type === 'number' && val !== '' && parseFloat(val) < 0) return;
             onChange(val);
           }}
+          min={type === 'number' ? 0 : undefined}
           style={{
             width: '100%',
             padding: suffix ? '0.75rem 3rem 0.75rem 1rem' : '0.75rem 1rem',

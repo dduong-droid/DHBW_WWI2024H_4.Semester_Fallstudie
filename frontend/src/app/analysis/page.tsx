@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CheckCircle2, ClipboardList, Sparkles } from 'lucide-react';
+import {
+  ArrowRight, BarChart3, CheckCircle2, ClipboardList, HeartPulse,
+  PackageCheck, ShieldAlert, Sparkles, Utensils
+} from 'lucide-react';
 import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
-import type { RecoveryAnalysis, MealKit } from '../../services/mockApi';
+import type { RecoveryAnalysis } from '../../services/mockApi';
 import { useCart } from '../../context/CartContext';
-import Image from 'next/image';
 
 const LOADING_MESSAGES = [
   "Prüfe Gesundheitsziele...",
@@ -18,20 +21,13 @@ const LOADING_MESSAGES = [
 
 export default function AnalysisPage() {
   const [analysis, setAnalysis] = useState<RecoveryAnalysis | null>(null);
-  const [recommendedKit, setRecommendedKit] = useState<MealKit | null>(null);
   const [loadingTextIdx, setLoadingTextIdx] = useState(0);
   const { addToCart } = useCart();
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch analysis and then the recommended kit
-    recoveryApi.fetchRecoveryAnalysis().then(async (data) => {
-      setAnalysis(data);
-      if (data.recommendedKitId) {
-        const kit = await recoveryApi.fetchMealKit(data.recommendedKitId);
-        setRecommendedKit(kit);
-      }
-    });
+    // Start fetch
+    recoveryApi.fetchRecoveryAnalysis().then(setAnalysis);
 
     // Rotate text
     const interval = setInterval(() => {
@@ -42,20 +38,23 @@ export default function AnalysisPage() {
   }, []);
 
   const handleAddKit = async () => {
-    if (!recommendedKit) return;
-    addToCart({
-      id: recommendedKit.id,
-      name: recommendedKit.name,
-      price: recommendedKit.price,
-      quantity: 1,
-      imageUrl: recommendedKit.imageUrl
-    });
-    router.push('/checkout');
+    if (!analysis) return;
+    const kit = await recoveryApi.fetchMealKit(analysis.recommendedKitId);
+    if (kit) {
+      addToCart({
+        id: kit.id,
+        name: kit.name,
+        price: kit.price,
+        quantity: 1,
+        imageUrl: kit.imageUrl
+      });
+      router.push('/checkout');
+    }
   };
 
-  if (!analysis || !recommendedKit) {
+  if (!analysis) {
     return (
-      <main className={styles.loadingContainer}>
+      <main className={styles.container}>
         <section className={styles.loadingCard} aria-live="polite">
           <div className={styles.scanIcon}>
             <ClipboardList size={34} />
@@ -73,41 +72,101 @@ export default function AnalysisPage() {
   }
 
   return (
-    <main className={styles.funnelContainer}>
-      <header className={styles.funnelHeader}>
+      <main className={styles.container}>
+
+      <section className={styles.progressCard}>
+        <div>
+          <p>Analyse abgeschlossen</p>
+          <span>Regelbasierte Demo-Auswertung aus Onboarding und Upload-Status</span>
+        </div>
+        <strong>{analysis.progressPercent}%</strong>
+        <div className={styles.progressTrack}>
+          <span style={{ width: `${analysis.progressPercent}%` }} />
+        </div>
+      </section>
+
+      <header className={styles.header}>
         <span className={styles.badge}>
           <Sparkles size={15} />
-          Analyse abgeschlossen
+          Demo-Ergebnis
         </span>
-        <h1>Dein perfektes Meal-Kit</h1>
-        <p>Basierend auf deinen Daten haben wir genau das Richtige für deine Recovery gefunden.</p>
+        <h1>{analysis.title}</h1>
+        <p>{analysis.summary}</p>
       </header>
 
-      <div className={styles.funnelCard}>
-        <div className={styles.funnelImageWrapper}>
-          <Image 
-            src={recommendedKit.imageUrl || 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800'} 
-            alt={recommendedKit.name} 
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={styles.funnelImage} 
-            priority
-          />
-        </div>
-        <div className={styles.funnelContent}>
-          <h2>{recommendedKit.name}</h2>
-          <p className={styles.funnelDescription}>{recommendedKit.description}</p>
-          
-          <ul className={styles.funnelFeatures}>
-            <li><CheckCircle2 size={20} /> Perfekt auf dich abgestimmt</li>
-            <li><CheckCircle2 size={20} /> Frische, gesunde Zutaten</li>
-            <li><CheckCircle2 size={20} /> Lieferung direkt nach Hause</li>
-          </ul>
+      <section className={styles.recommendationGrid}>
+        <article className={styles.kitCard}>
+          <div className={styles.kitVisual}>
+            <PackageCheck size={88} />
+            <span>Orientierende Empfehlung</span>
+          </div>
+          <div className={styles.kitFooter}>
+            <div>
+              <p>Empfohlenes Meal-Kit</p>
+              <h2>{analysis.recommendedKitName}</h2>
+            </div>
+            <button onClick={handleAddKit} className={styles.smallButton} style={{ border: 'none', cursor: 'pointer' }}>
+              In den Warenkorb
+            </button>
+          </div>
+        </article>
 
-          <button onClick={handleAddKit} className={styles.checkoutButton}>
-            Zur Kasse
-          </button>
-        </div>
+        <article className={styles.reasonCard}>
+          <h2>Warum diese Orientierung passt</h2>
+          <div className={styles.scoreList}>
+            {analysis.matchScores.map(score => (
+              <div key={score.label} className={styles.scoreItem}>
+                <div className={styles.scoreHeader}>
+                  <span>{score.label}</span>
+                  <strong>{score.percent}%</strong>
+                </div>
+                <div className={styles.scoreTrack}>
+                  <span style={{ width: `${score.percent}%` }} />
+                </div>
+                <p>{score.rationale}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+      </section>
+
+      <section className={styles.insightGrid}>
+        <article className={styles.infoCard}>
+          <HeartPulse size={22} />
+          <h3>Orientierung</h3>
+          <ul>
+            {analysis.orientationNotes.map(note => <li key={note}>{note}</li>)}
+          </ul>
+        </article>
+        <article className={styles.infoCard}>
+          <ShieldAlert size={22} />
+          <h3>Sicherheit</h3>
+          <ul>
+            {analysis.riskNotes.map(note => <li key={note}>{note}</li>)}
+          </ul>
+        </article>
+        <article className={styles.infoCard}>
+          <BarChart3 size={22} />
+          <h3>Naechste Schritte</h3>
+          <ul>
+            {analysis.nextSteps.map(step => <li key={step}>{step}</li>)}
+          </ul>
+        </article>
+      </section>
+
+      <section className={styles.disclaimer}>
+        <CheckCircle2 size={18} />
+        <p>
+          Food4Recovery ersetzt keine ärztliche Diagnose oder Behandlung. Empfehlungen dienen der Orientierung und sollten bei medizinischen Fragen mit Fachpersonal abgestimmt werden.
+        </p>
+      </section>
+
+      <div className={styles.actions}>
+        <Link href="/dashboard" className={styles.primaryAction}>
+          Wochenplan ansehen
+          <ArrowRight size={18} />
+        </Link>
+        <Link href="/recipes" className={styles.secondaryAction}>Rezepte prüfen</Link>
       </div>
     </main>
   );
