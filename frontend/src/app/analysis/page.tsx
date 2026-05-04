@@ -105,8 +105,8 @@ export default function AnalysisPage() {
               <p>Empfohlenes Meal-Kit</p>
               <h2>{analysis.recommendedKitName}</h2>
             </div>
-            <button onClick={handleAddKit} className={styles.smallButton} style={{ border: 'none', cursor: 'pointer' }}>
-              In den Warenkorb
+            <button onClick={handleAddKit} className={styles.primaryAction} style={{ border: 'none', cursor: 'pointer', padding: '0 24px', minHeight: '44px' }}>
+              Direkt zur Kasse
             </button>
           </div>
         </article>

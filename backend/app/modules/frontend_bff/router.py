@@ -8,6 +8,7 @@ from app.modules.frontend_bff.schemas import (
     FrontendHydrationProgress,
     FrontendMealKit,
     FrontendNutritionPlan,
+    FrontendPurchasedKitsResponse,
     FrontendShopInventory,
     FullAnalyzeRequest,
     FullAnalyzeResponse,
@@ -20,6 +21,7 @@ from app.modules.frontend_bff.service import (
     get_frontend_hydration_progress,
     get_frontend_meal_kit,
     get_frontend_nutrition_plan,
+    get_frontend_purchased_kits,
     get_frontend_shop_inventory,
     run_full_analyze,
     track_meal_box,
@@ -72,3 +74,8 @@ def get_hydration_tracking(patient_id: str) -> FrontendHydrationProgress:
 @router.post("/frontend/tracking/hydration/{patient_id}/water", response_model=FrontendHydrationProgress)
 def post_hydration_tracking(patient_id: str, payload: HydrationUpdateRequest) -> FrontendHydrationProgress:
     return add_frontend_hydration(patient_id, payload.amountMl)
+
+
+@router.get("/frontend/purchased-kits/{patient_id}", response_model=FrontendPurchasedKitsResponse)
+def get_purchased_kits(patient_id: str) -> FrontendPurchasedKitsResponse:
+    return get_frontend_purchased_kits(patient_id)

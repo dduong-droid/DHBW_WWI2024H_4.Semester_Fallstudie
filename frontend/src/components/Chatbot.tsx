@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, X, Send, Bot, Sparkles } from 'lucide-react';
@@ -72,7 +74,7 @@ export default function Chatbot() {
       if (savedKits) {
         const kits = JSON.parse(savedKits);
         let newQA = [...GENERAL_QA];
-        let newSuggestions: string[] = [];
+        const newSuggestions: string[] = [];
 
         const hasChemo = kits.some((k: any) => k.id === 'mk-chemo');
         const hasGesund = kits.some((k: any) => k.id === 'mk-einfach-gesund');

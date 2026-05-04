@@ -112,5 +112,24 @@ class FullAnalyzeResponse(BaseModel):
     rationale: list[str] = Field(default_factory=list)
 
 
+class FrontendPurchasedKit(BaseModel):
+    """A meal kit that was purchased via an order, with aggregated quantity."""
+    id: str
+    name: str
+    description: str
+    price: float
+    currency: str
+    imageUrl: str | None = None
+    nutritionalValues: FrontendNutritionalValues
+    dietaryTags: list[str] = Field(default_factory=list)
+    meals: list[str] | None = None
+    servings: int
+    quantity: int = Field(ge=1)
+
+
+class FrontendPurchasedKitsResponse(BaseModel):
+    purchasedKits: list[FrontendPurchasedKit] = Field(default_factory=list)
+
+
 class HydrationUpdateRequest(BaseModel):
     amountMl: int = Field(gt=0)

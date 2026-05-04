@@ -11,7 +11,6 @@ import styles from './page.module.css';
 import { recoveryApi } from '../../services/apiClient';
 import { useCart } from '../../context/CartContext';
 import CartNavIcon from '../../components/CartNavIcon';
-import { nutritionMockApi } from '../../services/mockApi';
 
 const TIME_SLOTS = ['08:00 – 10:00', '10:00 – 12:00', '14:00 – 16:00', '18:00 – 20:00'];
 
@@ -105,7 +104,7 @@ export default function CheckoutPage() {
 
     // Aktiviere die gekauften Meal-Kits für das Dashboard (mit Menge)
     for (const item of items) {
-      await nutritionMockApi.activateMealKit(item.id, item.quantity);
+      await recoveryApi.activatePurchasedKit(item.id, item.quantity);
     }
 
     setOrderId(order.orderId);

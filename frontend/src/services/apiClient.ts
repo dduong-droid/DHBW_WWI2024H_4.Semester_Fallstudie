@@ -326,7 +326,7 @@ function mapMealKit(kit: FrontendMealKit): MealKit {
       fat: `${kit.nutritionalValues.fat}g`,
     },
     meals: [] as DailyMeal[],
-    deliveryDays: 'lokaler Demo-Modus',
+    deliveryDays: 'Für 1 Woche',
   };
 }
 
@@ -606,17 +606,35 @@ export const recoveryApi = {
       const analysis = await fallbackOrThrow('Onboarding nutzt Mock-Auswertung', error, async () => {
         const mockAnalysis = await nutritionMockApi.fetchRecoveryAnalysis();
         // Falls 'Einfach Gesund' gew\u00e4hlt wurde, passe die Empfehlung an
-        if (input.goals.includes('simply_healthy')) {
-          mockAnalysis.recommendedKitId = 'mk-einfach-gesund';
-          mockAnalysis.recommendedKitName = 'Einfach Gesund';
-          mockAnalysis.title = 'Ernährungsoptimierung';
-          mockAnalysis.summary = 'Basierend auf deinen Angaben liegt der Fokus auf einer ausgewogenen und präventiven Gesundheitsförderung. Diese Auswertung ersetzt keine ärztliche Beratung.';
-        } else if (input.goals.includes('chemo_support')) {
-          mockAnalysis.recommendedKitId = 'mk-chemo';
-          mockAnalysis.recommendedKitName = 'Chemotherapie Box';
+        if (input.goals.includes('wundheilung')) {
+          mockAnalysis.recommendedKitId = 'produktdetails_wundheilungs_box';
+          mockAnalysis.recommendedKitName = 'Wundheilungs-Box';
+          mockAnalysis.title = 'Regeneration & Wundheilung';
+          mockAnalysis.summary = 'Optimierte Nährstoffversorgung zur Unterstützung deiner Genesung. Diese Auswertung ersetzt keine ärztliche Beratung.';
+        } else if (input.goals.includes('onkologie')) {
+          mockAnalysis.recommendedKitId = 'produktdetails_onko_box';
+          mockAnalysis.recommendedKitName = 'Onko-Box';
           mockAnalysis.title = 'Onkologische Unterstützung';
           mockAnalysis.summary = 'Sanfte, kaloriendichte Mahlzeiten zur Erhaltung der Kraft während deiner Behandlung. Diese Auswertung ersetzt keine ärztliche Beratung.';
+        } else if (input.goals.includes('darm')) {
+          mockAnalysis.recommendedKitId = 'produktdetails_darm_balance_box';
+          mockAnalysis.recommendedKitName = 'Darm-Balance-Box';
+          mockAnalysis.title = 'Darmgesundheit & Balance';
+          mockAnalysis.summary = 'Milde, gut verträgliche Mahlzeiten für ein gesundes Mikrobiom. Diese Auswertung ersetzt keine ärztliche Beratung.';
+        } else if (input.goals.includes('immun')) {
+          mockAnalysis.recommendedKitId = 'produktdetails_immun_boost_box';
+          mockAnalysis.recommendedKitName = 'Immun-Boost-Box';
+          mockAnalysis.title = 'Immun-Boost & Abwehrkräfte';
+          mockAnalysis.summary = 'Vitamin- und antioxidantienreiche Mahlzeiten zur Stärkung des Immunsystems. Diese Auswertung ersetzt keine ärztliche Beratung.';
         }
+        
+        // Sync to profile for consistency in demo mode
+        nutritionMockApi.savePatientProfile({
+          firstName: input.name.split(' ')[0] || '',
+          lastName: input.name.split(' ').slice(1).join(' ') || '',
+          conditions: input.goals,
+        });
+
         return mockAnalysis;
       });
       storeAnalysis(analysis);
@@ -724,5 +742,106 @@ export const recoveryApi = {
         backendUsed: false,
       }));
     }
+  },
+
+  fetchPurchasedKits: async (): Promise<{ kits: MealKit[]; backendUsed: boolean }> => {
+    try {
+      type BackendPurchasedKit = {
+        id: string;
+        name: string;
+        description: string;
+        price: number;
+        currency: string;
+        imageUrl?: string | null;
+        nutritionalValues: { calories: number; protein: number; carbs: number; fat: number; fiber: number };
+        dietaryTags: string[];
+        meals?: string[] | null;
+        servings: number;
+        quantity: number;
+      };
+      type BackendPurchasedKitsResponse = { purchasedKits: BackendPurchasedKit[] };
+
+      const response = await fetchJson<BackendPurchasedKitsResponse>(`/api/frontend/purchased-kits/${getPatientId()}`);
+
+      // Resolve full meal details from mock catalog (backend kits don't have per-meal data)
+      const allMockKits = await nutritionMockApi.fetchShopInventory();
+
+      const kits: (MealKit & { quantity: number })[] = response.purchasedKits.map(bk => {
+        const mockMatch = allMockKits.find(mk => mk.id === bk.id);
+        
+        let mappedMeals = mockMatch?.meals;
+        if (!mappedMeals && bk.meals && bk.meals.length > 0) {
+          // Generiere Dummy DailyMeal-Objekte aus den Backend-Strings
+          mappedMeals = bk.meals.map((mealName, idx) => ({
+            id: `m-${bk.id}-${idx}`,
+            type: idx === 0 ? 'breakfast' : idx === 1 ? 'lunch' : 'dinner',
+            label: idx === 0 ? 'Frühstück' : idx === 1 ? 'Mittagessen' : 'Abendessen',
+            name: mealName,
+            description: 'Nährstoffreiche Mahlzeit aus deiner Box',
+            calories: Math.round(bk.nutritionalValues.calories / 3),
+            protein: Math.round(bk.nutritionalValues.protein / 3),
+            carbs: Math.round(bk.nutritionalValues.carbs / 3),
+            fat: Math.round(bk.nutritionalValues.fat / 3),
+            prepTime: '15 Min',
+            time: idx === 0 ? '08:00' : idx === 1 ? '13:00' : '19:00',
+            image: bk.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+            checked: false,
+            micronutrients: {
+              vitaminC: idx === 0 ? 60 : idx === 1 ? 40 : 50, // Frühstück oft vitaminreicher
+              zinc: idx === 1 ? 7 : idx === 2 ? 5 : 3,        // Mittagessen oft mineralstoffreicher
+              iron: idx === 1 ? 6 : idx === 2 ? 5 : 3,
+              // Spezifische Boosts je nach Box-ID
+              ...(bk.id.includes('immun') && { vitaminC: idx === 0 ? 80 : 50 }),
+              ...(bk.id.includes('vitality') && { iron: idx === 1 ? 8 : 6 }),
+              ...(bk.id.includes('wundheilung') && { zinc: idx === 1 ? 9 : 6 }),
+            }
+          }));
+        }
+
+        return {
+          id: bk.id,
+          name: bk.name,
+          description: bk.description,
+          price: bk.price,
+          currency: bk.currency,
+          imageUrl: bk.imageUrl || mockMatch?.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+          tags: bk.dietaryTags,
+          category: mockMatch?.category || 'general_health' as MealKit['category'],
+          nutrition: {
+            calories: bk.nutritionalValues.calories,
+            protein: `${bk.nutritionalValues.protein}g`,
+            carbs: `${bk.nutritionalValues.carbs}g`,
+            fat: `${bk.nutritionalValues.fat}g`,
+          },
+          meals: mappedMeals || [],
+          deliveryDays: 'Backend-Order',
+          quantity: bk.quantity,
+        };
+      });
+
+      // Sync to sessionStorage so dashboard has immediate access
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('f4r_purchased_kits', JSON.stringify(kits));
+      }
+
+      return { kits, backendUsed: true };
+    } catch (error) {
+      return fallbackOrThrow('Purchased-Kits nutzen sessionStorage', error, () => {
+        if (typeof window !== 'undefined') {
+          const saved = sessionStorage.getItem('f4r_purchased_kits');
+          if (saved) return { kits: JSON.parse(saved), backendUsed: false };
+        }
+        return { kits: [], backendUsed: false };
+      });
+    }
+  },
+
+  activatePurchasedKit: async (kitId: string, quantity: number = 1): Promise<{ backendUsed: boolean }> => {
+    // Always save to sessionStorage for immediate UI feedback
+    await nutritionMockApi.activateMealKit(kitId, quantity);
+
+    // The backend stores the purchase via the order endpoint (already called in checkout).
+    // This method just ensures sessionStorage is in sync for the dashboard.
+    return { backendUsed: false };
   },
 };

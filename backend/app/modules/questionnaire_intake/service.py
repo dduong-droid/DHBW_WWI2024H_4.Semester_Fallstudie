@@ -33,14 +33,14 @@ def derive_flags(
     infections_last_year = questionnaire.recovery_indicators.infections_last_year
     fluid_intake = questionnaire.eating_habits.fluid_intake_ml_per_day
 
-    post_op_recovery = "post_op_recovery" in normalized_conditions or questionnaire.recovery_indicators.wound_healing_issues
+    post_op_recovery = "post_op_recovery" in normalized_conditions or questionnaire.recovery_indicators.wound_healing_issues or "wundheilung" in goals
     oncology_context = any(
         marker in normalized_conditions
         for marker in {"chemotherapy_support", "onko_support", "oncology_support", "cancer_support"}
-    )
+    ) or "onkologie" in goals
     appetite_low = questionnaire.nutrition_status.appetite_level in {"reduced", "minimal"} or intake_change == "significantly_less"
     chemo_related_appetite_loss = oncology_context and appetite_low
-    gut_sensitivity = bool(digestive_symptoms or intolerances or questionnaire.gut_health.last_antibiotic_date)
+    gut_sensitivity = bool(digestive_symptoms or intolerances or questionnaire.gut_health.last_antibiotic_date) or "darm" in goals
     high_fatigue = questionnaire.recovery_indicators.fatigue_level in {"moderate", "high"}
     needs_easy_prep = high_fatigue or support_at_home != "independent" or not questionnaire.eating_habits.can_cook
     high_protein_need = post_op_recovery or "protein" in goals or "genesung" in goals or "wundheil" in goals

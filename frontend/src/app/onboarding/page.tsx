@@ -30,8 +30,10 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 
 const GOAL_OPTIONS = [
-  { id: 'chemo_support', label: 'Chemotherapie', desc: 'W\u00e4hrend onkologischer Behandlung' },
-  { id: 'simply_healthy', label: 'Einfach Gesund', desc: 'Gesunde Ern\u00e4hrungsoptimierung ohne Beschwerden' },
+  { id: 'wundheilung', label: 'Einfach Gesund / Wundheilung', desc: 'Protein- und nährstoffreiche Unterstützung für Regeneration' },
+  { id: 'onkologie', label: 'Chemotherapie / Onkologie', desc: 'Sanfte, kaloriendichte Mahlzeiten zur Erhaltung der Kraft' },
+  { id: 'darm', label: 'Darm-Balance', desc: 'Milde, ballaststoffbewusste Unterstützung für die Verdauung' },
+  { id: 'immun', label: 'Immun-Boost', desc: 'Antioxidantien und Vitamine zur Stärkung des Immunsystems' },
 ];
 
 export default function OnboardingPage() {

@@ -14,6 +14,8 @@ from app.modules.frontend_bff.schemas import (
     FrontendHydrationProgress,
     FrontendMealKit,
     FrontendNutritionPlan,
+    FrontendPurchasedKit,
+    FrontendPurchasedKitsResponse,
     FrontendShopInventory,
     FullAnalyzeRequest,
     FullAnalyzeResponse,
@@ -105,3 +107,43 @@ def get_frontend_hydration_progress(patient_id: str) -> FrontendHydrationProgres
 def add_frontend_hydration(patient_id: str, amount_ml: int) -> FrontendHydrationProgress:
     get_patient_profile_or_404(patient_id)
     return add_water(patient_id, amount_ml)
+
+
+def get_frontend_purchased_kits(patient_id: str) -> FrontendPurchasedKitsResponse:
+    """Return all purchased meal kits for a patient, aggregated across orders."""
+    from app.modules.order_handling.repository import list_orders_for_patient
+
+    get_patient_profile_or_404(patient_id)
+    orders = list_orders_for_patient(patient_id)
+
+    # Only consider confirmed/processing/completed orders
+    valid_statuses = {"confirmed", "processing", "completed"}
+    aggregated: dict[str, int] = {}
+    for order in orders:
+        if order.status not in valid_statuses:
+            continue
+        for item in order.items:
+            aggregated[item.meal_kit_id] = aggregated.get(item.meal_kit_id, 0) + item.quantity
+
+    purchased_kits: list[FrontendPurchasedKit] = []
+    for meal_kit_id, quantity in aggregated.items():
+        meal_kit = get_meal_kit(meal_kit_id)
+        if meal_kit is None or not meal_kit.is_active:
+            continue
+        frontend_kit = map_meal_kit(meal_kit)
+        purchased_kits.append(
+            FrontendPurchasedKit(
+                id=frontend_kit.id,
+                name=frontend_kit.name,
+                description=frontend_kit.description,
+                price=frontend_kit.price,
+                currency=frontend_kit.currency,
+                imageUrl=frontend_kit.imageUrl,
+                nutritionalValues=frontend_kit.nutritionalValues,
+                dietaryTags=frontend_kit.dietaryTags,
+                meals=frontend_kit.meals,
+                servings=frontend_kit.servings,
+                quantity=quantity,
+            )
+        )
+    return FrontendPurchasedKitsResponse(purchasedKits=purchased_kits)

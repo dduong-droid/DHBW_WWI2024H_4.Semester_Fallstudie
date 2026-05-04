@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import * as XLSX from 'xlsx';
 import {
   Utensils, Droplets, Flame, Clock, ChevronRight,
   Activity, ShoppingBag, HeartPulse, Sparkles, Check, Zap, LineChart, Plus, Trash2, ChevronDown, X
@@ -67,9 +70,16 @@ export default function DashboardPage() {
       setData(d);
       setProfile(p);
 
-      // Load purchased kits inventory
-      const savedKits = sessionStorage.getItem('f4r_purchased_kits');
-      if (savedKits) setPurchasedKits(JSON.parse(savedKits));
+      // Load purchased kits: try backend, fall back to sessionStorage
+      recoveryApi.fetchPurchasedKits().then(({ kits }) => {
+        if (kits.length > 0) {
+          setPurchasedKits(kits as PurchasedKit[]);
+        } else {
+          // Fallback to sessionStorage (already handled inside fetchPurchasedKits, but double-check)
+          const savedKits = sessionStorage.getItem('f4r_purchased_kits');
+          if (savedKits) setPurchasedKits(JSON.parse(savedKits));
+        }
+      });
 
       // Restore planned meals per day
       const savedPlanned = sessionStorage.getItem('f4r_planned_meals');
@@ -246,62 +256,48 @@ export default function DashboardPage() {
     if (type === 'weight') setInputWeight('');
   };
 
-  const exportPlan = (format: 'md' | 'json') => {
+  const exportPlan = () => {
     if (!data) return;
     
-    let content = '';
-    let filename = `food4recovery_plan_${new Date().toISOString().split('T')[0]}`;
-    
-    if (format === 'md') {
-      content = `# Food4Recovery Ernährungsplan\n\n`;
-      content += `**Patient:** ${data.patientName}\n`;
-      content += `**Diagnose:** ${data.diagnosis}\n`;
-      content += `**Phase:** ${data.phase}\n\n`;
-      
-      DAYS.forEach(day => {
-        content += `## ${FULL_DAYS[day]}\n`;
-        const checked = checkedMealsByDay[day] || [];
-        const hydration = hydrationByDay[day] || 0;
-        const quick = quickTrackByDay[day] || {};
-        
-        const dayMeals = plannedMealsByDay[day] || [];
-        dayMeals.forEach(meal => {
-          const isDone = checked.includes(String(meal.planIdx)) ? '[x]' : '[ ]';
-          content += `${isDone} ${meal.time} Uhr: ${meal.name} (${meal.calories} kcal) [${meal.boxName}]\n`;
-        });
-        content += `**Wasser:** ${hydration} / ${data.hydration.target} L\n`;
-        content += `**Appetit:** ${quick.appetite || '-'}\n`;
-        content += `**Schmerzlevel:** ${quick.symptom || '-'}\n\n`;
-      });
-      filename += '.md';
-    } else {
-      const exportData = {
-        metadata: {
-          patient: data.patientName,
-          date: new Date().toISOString(),
-          plan: data.diagnosis
-        },
-        tracking: {
-          checkedMealsByDay,
-          hydrationByDay,
-          quickTrackByDay,
-          streak: data.streakDays
-        },
-        plan: plannedMealsByDay
-      };
-      content = JSON.stringify(exportData, null, 2);
-      filename += '.json';
-    }
+    const rows: any[] = [];
+    DAYS.forEach(day => {
+      const dayMeals = plannedMealsByDay[day] || [];
+      const checked = checkedMealsByDay[day] || [];
+      const hydration = hydrationByDay[day] || 0;
+      const quick = quickTrackByDay[day] || {};
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      if (dayMeals.length === 0) {
+        rows.push({
+          Tag: FULL_DAYS[day],
+          Zeit: '-',
+          Mahlzeit: 'Keine Mahlzeiten geplant',
+          Kalorien: '-',
+          Status: '-',
+          Wasser: `${hydration} / ${data.hydration.target} L`,
+          Appetit: quick.appetite || '-',
+          Schmerzlevel: quick.symptom || '-'
+        });
+      } else {
+        dayMeals.forEach((meal, index) => {
+          rows.push({
+            Tag: index === 0 ? FULL_DAYS[day] : '',
+            Zeit: `${meal.time} Uhr`,
+            Mahlzeit: `${meal.name} (${meal.boxName})`,
+            Kalorien: meal.calories,
+            Status: checked.includes(String(meal.planIdx)) ? 'Gegessen' : 'Offen',
+            Wasser: index === 0 ? `${hydration} / ${data.hydration.target} L` : '',
+            Appetit: index === 0 ? (quick.appetite || '-') : '',
+            Schmerzlevel: index === 0 ? (quick.symptom || '-') : ''
+          });
+        });
+      }
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Ernährungsplan");
+
+    XLSX.writeFile(workbook, `food4recovery_plan_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   // Loading State
@@ -365,11 +361,8 @@ export default function DashboardPage() {
               <span className={styles.currentMonth}>April 2026</span>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button className={styles.exportBtn} onClick={() => exportPlan('md')} style={{ fontSize: '0.75rem' }}>
-                MD Export
-              </button>
-              <button className={styles.exportBtn} onClick={() => exportPlan('json')} style={{ fontSize: '0.75rem' }}>
-                JSON Export
+              <button className={styles.exportBtn} onClick={() => exportPlan()} style={{ fontSize: '0.75rem' }}>
+                Excel Export
               </button>
             </div>
           </div>

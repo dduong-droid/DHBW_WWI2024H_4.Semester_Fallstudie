@@ -13,7 +13,10 @@ import CartNavIcon from '../../components/CartNavIcon';
 // --- Konfiguration: Beschwerden und Allergien ---
 
 const CONDITIONS = [
-  { id: 'chemotherapy', label: 'Chemotherapie', desc: 'Laufende oder kürzliche onkologische Behandlung' },
+  { id: 'wundheilung', label: 'Wundheilung', desc: 'Genesung nach Operationen oder Verletzungen' },
+  { id: 'onkologie', label: 'Onkologie', desc: 'Laufende oder kürzliche Krebstherapie' },
+  { id: 'darm', label: 'Darm-Balance', desc: 'Unterstützung für Verdauung und Mikrobiom' },
+  { id: 'immun', label: 'Immun-Boost', desc: 'Stärkung der Abwehrkräfte und Vitalität' },
 ];
 
 const ALLERGIES = [
