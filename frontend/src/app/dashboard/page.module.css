@@ -327,6 +327,10 @@
   box-shadow: var(--shadow-sm);
 }
 
+.mealImage {
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-md);
   background-color: var(--border);
   flex-shrink: 0;
   display: flex;

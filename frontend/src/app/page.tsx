@@ -7,7 +7,7 @@ export default function Home() {
     <main className={styles.main}>
       <section className={styles.phoneShell} aria-labelledby="home-title">
         <div className={styles.logoMark} aria-hidden="true">
-          <Leaf size={30} strokeWidth={3} />
+          <Leaf size={24} strokeWidth={3} />
         </div>
 
         <div className={styles.hero}>
